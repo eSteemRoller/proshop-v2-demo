@@ -8,7 +8,7 @@ const ProductScreen = () => {
     console.log(product);
 
     return (
-        <div>ProductScreen</div>;
+        <div>ProductScreen</div>
     );
 }
 
