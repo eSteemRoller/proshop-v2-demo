@@ -1,12 +1,11 @@
 
-import React from 'react';
-import { Container } from 'react-bootstrap';
+import { Outlet } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import { Outlet } from 'react-router-dom';
+import { Container } from 'react-bootstrap';
 
 
-const App = () => {
+export default function App() {
   return (
     <>
       <Header />
@@ -15,9 +14,8 @@ const App = () => {
             <Outlet />
           </Container>
         </main>
-        <Footer />
+      <Footer />
     </>
-  )
+  );
 }
 
-export default App;
