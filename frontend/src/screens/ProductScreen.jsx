@@ -33,7 +33,7 @@ const ProductScreen = () => {
                                 Price: ${product.price} 
                         </ListGroup.Item>
                         <ListGroup.Item>
-                                Description: ${product.description} 
+                                Description: {product.description} 
                         </ListGroup.Item>
                     </ListGroup>
                 </Col>
@@ -60,11 +60,16 @@ const ProductScreen = () => {
                                 </Row>
                             </ListGroup.Item>
                             <ListGroup.Item>
-                                <Button
-                                    className='btn-block'
-                                    type='button'
-                                    disabled={product.countInStock === 0}
-                                >
+                                    <Button
+                                        className='btn-block'
+                                        type='button'
+                                        disabled={product.countInStock === 0}
+                                        style={
+                                            product.countInStock === 0
+                                            ? { cursor: 'not-allowed', pointerEvents: 'auto' } // override Bootstrap disabling cursor
+                                            : {}
+                                        } 
+                                    >
                                     Add To Cart
                                 </Button>
                             </ListGroup.Item>
