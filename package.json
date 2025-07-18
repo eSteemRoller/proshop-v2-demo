@@ -183,7 +183,6 @@
     "domhandler": "^4.3.1",
     "domutils": "^2.8.0",
     "dot-case": "^3.0.4",
-    "dotenv": "^10.0.0",
     "dotenv-expand": "^5.1.0",
     "dunder-proto": "^1.0.1",
     "duplexer": "^0.1.2",
@@ -865,7 +864,10 @@
     "yocto-queue": "^0.1.0"
   },
   "scripts": {
-    "start": "node backend/server.js"
+    "start": "node backend/server.js",
+    "server": "nodemon backend/server.js",
+    "client": "npm start --prefix frontend",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "repository": {
     "type": "git",
@@ -876,5 +878,10 @@
   "bugs": {
     "url": "https://github.com/eSteemRoller/proshop-v2-demo/issues"
   },
-  "homepage": "https://github.com/eSteemRoller/proshop-v2-demo#readme"
+  "homepage": "https://github.com/eSteemRoller/proshop-v2-demo#readme",
+  "devDependencies": {
+    "concurrently": "^9.2.0",
+    "dotenv": "^17.2.0",
+    "nodemon": "^3.1.10"
+  }
 }
