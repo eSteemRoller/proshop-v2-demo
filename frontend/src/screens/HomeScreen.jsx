@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from 'react';
-import { Row, Col } from 'react-bootstrap'
-import Product from '../components/Product'
+import { Row, Col } from 'react-bootstrap';
+import Product from '../components/Product.jsx';
 import axios from 'axios';
 
 
@@ -10,7 +10,7 @@ export default function HomeScreen() {
 
     useEffect(() => {
         const fetchProducts = async () => {
-            const { data } = await axios.get('/api/products');
+            const { data } = await axios.get('http://localhost:5000/api/products');
             setProducts(data);
         };
 
