@@ -14,7 +14,7 @@ export default function ProductScreen() {
     
     useEffect(() => {
         const fetchProduct = async () => {
-            const { data } = await axios.get(`/api/products/${productId}`);
+            const { data } = await axios.get(`/api/products/${productId}`);  // not http://localhost:5000
             setProduct(data);
         }
 

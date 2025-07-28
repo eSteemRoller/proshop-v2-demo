@@ -1,7 +1,7 @@
 
 import express from "express";
 const router = express.Router();
-// import products from '../data/products.js'; // For seeding
+// import products from '../data/products.js'; // local server data
 import asyncHandler from "../middleware/asyncHandler.js";
 import Product from "../models/productModel.js";
 // import { message } from "statuses";
@@ -10,13 +10,14 @@ import Product from "../models/productModel.js";
 router.get(
     '/', 
     asyncHandler(async (req, res) => {
+        console.log("GET /api/products hit");
         const products = await Product.find({});
         res.json(products);
     })
 );
 
 router.get(
-    '/:id', 
+    '/:id', // Links to server.js: app.use
     asyncHandler(async (req, res) => {
         const product = await Product.findById(req.params.id);
 

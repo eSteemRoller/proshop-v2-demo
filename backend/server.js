@@ -1,5 +1,5 @@
 
-import cors from 'cors';
+// import cors from 'cors';
 import express from 'express';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -11,13 +11,13 @@ connectDB(); // Connect to MongoDB
 
 const app = express();
 
-app.use(cors());
+// app.use(cors());
 
 app.get('/', (req, res) => {
     res.send('API is running...');
 });
 
-app.use('/api/products', productRoutes);
+app.use('/api/products', productRoutes); // Links to productRoutes.js: router.get
 
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
