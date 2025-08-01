@@ -1,7 +1,7 @@
 
 import { Row, Col } from 'react-bootstrap';
 import Product from '../components/Product.jsx';
-import { useGetProductsQuery } from '../slices/productsApiSlice.js';
+import { useGetProductsQuery } from '../slices/productsApiSlice';
 
 export default function HomeScreen() {
   const { data: products, isLoading, error } = useGetProductsQuery();
