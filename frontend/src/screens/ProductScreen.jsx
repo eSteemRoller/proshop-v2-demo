@@ -12,7 +12,7 @@ import { useGetProductDetailsQuery } from "../slices/productsApiSlice";
 export default function ProductScreen() {
   const { id: productId } = useParams();
 
-  const [qty, setQty] = useState(1);
+  const [itemQty, setQty] = useState(1);
 
   const {
     data: product,
@@ -81,7 +81,7 @@ export default function ProductScreen() {
                       <Col>
                         <Form.Control 
                           as='select'
-                          value={qty}
+                          value={itemQty}
                           onChange={(event) => 
                             setQty(Number(event.target.value))}
                         >
