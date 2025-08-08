@@ -1,24 +1,33 @@
 
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Form, Row, Col, Image, ListGroup, Card, Button } from "react-bootstrap";
+import { useDispatch } from "react-redux";
 import Rating from '../components/Rating';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import { useGetProductDetailsQuery } from "../slices/productsApiSlice";
-
+import { addToCart } from '../slices/cartSlice';
 
 export default function ProductScreen() {
   const { id: productId } = useParams();
 
-  const [itemQty, setQty] = useState(1);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [qty, setQty] = useState(1);
 
   const {
     data: product,
     isLoading,
     error,
   } = useGetProductDetailsQuery(productId);
+
+  const addToCartHandler = () => { 
+    dispatch(addToCart({ ...product, qty }));
+    navigate('/cart');
+  }
 
   return (
     <>
@@ -81,13 +90,13 @@ export default function ProductScreen() {
                       <Col>
                         <Form.Control 
                           as='select'
-                          value={itemQty}
+                          value={qty}
                           onChange={(event) => 
                             setQty(Number(event.target.value))}
                         >
                           {[...Array(product.countInStock).keys()].map((currentItem) =>
-                            <option key={currentItem = 1} value={currentItem + 1}>
-                              {itemQty + 1}
+                            <option key={currentItem + 1} value={currentItem + 1}>
+                              {currentItem + 1}
                             </option>)}
                         </Form.Control>
                       </Col>
@@ -104,6 +113,7 @@ export default function ProductScreen() {
                         ? { cursor: "not-allowed", pointerEvents: "auto" } // override Bootstrap from disabling cursor
                         : {}
                     }
+                    onClick={addToCartHandler}
                   >
                     Add To Cart
                   </Button>
