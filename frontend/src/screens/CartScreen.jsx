@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap';
 import { FaTrash } from 'react-icons/fa';
 import Message from '../components/Message';
+import { addToCart, removeFromCart } from '../slices/cartSlice';
 
 
 export default function CartScreen() { 
@@ -13,14 +14,21 @@ export default function CartScreen() {
   const cart = useSelector((cartState) => cartState.cart);
   const { cartItems } = cart;
 
+  const addToCartHandler = async (product, productQty) => { 
+    dispatch(addToCart({ ...product, productQty }));
+  };
+
+  const removeFromCartHandler = async (id) => { 
+    dispatch(removeFromCart(id));
+  };
+
   return (
     <Row>
       <Col md={8}>
         <h1 style={{marginBottom: '16px'}}>Shopping Cart</h1>
         { cartItems.length === 0 ? ( 
           <Message>
-            Your cart is empty!
-              <Link to='/'>Return to Latest Products</Link>
+            Your cart is empty! <Link to='/'>Return to Latest Products</Link>
           </Message>
           ) : ( 
           <ListGroup variant='flush'>
@@ -40,17 +48,22 @@ export default function CartScreen() {
                       <Form.Control 
                           as='select'
                           value={item.productQty}
-                        //   onChange={(e) => 
-                        //     setProductQty(Number(e.target.value))}
+                          onChange={(e) => 
+                            addToCartHandler(item, Number(e.target.value))}
                         >
-                          {[...Array(item.countInStock).keys()].map((x) =>
-                            <option key={x + 1} value={x + 1}>
-                              {x + 1}
-                            </option>)}
+                          {[...Array(item.countInStock).keys()].map((xItem) =>
+                            <option key={xItem + 1} value={xItem + 1}>
+                              {xItem + 1}
+                            </option>)
+                          }
                         </Form.Control>
                     </Col>
                     <Col md={2}>
-                      <Button type='button' variant='light'>
+                      <Button 
+                        type='button' 
+                        variant='light' 
+                        onClick={ () => removeFromCartHandler(item._id) }
+                      >
                         <FaTrash />
                       </Button>
                     </Col>
@@ -66,19 +79,19 @@ export default function CartScreen() {
           <ListGroup variant='flush'>
             <ListGroup.Item>
               <h3>
-                Sub-Total of your ({ cartItems.reduce((acc, item) => acc + item.productQty, 0) }) item(s):
+                Sub-total of your ({ cartItems.reduce((acc, item) => acc + item.productQty, 0) }) item(s):
               </h3>
-              ${ cartItems.reduce((acc, item) => acc + item.productQty * item.price, 0).
-                toFixed(2) }
+              ${ cartItems.reduce((acc, item) => acc + item.productQty * item.price, 0)
+                .toFixed(2) }
             </ListGroup.Item>
             <ListGroup.Item>
-              <Button type='button' className='btn-block' disabled={ cartItems.lenth === 0 }>
-                Proceed To Checkout
+              <Button type='button' className='btn-block' disabled={ cartItems.length === 0 }>
+                Proceed to Checkout
               </Button>
             </ListGroup.Item>
           </ListGroup>
         </Card>
       </Col>
     </Row>
-  )
+  );
 }

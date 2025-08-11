@@ -17,6 +17,7 @@ export default function ProductScreen() {
   const navigate = useNavigate();
 
   const [productQty, setProductQty] = useState(1);
+  const [showGoToCartButton, setShowGoToCartButton] = useState(false)
 
   const {
     data: product,
@@ -26,7 +27,8 @@ export default function ProductScreen() {
 
   const addToCartHandler = () => { 
     dispatch(addToCart({ ...product, productQty }));
-    navigate('/cart');
+    // navigate('/cart');
+    setShowGoToCartButton(true);
   }
 
   return (
@@ -94,9 +96,9 @@ export default function ProductScreen() {
                           onChange={(e) => 
                             setProductQty(Number(e.target.value))}
                         >
-                          {[...Array(product.countInStock).keys()].map((currentItem) =>
-                            <option key={currentItem + 1} value={currentItem + 1}>
-                              {currentItem + 1}
+                          {[...Array(product.countInStock).keys()].map((xItem) =>
+                            <option key={xItem + 1} value={xItem + 1}>
+                              {xItem + 1}
                             </option>)}
                         </Form.Control>
                       </Col>
@@ -118,6 +120,14 @@ export default function ProductScreen() {
                     Add To Cart
                   </Button>
                 </ListGroup.Item>
+                {/* {showGoToCartButton ? (
+                  <ListGroup.Item>
+                    <Button Link to='/cart' type="button">Go to Cart</Button>
+                  </ListGroup.Item>
+                  ) : (
+                    {}
+                  )
+                } */}
               </ListGroup>
             </Card>
           </Col>
