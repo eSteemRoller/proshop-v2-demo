@@ -22,6 +22,10 @@ export default function CartScreen() {
     dispatch(removeFromCart(id));
   };
 
+  const checkoutHandler = () => {
+    navigate('/login?redirect=/shipping');
+  };
+
   return (
     <Row>
       <Col md={8}>
@@ -85,7 +89,12 @@ export default function CartScreen() {
                 .toFixed(2) }
             </ListGroup.Item>
             <ListGroup.Item>
-              <Button type='button' className='btn-block' disabled={ cartItems.length === 0 }>
+              <Button 
+                type='button' 
+                className='btn-block' 
+                disabled={ cartItems.length === 0 }
+                onClick={ checkoutHandler }
+              >
                 Proceed to Checkout
               </Button>
             </ListGroup.Item>

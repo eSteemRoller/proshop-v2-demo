@@ -105,9 +105,9 @@ export default function ProductScreen() {
                     </Row>
                   </ListGroup.Item>
                 )}
-                <ListGroup.Item>
+                <ListGroup.Item className="d-flex gap-2">
                   <Button
-                    className="btn-block"
+                    className="flex-fill"
                     type="button"
                     disabled={product.countInStock === 0}
                     style={
@@ -117,17 +117,18 @@ export default function ProductScreen() {
                     }
                     onClick={addToCartHandler}
                   >
-                    Add To Cart
+                    Add to Cart
                   </Button>
+                  {showGoToCartButton && (
+                    <Button 
+                      className="flex-fill"
+                      variant="secondary"
+                      onClick={() => navigate('/cart')}
+                    >
+                      Go to Cart
+                    </Button>
+                  )}
                 </ListGroup.Item>
-                {/* {showGoToCartButton ? (
-                  <ListGroup.Item>
-                    <Button Link to='/cart' type="button">Go to Cart</Button>
-                  </ListGroup.Item>
-                  ) : (
-                    {}
-                  )
-                } */}
               </ListGroup>
             </Card>
           </Col>
