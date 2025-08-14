@@ -13,6 +13,10 @@ connectDB(); // Connect to MongoDB
 
 const app = express();
 
+// Auth user Body parser middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 // app.use(cors());
 
 app.get('/', (req, res) => {
