@@ -13,11 +13,13 @@ import {
   updateUserById,
   deleteUserById,
 } from '../controllers/userController.js'; // file extension needed
+import { protectRoute, adminUser } from "../middleware/authHandler.js";
 
-router.route('/').post(signupUser).post(createUser).get(getAllUsers);
+
+router.route('/').post(signupUser).post(protectRoute, adminUser, createUser).get(protectRoute, adminUser, getAllUsers);
 router.post('/logout', logoutUser);
 router.post('/login', authUser);
-router.route('/user').get(getUserProfile).put(updateUserProfile);
-router.route('/:id').get(getUserById).put(updateUserById).delete(deleteUserById);
+router.route('/user').get(protectRoute, getUserProfile).put(protectRoute, updateUserProfile);
+router.route('/:id').get(protectRoute, adminUser, getUserById).put(protectRoute, adminUser, updateUserById).delete(protectRoute, adminUser, deleteUserById);
 
 export default router;
