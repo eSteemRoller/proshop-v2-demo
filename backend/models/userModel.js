@@ -30,7 +30,15 @@ const userSchema = new mongoose.Schema(
 
 userSchema.methods.verifyPassword = async function (enteredPassword) { 
   return await bcrypt.compare(enteredPassword, this.password);
-}
+};
+
+userSchema.pre('save', async function (next) { 
+  if (!this.isModified('password')) { 
+    next();
+  }
+  const pwSalt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, pwSalt);
+});
 
 const User = mongoose.model("User", userSchema);
 

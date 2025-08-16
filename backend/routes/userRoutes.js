@@ -9,6 +9,7 @@ import {
   updateUserProfile,
   createUser,
   getAllUsers,
+  getAllUsersByAdmin,
   getUserById,
   updateUserById,
   deleteUserById,
@@ -16,7 +17,8 @@ import {
 import { protectRoute, adminUser } from "../middleware/authHandler.js";
 
 
-router.route('/').post(signupUser).post(protectRoute, adminUser, createUser).get(protectRoute, adminUser, getAllUsers);
+router.route('/').post(signupUser).get(protectRoute, adminUser, getAllUsers);
+router.route('/usersByAdmin').post(protectRoute, adminUser, createUser).get(protectRoute, adminUser, getAllUsersByAdmin);
 router.post('/logout', logoutUser);
 router.post('/login', authUser);
 router.route('/user').get(protectRoute, getUserProfile).put(protectRoute, updateUserProfile);
