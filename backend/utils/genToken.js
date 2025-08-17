@@ -15,7 +15,7 @@ const genToken = (res, userId) => {
     httpOnly: true,
     secure: process.env.NODE_ENV !== 'development',
     sameSite: 'strict',
-    maxAge: 30 * 24 * 60 * 1000, // Time target amount ((30 days) * ...) --> time measurement (milliseconds)
+    maxAge: 30 * 24 * 60 * 1000, // Time target amount (30 days) * ... * --> time measurement (milliseconds)
   });
 }
 
