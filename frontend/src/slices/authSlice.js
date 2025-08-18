@@ -9,14 +9,14 @@ const initialState = {
 }
 
 const authSlice = createSlice({ 
-  name: 'auth',
+  name: 'signin',
   initialState,
   reducers: { 
     setCredentials (state, action) { 
       state.userInfo = action.payload;
       localStorage.setItem('userInfo', JSON.stringify(action.payload));
-    }
-  }
+    },
+  },
 });
 
 export const { setCredentials } = authSlice.actions;

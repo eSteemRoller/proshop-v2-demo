@@ -20,7 +20,7 @@ import { protectRoute, adminUser } from "../middleware/authHandler.js";
 router.route('/').post(signupUser).get(protectRoute, adminUser, getAllUsers);
 router.route('/usersByAdmin').post(protectRoute, adminUser, createUser).get(protectRoute, adminUser, getAllUsersByAdmin);
 router.post('/logout', logoutUser);
-router.post('/login', authUser);
+router.post('/signin', authUser);
 router.route('/user').get(protectRoute, getUserProfile).put(protectRoute, updateUserProfile);
 router.route('/:id').get(protectRoute, adminUser, getUserById).put(protectRoute, adminUser, updateUserById).delete(protectRoute, adminUser, deleteUserById);
 

@@ -6,7 +6,7 @@ import genToken from "../utils/genToken.js";
 
 
 // @desc  Auth user & get JsonWebToken (Create authorization)
-// @route  POST /api/users/login
+// @route  POST /api/users/signin
 // @access  Public
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
@@ -74,7 +74,7 @@ const logoutUser = asyncHandler(async (req, res) => {
   res.status(200).json({ message: 'Logged out successfully'});
   // } else {
   //   res.status(400);
-  //   throw new Error('Invalid request. Please, login.');
+  //   throw new Error('Invalid request. Please, sign in.');
   // }
 });
 

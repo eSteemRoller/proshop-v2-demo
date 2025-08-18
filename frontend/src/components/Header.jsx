@@ -32,7 +32,7 @@ export default function Header() {
                   )
                 }
               </Nav.Link>
-              <Nav.Link as={Link} to="/login">
+              <Nav.Link as={Link} to="/signin">
                 <FaUser /> Sign In
               </Nav.Link>
             </Nav>
