@@ -1,15 +1,24 @@
 
-import { Navbar, Nav, Container, Badge } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import { Navbar, Nav, Container, Badge, NavDropdown } from 'react-bootstrap';
 import { FaShoppingCart, FaUser } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { useSignOutMutation } from '../slices/usersApiSlice';
+import { signout } from '../slices/authSlice';
 import logo from '../assets/logo.png';
+import { LinkContainer } from 'react-router-bootstrap';
 
 // import { useNavigate } from 'react-router-dom';
 
 
 export default function Header() { 
   const { cartItems } = useSelector((cartState) => cartState.cart);
+  const { userInfo } = useSelector((authState) => authState.auth);
+
+  const signOutHandler = () => { 
+    console.log('signOut')
+  }
 
   return (
     <header>
@@ -32,9 +41,21 @@ export default function Header() {
                   )
                 }
               </Nav.Link>
-              <Nav.Link as={Link} to="/signin">
-                <FaUser /> Sign In
-              </Nav.Link>
+              { userInfo ? ( 
+                <NavDropdown title={ userInfo.name } id='username'>
+                  <LinkContainer to='/login'>
+                    <NavDropdown.Item>Profile</NavDropdown.Item>
+                  </LinkContainer>
+                  <NavDropdown.Item onClick={ signOutHandler }>
+                    Logout
+                  </NavDropdown.Item>
+                </NavDropdown>
+              ) : ( 
+                <Nav.Link as={Link} to="/signin">
+                  <FaUser /> Sign In
+                </Nav.Link>
+              ) }
+              
             </Nav>
           </Navbar.Collapse>
         </Container>

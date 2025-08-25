@@ -5,7 +5,7 @@ import { Form, Button, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import FormContainer from '../components/FormContainer';
 import Loader from '../components/Loader';
-import { useLoginMutation } from '../slices/usersApiSlice';
+import { useSignInMutation } from '../slices/usersApiSlice';
 import { setCredentials } from '../slices/authSlice';
 import { toast } from 'react-toastify';
 
@@ -17,9 +17,9 @@ export default function SignInScreen() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [login, { isLoading }] = useLoginMutation();
+  const [signIn, { isSigningIn }] = useSignInMutation();
 
-  const { userInfo } = useSelector((state) => state.auth);
+  const { userInfo } = useSelector((authState) => authState.auth);
 
   const { search } = useLocation();
   const searchParams = new URLSearchParams(search);
@@ -36,7 +36,7 @@ export default function SignInScreen() {
     formSubmit.preventDefault();
     console.log('submit');
     try {
-      const res = await login({ email, password }).unwrap();
+      const res = await signIn({ email, password }).unwrap();
       dispatch(setCredentials({...res, }));
       navigate(redirect);
     } catch (error) {
@@ -69,11 +69,11 @@ export default function SignInScreen() {
           </Form.Control>
         </Form.Group>
         <Button type='submit' variant='primary' className='mt-4'
-          disabled={ isLoading }
+          disabled={ isSigningIn }
         >
           Sign In
         </Button>
-        { isLoading && <Loader /> }
+        { isSigningIn && <Loader /> }
       </Form>
       <Row className='py-4'>
         <Col>
