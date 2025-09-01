@@ -32,12 +32,12 @@ export default function SignInScreen() {
     }, [userInfo, redirect, navigate]
   );
 
-  const submitHandler = async (formSubmit) => { 
-    formSubmit.preventDefault();
-    console.log('submit');
+  const signInHandler = async (signInFormSubmit) => { 
+    signInFormSubmit.preventDefault();
+    console.log('Sign in form submit');
     try {
-      const res = await signIn({ email, password }).unwrap();
-      dispatch(setCredentials({...res, }));
+      const dbResponse = await signIn({ email, password }).unwrap();
+      dispatch(setCredentials({...dbResponse, }));
       navigate(redirect);
     } catch (error) {
       toast.error(error?.data?.message || error.error);
@@ -47,7 +47,7 @@ export default function SignInScreen() {
   return ( 
     <FormContainer>
       <h1>Sign In</h1>
-      <Form onSubmit={submitHandler}>
+      <Form onSubmit={signInHandler}>
         <Form.Group controlId='email' className='my-4'>
           <Form.Label>E-mail Address:</Form.Label>
           <Form.Control

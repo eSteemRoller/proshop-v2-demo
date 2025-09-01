@@ -32,7 +32,7 @@ const authUser = asyncHandler(async (req, res) => {
 // @desc  Create/Signup/Register user
 // @route  POST /api/users
 // @access  Public
-const signupUser = asyncHandler(async (req, res) => { 
+const signUpUser = asyncHandler(async (req, res) => { 
   const { name, email, password } = req.body;
 
   const userExists = await User.findOne({ email });
@@ -62,16 +62,16 @@ const signupUser = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc  Logout user & clear (delete, not just clear contents) cookie
-// @route  POST /api/users/logout
+// @desc  Sign out user & clear (delete, not just clear contents) cookie
+// @route  POST /api/users/signout
 // @access  Private (User)
-const logoutUser = asyncHandler(async (req, res) => { 
+const signOutUser = asyncHandler(async (req, res) => { 
   // if (req.user) {
     res.cookie('jwt', '', { 
     httpOnly: true,
     expires: new Date(0)
   });
-  res.status(200).json({ message: 'Logged out successfully'});
+  res.status(200).json({ message: 'Signed out successfully'});
   // } else {
   //   res.status(400);
   //   throw new Error('Invalid request. Please, sign in.');
@@ -169,8 +169,8 @@ const deleteUserById = asyncHandler(async (req, res) => {
 
 export {
   authUser,
-  signupUser,
-  logoutUser,
+  signUpUser,
+  signOutUser,
   getUserProfile,
   updateUserProfile,
   createUser,
