@@ -7,7 +7,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({ 
     signIn: builder.mutation({
       query: (userData) => ({
-        url: `${USERS_URL}/auth`,
+        url: `${USERS_URL}/signin`,
         method: 'POST',
         body: userData,
       }),
