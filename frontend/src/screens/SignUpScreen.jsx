@@ -55,6 +55,15 @@ export default function SignUpScreen() {
     <FormContainer>
       <h1>Sign Up</h1>
       <Form onSubmit={signInHandler}>
+        <Form.Group controlId='name' className='my-4'>
+          <Form.Label>First and Last Name:</Form.Label>
+          <Form.Control
+            type='text'
+            placeholder='Enter your first and last name'
+            value={name}
+            onChange={(formSubmit) => setName(formSubmit.target.value)}
+          ></Form.Control>
+        </Form.Group>
         <Form.Group controlId='email' className='my-4'>
           <Form.Label>E-mail Address:</Form.Label>
           <Form.Control
@@ -62,8 +71,7 @@ export default function SignUpScreen() {
             placeholder='Enter e-mail'
             value={email}
             onChange={(formSubmit) => setEmail(formSubmit.target.value)}
-          >
-          </Form.Control>
+          ></Form.Control>
         </Form.Group>
         <Form.Group controlId='password' className='my-4'>
           <Form.Label>Password:</Form.Label>
@@ -72,10 +80,21 @@ export default function SignUpScreen() {
             placeholder='Enter password'
             value={password}
             onChange={(formSubmit) => setPassword(formSubmit.target.value)}
-          >
-          </Form.Control>
+          ></Form.Control>
         </Form.Group>
-        <Button type='submit' variant='primary' className='mt-4'
+        <Form.Group controlId='confirmPassword' className='my-4'>
+          <Form.Label>Confirm Password:</Form.Label>
+          <Form.Control
+            type='password'
+            placeholder='Confirm password'
+            value={confirmPassword}
+            onChange={(formSubmit) => setConfirmPassword(formSubmit.target.value)}
+          ></Form.Control>
+        </Form.Group>
+        <Button 
+          type='submit' 
+          variant='primary' 
+          className='mt-4'
           disabled={ isSigningIn }
         >
           Sign Up
@@ -84,9 +103,9 @@ export default function SignUpScreen() {
       </Form>
       <Row className='py-4'>
         <Col>
-          First visit? <Link to={ redirect ? 
-            `/signup?redirect=${redirect}` : 
-              '/signup'}>Sign Up</Link>
+          Already signed up? <Link to={ redirect ? 
+            `/signin?redirect=${redirect}` : 
+              '/signin'}>Sign In</Link>
         </Col>
       </Row>
     </FormContainer>
