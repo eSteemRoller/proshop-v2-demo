@@ -17,6 +17,7 @@ import SignUpScreen from './screens/SignUpScreen';
 import ProductScreen from './screens/ProductScreen';
 import CartScreen from './screens/CartScreen';
 import ShippingScreen from './screens/ShippingScreen';
+import PrivateRoute from './components/PrivateRoute';
 
 import reportWebVitals from './reportWebVitals';
 
@@ -30,6 +31,11 @@ const router = createBrowserRouter(
       <Route path='/product/:id' element={<ProductScreen />} />
       <Route path='/cart' element={<CartScreen />} />
       <Route path='/shipping' element={<ShippingScreen />} />
+
+      <Route path='' element={<PrivateRoute />}>
+        <Route path='/shipping' element={<ShippingScreen />} />
+        
+      </Route>
     </Route>
   )
 );
