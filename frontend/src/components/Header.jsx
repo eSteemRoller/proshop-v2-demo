@@ -1,14 +1,12 @@
 
-// import { useNavigate } from 'react-router-dom';
 import { Navbar, Nav, Container, Badge, NavDropdown } from 'react-bootstrap';
 import { FaShoppingCart, FaUser } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSignOutMutation } from '../slices/usersApiSlice';
 import { signOut } from '../slices/authSlice';
 import logo from '../assets/logo.png';
 
-// import { useNavigate } from 'react-router-dom';
 
 
 export default function Header() { 
@@ -16,7 +14,7 @@ export default function Header() {
   const { userInfo } = useSelector((authState) => authState.auth);
 
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [signOutApiCall] = useSignOutMutation();
 
@@ -25,7 +23,7 @@ export default function Header() {
     try {
       await signOutApiCall().unwrap();
       dispatch(signOut());
-      // navigate('/signin');
+      navigate('/signin');
     } catch (error) {
       console.log(error);
     }
@@ -54,23 +52,18 @@ export default function Header() {
               </Nav.Link>
               { userInfo ? ( 
                 <NavDropdown title={ userInfo.name } id='username'>
-                  <Nav.Link as={Link} to="/user">
-                    <NavDropdown.Item>
-                      Profile
-                    </NavDropdown.Item>
-                  </Nav.Link>
-                  <Nav.Link as={Link} to="/signin">
-                    <NavDropdown.Item onClick={ signOutHandler }>
-                      Sign Out
-                    </NavDropdown.Item>
-                  </Nav.Link>
+                  <NavDropdown.Item onClick={() => navigate('/user')}>
+                    Profile
+                  </NavDropdown.Item>
+                  <NavDropdown.Item onClick={ signOutHandler }>
+                    Sign Out
+                  </NavDropdown.Item>
                 </NavDropdown>
               ) : ( 
                 <Nav.Link as={Link} to="/signin">
                   <FaUser /> Sign In
                 </Nav.Link>
               ) }
-              
             </Nav>
           </Navbar.Collapse>
         </Container>

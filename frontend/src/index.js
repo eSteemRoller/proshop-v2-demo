@@ -16,8 +16,10 @@ import SignInScreen from './screens/SignInScreen';
 import SignUpScreen from './screens/SignUpScreen';
 import ProductScreen from './screens/ProductScreen';
 import CartScreen from './screens/CartScreen';
-import ShippingScreen from './screens/ShippingScreen';
+
 import PrivateRoute from './components/PrivateRoute';
+import ShippingScreen from './screens/ShippingScreen';
+import PaymentScreen from './screens/PaymentScreen';
 
 import reportWebVitals from './reportWebVitals';
 
@@ -34,7 +36,7 @@ const router = createBrowserRouter(
 
       <Route path='' element={<PrivateRoute />}>
         <Route path='/shipping' element={<ShippingScreen />} />
-        
+        <Route path='/payment' element={<PaymentScreen />} />
       </Route>
     </Route>
   )

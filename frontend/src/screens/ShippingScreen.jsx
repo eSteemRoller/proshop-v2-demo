@@ -16,6 +16,8 @@ export default function ShippingScreen() {
     useState(cartShippingAddress?.shippingAddress || '');
   const [shippingCity, setShippingCity] = 
     useState(cartShippingAddress?.shippingCity || '');
+  const [shippingState, setShippingState] = 
+    useState(cartShippingAddress?.shippingState || '');
   const [shippingPostalCode, setShippingPostalCode] = 
     useState(cartShippingAddress?.shippingPostalCode || '');
   const [shippingCountry, setShippingCountry] = 
@@ -29,6 +31,7 @@ export default function ShippingScreen() {
     dispatch(saveShippingAddress({ 
       shippingAddress, 
       shippingCity, 
+      shippingState, 
       shippingPostalCode, 
       shippingCountry,
     }));
@@ -58,6 +61,15 @@ export default function ShippingScreen() {
             placeholder='Enter shipping city'
             value={shippingCity}
             onChange={(shippingCityChange) => setShippingCity(shippingCityChange.target.value)}
+          ></Form.Control>
+        </Form.Group>
+        <Form.Group controlId='shippingState' className='my-4'>
+          <Form.Label>State:</Form.Label>
+          <Form.Control 
+            type='text'
+            placeholder='Enter shipping State'
+            value={shippingState}
+            onChange={(shippingStateChange) => setShippingState(shippingStateChange.target.value)}
           ></Form.Control>
         </Form.Group>
         <Form.Group controlId='shippingPostalCode' className='my-4'>

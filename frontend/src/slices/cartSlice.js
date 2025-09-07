@@ -9,7 +9,7 @@ const initialCartState = localStorage.getItem("cart") ?
     
 const cartSlice = createSlice({ 
   name: "cart",
-  initialCartState,
+  initialState: initialCartState,
   reducers: { 
     addToCart: (cartState, action) => {
       const item = action.payload;
@@ -24,23 +24,29 @@ const cartSlice = createSlice({
       } else { 
         cartState.cartItems = [...cartState.cartItems, item];
       }
-
       return updateCart(cartState);
     },
     removeFromCart: (cartState, action) => { 
       cartState.cartItems = cartState.cartItems.filter((xItem) => 
         xItem._id !== action.payload);
-
       return updateCart(cartState);
     },
     saveShippingAddress: (cartState, action) => { 
-      state.shippingAddress = action.payload;
+      cartState.shippingAddress = action.payload;
       return updateCart(cartState);
-    }
+    },
+    savePaymentMethod: (cartState, action) => { 
+      cartState.paymentMethod = action.payload;
+      return updateCart(cartState);
+    },
   },
 });
 
-export const { addToCart, removeFromCart, saveShippingAddress } = 
-  cartSlice.actions;
+export const { 
+  addToCart, 
+  removeFromCart, 
+  saveShippingAddress, 
+  savePaymentMethod, 
+} = cartSlice.actions;
 
 export default cartSlice.reducer;
