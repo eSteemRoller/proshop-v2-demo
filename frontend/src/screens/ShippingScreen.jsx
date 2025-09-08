@@ -67,7 +67,7 @@ export default function ShippingScreen() {
           <Form.Label>State:</Form.Label>
           <Form.Control 
             type='text'
-            placeholder='Enter shipping State'
+            placeholder='Enter shipping state'
             value={shippingState}
             onChange={(shippingStateChange) => setShippingState(shippingStateChange.target.value)}
           ></Form.Control>
