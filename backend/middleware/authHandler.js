@@ -5,7 +5,7 @@ import User from '../models/userModel.js';
 
 
 // Protect routes
-export const protectRoute = asyncHandler(async (req, resizeBy, next) => { 
+export const protectRoute = asyncHandler(async (req, res, next) => { 
   let JWToken;
 
   // Read the JWToken from the cookie
@@ -28,11 +28,11 @@ export const protectRoute = asyncHandler(async (req, resizeBy, next) => {
 });
 
 // Admin middleware
-export const adminUser = (req, res, next) => { 
+export const admin = (req, res, next) => { 
   if (req.user && req.user.isAdmin) { 
     next();
   } else {
     res.status(401);
-    throw new Error('Not authorized as Admin');
+    throw new Error('Not authorized as an Administrator');
   } 
 };

@@ -1,0 +1,24 @@
+
+import express from 'express';
+const router = express.Router();
+import {
+  createUserOrder,
+  readAllUsersOrders,
+  readUsersOrderById,
+  updateUsersOrderByIdAsPaid,
+  updateUsersOrderByIdAsShipped,
+  updateUsersOrderByIdAsDelivered,
+  readAllOrders,
+} from '../controllers/orderController.js'; // file extension needed
+import { protectRoute, admin } from '../middleware/authHandler.js';
+
+
+router.route('/').post(protectRoute, createUserOrder).get(protectRoute, admin, readAllOrders);
+router.route('/myorders').get(protectRoute, readAllUsersOrders);
+router.route('/:id').get(protectRoute, admin, readUsersOrderById);
+router.route('/:id/paid').put(protectRoute, updateUsersOrderByIdAsPaid);
+router.route('/:id/shipped').put(protectRoute, admin, updateUsersOrderByIdAsShipped);
+router.route('/:id/delivered').put(protectRoute, admin, updateUsersOrderByIdAsDelivered);
+
+
+export default router;
