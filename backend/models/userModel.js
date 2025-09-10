@@ -5,7 +5,11 @@ import bcrypt from 'bcryptjs';
 
 const userSchema = new mongoose.Schema(
     {
-        name: {
+        firstName: {
+            type: String,
+            required: true,
+        },
+        lastName: {
             type: String,
             required: true,
         },
@@ -16,6 +20,18 @@ const userSchema = new mongoose.Schema(
         password: {
             type: String,
             required: true,
+        },
+        phone: {
+            type: String,
+            required: true,
+        },
+        primaryBillingAddress: {
+            type: String,
+            required: true,
+        },
+        primaryShipppingAddress: {
+            type: String,
+            required: false,
         },
         isAdmin: {
             type: Boolean,
