@@ -7,10 +7,12 @@ import {
   RouterProvider
 } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import App from './App';
 import store from './store';
+
 import './assets/styles/bootstrap.custom.css';
 import './assets/styles/index.css';
-import App from './App';
+
 import HomeScreen from './screens/HomeScreen';
 import SignInScreen from './screens/SignInScreen';
 import SignUpScreen from './screens/SignUpScreen';
@@ -20,6 +22,7 @@ import CartScreen from './screens/CartScreen';
 import PrivateRoute from './components/PrivateRoute';
 import ShippingScreen from './screens/ShippingScreen';
 import PaymentScreen from './screens/PaymentScreen';
+import OrderScreen from './screens/OrderScreen';
 
 import reportWebVitals from './reportWebVitals';
 
@@ -32,11 +35,11 @@ const router = createBrowserRouter(
       <Route path='/signup' element={<SignUpScreen />} />
       <Route path='/product/:id' element={<ProductScreen />} />
       <Route path='/cart' element={<CartScreen />} />
-      <Route path='/shipping' element={<ShippingScreen />} />
 
       <Route path='' element={<PrivateRoute />}>
         <Route path='/shipping' element={<ShippingScreen />} />
         <Route path='/payment' element={<PaymentScreen />} />
+        <Route path='/order' element={<OrderScreen />} />
       </Route>
     </Route>
   )

@@ -39,6 +39,10 @@ const cartSlice = createSlice({
       cartState.paymentMethod = action.payload;
       return updateCart(cartState);
     },
+    clearCartAfterOrder: (cartState, action) => { 
+      cartState.cartItems = [];
+      return updateCart(cartState);
+    }
   },
 });
 
@@ -47,6 +51,7 @@ export const {
   removeFromCart, 
   saveShippingAddress, 
   savePaymentMethod, 
+  clearCartAfterOrder,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;
