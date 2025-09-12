@@ -22,14 +22,14 @@ const orderSchema = mongoose.Schema(
         },
       },
     ],
-    shippingAddress: {
+    billingAddress: {
       address: { type: String, required: true },
       unitOrSuite: { type: String, required: false },
       city: { type: String, required: true },
       postalCode: { type: String, required: true },
       country: { type: String, required: true },
     },
-    billingAddress: {
+    shippingAddress: {
       address: { type: String, required: true },
       unitOrSuite: { type: String, required: false },
       city: { type: String, required: true },

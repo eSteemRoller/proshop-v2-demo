@@ -11,7 +11,8 @@ import { toast } from 'react-toastify';
 
 
 export default function SignUpScreen() { 
-  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -41,7 +42,7 @@ export default function SignUpScreen() {
       return;
     } else { 
       try {
-      const dbResponse = await signUp({ name, email, password }).unwrap();
+      const dbResponse = await signUp({ firstName, lastName, email, password }).unwrap();
       dispatch(setCredentials({...dbResponse, }));
       navigate(redirect);
       console.log('Sign in form submit');
@@ -55,13 +56,22 @@ export default function SignUpScreen() {
     <FormContainer>
       <h1>Sign Up</h1>
       <Form onSubmit={signInHandler}>
-        <Form.Group controlId='name' className='my-4'>
-          <Form.Label>First and Last Name:</Form.Label>
+        <Form.Group controlId='firstName' className='my-4'>
+          <Form.Label>First Name:</Form.Label>
           <Form.Control
             type='text'
-            placeholder='Enter your first and last name'
-            value={name}
-            onChange={(formSubmit) => setName(formSubmit.target.value)}
+            placeholder='Enter your first name'
+            value={firstName}
+            onChange={(formSubmit) => setFirstName(formSubmit.target.value)}
+          ></Form.Control>
+        </Form.Group>
+        <Form.Group controlId='lastName' className='my-4'>
+          <Form.Label>Last Name:</Form.Label>
+          <Form.Control
+            type='text'
+            placeholder='Enter your last name'
+            value={lastName}
+            onChange={(formSubmit) => setLastName(formSubmit.target.value)}
           ></Form.Control>
         </Form.Group>
         <Form.Group controlId='email' className='my-4'>
