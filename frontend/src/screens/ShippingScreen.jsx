@@ -40,7 +40,7 @@ export default function ShippingScreen() {
 
   return ( 
     <FormContainer>
-      <CheckoutSteps step1 step2 />
+      <CheckoutSteps step1 step2 step3 />
 
       <h1>Shipping</h1>
 
@@ -95,7 +95,7 @@ export default function ShippingScreen() {
           variant='primary' 
           className='my-4'
         >
-          Continue
+          Continue to Payment
         </Button>
       </Form>
     </FormContainer>

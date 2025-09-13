@@ -51,7 +51,7 @@ export default function Header() {
                 }
               </Nav.Link>
               { userInfo ? ( 
-                <NavDropdown title={ userInfo.name } id='username'>
+                <NavDropdown title={ userInfo.email } id='username'>
                   <NavDropdown.Item onClick={() => navigate('/user')}>
                     Profile
                   </NavDropdown.Item>

@@ -14,19 +14,50 @@ import { ListGroupItem } from "react-bootstrap";
 
 export default function OrderScreen() { 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const cart = useSelector((cartState) => cartState.cart);
 
+  const [createUserOrder, { isLoading, error }] = useCreateUserOrderMutation();
+  
+
   useEffect(() => { 
-    if (!cart.billingAddress.address || !cart.shippingAddress.address) { 
+    if (!cart.billingAddress.address) { 
+      navigate('/billing');
+    } else if (!cart.shippingAddress.address) { 
       navigate('/shipping');
     } else if (!cart.paymentMethod) { 
       navigate('/payment');
     }
-  }, [cart.billingAddress.address, cart.shippingAddress.address, navigate]);
+  }, [ 
+      cart.billingAddress.address, 
+      cart.shippingAddress.address, 
+      cart.paymentMethod, 
+      navigate,
+    ]
+  );
+
+  const submitOrderHandler = async () => { 
+    try {
+      const res = await createUserOrder({ 
+        orderItems: cart.cartItems,
+        billingAddress: cart.billingAddress,
+        shippingAddress: cart.shippingAddress,
+        paymentMethod: cart.paymentMethod,
+        cartSubTotal: cart.cartSubTotal,
+        shippingPrice: cart.shippingPrice,
+        taxCost: cart.taxCost,
+        cartTotal: cart.cartTotal,
+      }).unwrap();
+      dispatch(clearCartAfterOrder());
+      navigate(`/order/${res._id}`);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
 
   return ( 
     <>
-      <CheckoutSteps step1 step2 step3 step4 />
+      <CheckoutSteps step1 step2 step3 step4 step5 />
       <Row>
         <Col md={8}>
           <ListGroup variant='flush'>
@@ -57,7 +88,7 @@ export default function OrderScreen() {
                 </Message>
               ) : ( 
                 <ListGroup>
-                  { cart.orderItems.map((item, index) => ( 
+                  { cart.cartItems.map((item, index) => ( 
                     <ListGroupItem key={index}>
                       <Row>
                         <Col md={2}>
@@ -93,9 +124,41 @@ export default function OrderScreen() {
               </ListGroupItem>
               <ListGroupItem>
                 <Row>
-                  <Col>Sub-total of Items:</Col>
-                  <Col>${cart.itemsPrice}</Col>
+                  <Col>Items Sub-total:</Col>
+                  <Col>${cart.cartSubTotal}</Col>
                 </Row>
+              </ListGroupItem>
+              <ListGroupItem>
+                <Row>
+                  <Col>Shipping:</Col>
+                  <Col>${cart.shippingPrice}</Col>
+                </Row>
+              </ListGroupItem>
+              <ListGroupItem>
+                <Row>
+                  <Col>Tax:</Col>
+                  <Col>${cart.taxCost}</Col>
+                </Row>
+              </ListGroupItem>
+              <ListGroupItem>
+                <Row>
+                  <Col>Total:</Col>
+                  <Col>${cart.cartTotal}</Col>
+                </Row>
+              </ListGroupItem>
+              <ListGroupItem>
+                { error && <Message variant='danger'>{error}</Message> }
+              </ListGroupItem>
+              <ListGroupItem>
+                <Button 
+                  type='button'
+                  className='btn-block'
+                  disabled={cart.cartItems.length === 0}
+                  onClick={submitOrderHandler}
+                >
+                  Submit Order
+                </Button>
+                { isLoading && <Loader /> }
               </ListGroupItem>
             </ListGroup>
           </Card>

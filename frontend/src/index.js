@@ -20,6 +20,7 @@ import ProductScreen from './screens/ProductScreen';
 import CartScreen from './screens/CartScreen';
 
 import PrivateRoute from './components/PrivateRoute';
+import BillingScreen from './screens/BillingScreen';
 import ShippingScreen from './screens/ShippingScreen';
 import PaymentScreen from './screens/PaymentScreen';
 import OrderScreen from './screens/OrderScreen';
@@ -37,6 +38,7 @@ const router = createBrowserRouter(
       <Route path='/cart' element={<CartScreen />} />
 
       <Route path='' element={<PrivateRoute />}>
+        <Route path='/billing' element={<BillingScreen />} />
         <Route path='/shipping' element={<ShippingScreen />} />
         <Route path='/payment' element={<PaymentScreen />} />
         <Route path='/order' element={<OrderScreen />} />

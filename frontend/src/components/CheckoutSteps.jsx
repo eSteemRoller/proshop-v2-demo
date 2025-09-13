@@ -2,7 +2,7 @@
 import { Nav } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-export default function CheckoutSteps({ step1, step2, step3, step4 }) { 
+export default function CheckoutSteps({ step1, step2, step3, step4, step5 }) { 
   
   
   return ( 
@@ -20,6 +20,17 @@ export default function CheckoutSteps({ step1, step2, step3, step4 }) {
       </Nav.Item>
       <Nav.Item>
         { step2 ? ( 
+          <Nav.Link as={Link} to="/billing">
+            Billing
+          </Nav.Link>
+        ) : ( 
+          <Nav.Link disabled>
+            Billing
+          </Nav.Link>
+        ) }
+      </Nav.Item>
+      <Nav.Item>
+        { step3 ? ( 
           <Nav.Link as={Link} to="/shipping">
             Shipping
           </Nav.Link>
@@ -30,7 +41,7 @@ export default function CheckoutSteps({ step1, step2, step3, step4 }) {
         ) }
       </Nav.Item>
       <Nav.Item>
-        { step3 ? ( 
+        { step4 ? ( 
           <Nav.Link as={Link} to="/payment">
             Payment
           </Nav.Link>
@@ -41,13 +52,13 @@ export default function CheckoutSteps({ step1, step2, step3, step4 }) {
         ) }
       </Nav.Item>
       <Nav.Item>
-        { step4 ? ( 
+        { step5 ? ( 
           <Nav.Link as={Link} to="/order">
-            Place Order
+            Order
           </Nav.Link>
         ) : ( 
           <Nav.Link disabled>
-            Place Order
+            Order
           </Nav.Link>
         ) }
       </Nav.Item>

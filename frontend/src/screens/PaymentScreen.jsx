@@ -1,5 +1,5 @@
 
-import { Form, Button, Col } from 'react-bootstrap';
+import { Col, Form, Button } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,15 +15,17 @@ export default function PaymentScreen() {
   const navigate = useNavigate();
 
   const cart = useSelector((cartState) => cartState.cart);
-  const { shippingAddress } = cart;
+  const { billingAddress, shippingAddress } = cart;
 
   useEffect(() => { 
-    if (!shippingAddress) {
+    if (!billingAddress) {
+      navigate('/billing');
+    } else if (!shippingAddress) {
       navigate('/shipping');
     }
-  }, [shippingAddress, navigate]);
+  }, [billingAddress, shippingAddress, navigate]);
 
-  const submitPHandler = (event) => { 
+  const submitPaymentHandler = (event) => { 
     event.preventDefault();
     dispatch(savePaymentMethod(paymentMethod));
     navigate('/order');
@@ -31,9 +33,9 @@ export default function PaymentScreen() {
   
   return ( 
     <FormContainer>
-      <CheckoutSteps step1 step2 step3 />
+      <CheckoutSteps step1 step2 step3 step4 />
       <h1>Payment Method</h1>
-      <Form onSubmit={ submitPHandler }>
+      <Form onSubmit={ submitPaymentHandler }>
         <Form.Group>
           <Form.Label as='legend'>
             Select Payment Method

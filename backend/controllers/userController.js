@@ -18,7 +18,8 @@ const authUser = asyncHandler(async (req, res) => {
 
     res.status(200).json({ 
       _id: user._id,
-      name: user.name,
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
       isAdmin: user.isAdmin,
     });
@@ -33,7 +34,7 @@ const authUser = asyncHandler(async (req, res) => {
 // @route  POST /api/users
 // @access  Public
 const signUpUser = asyncHandler(async (req, res) => { 
-  const { name, email, password } = req.body;
+  const { firstName, lastName, email, password } = req.body;
 
   const userExists = await User.findOne({ email });
 
@@ -42,7 +43,8 @@ const signUpUser = asyncHandler(async (req, res) => {
     throw new Error('User already exists');
   }
   const user = await User.create({ 
-    name,
+    firstName,
+    lastName,
     email,
     password,
   });
@@ -52,7 +54,8 @@ const signUpUser = asyncHandler(async (req, res) => {
 
     res.status(201).json({ 
       _id: user._id,
-      name: user.name,
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
       isAdmin: user.isAdmin,
     });
@@ -87,7 +90,8 @@ const getUserProfile = asyncHandler(async (req, res) => {
   if (user) { 
     res.status(200).json({ 
       _id: user._id,
-      name: user.name,
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
       isAdmin: user.isAdmin,
     });
@@ -104,7 +108,8 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
 
   if (user) { 
-    user.name = req.body.name || user.name;
+    user.firstName = req.body.firstName || user.firstName;
+    user.lastName = req.body.lastName || user.lastName;
     user.email = req.body.email || user.email;
 
     if (req.body.password) { 
@@ -115,7 +120,8 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 
     res.status(200).json({ 
       _id: updatedUser._id,
-      name: updatedUser.name,
+      firstName: updatedUser.firstName,
+      lastName: updatedUser.lastName,
       email: updatedUser.email,
       isAdmin: updatedUser.isAdmin,
     });
