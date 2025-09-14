@@ -10,9 +10,19 @@ export const ordersApiSlice = apiSlice.injectEndpoints({
         url: ORDERS_URL,
         method: 'POST',
         body: {...order}
-      })
-    })
-  })
+      }),
+    }),
+    readUserOrderDetails: builder.query({ 
+      query: (UserOrderId) => ({ 
+        url: `${ORDERS_URL}/${UserOrderId}`,
+        method: 'GET',  // Read function ('GET') by default
+      }),
+      keepUnusedDataFor: 5,  // Seconds
+    }),
+  }),
 });
 
-export const { useCreateUserOrderMutation } = ordersApiSlice;
+export const { 
+  useCreateUserOrderMutation, 
+  useReadUserOrderDetailsQuery 
+} = ordersApiSlice;

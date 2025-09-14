@@ -15,7 +15,7 @@ import { protectRoute, admin } from '../middleware/authHandler.js';
 
 router.route('/').post(protectRoute, createUserOrder).get(protectRoute, admin, readAllOrders);
 router.route('/myorders').get(protectRoute, readAllUsersOrders);
-router.route('/:id').get(protectRoute, admin, readUsersOrderById);
+router.route('/:id').get(protectRoute, readUsersOrderById);
 router.route('/:id/paid').put(protectRoute, updateUsersOrderByIdAsPaid);
 router.route('/:id/shipped').put(protectRoute, admin, updateUsersOrderByIdAsShipped);
 router.route('/:id/delivered').put(protectRoute, admin, updateUsersOrderByIdAsDelivered);
