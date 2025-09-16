@@ -5,7 +5,7 @@ import { ORDERS_URL } from '../constants.js';
 
 export const ordersApiSlice = apiSlice.injectEndpoints({ 
   endpoints: (builder) => ({ 
-    createUserOrder: builder.mutation({ 
+    createUsersOrder: builder.mutation({ 
       query: (order) => ({ 
         url: ORDERS_URL,
         method: 'POST',
@@ -23,6 +23,6 @@ export const ordersApiSlice = apiSlice.injectEndpoints({
 });
 
 export const { 
-  useCreateUserOrderMutation, 
+  useCreateUsersOrderMutation, 
   useReadUserOrderDetailsQuery 
 } = ordersApiSlice;

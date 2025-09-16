@@ -6,7 +6,7 @@ import Order from '../models/orderModel.js';
 // @desc Create/POST new User order
 // @route POST /api/orders
 // @access Private
-const createUserOrder = asyncHandler(async (req, res) => { 
+const createUsersOrder = asyncHandler(async (req, res) => { 
   const { 
     // user,
     orderItems,
@@ -49,7 +49,7 @@ const createUserOrder = asyncHandler(async (req, res) => {
 
     res.status(201).json(createdOrder);
 
-    res.send('createUserOrder');
+    res.send('createUsersOrder');
   }
 });
 
@@ -81,8 +81,27 @@ const readUsersOrderById = asyncHandler(async (req, res) => {
 // @desc Update/PUT User's order as Paid
 // @route PUT /api/orders/:id/paid
 // @access Private
-const updateUsersOrderByIdAsPaid = asyncHandler(async (req, res) => {
-  res.send('updateUsersOrderByIdAsPaid');
+const updateUsersOrderByIdAsPaid = asyncHandler(async (req, res) => { 
+  const order = await order.findById(req.params.id);
+
+  if (order) { 
+    order.isPaid = true;
+    order.paidWhen = Date.now();
+    order.paymentResult = { 
+      id: req.body.id,
+      status: req.body.status,
+      update_time: req.body.update_time,
+      email_address: req.body.payer.email_address,
+    };
+    res.send('updateUsersOrderByIdAsPaid');
+
+    const paidOrder = await order.save();
+
+    res.status(200).json(paidOrder);
+  } else { 
+    res.status(404);
+    throw new Error('Order not found');
+  }
 });
 
 // @desc Update/PUT User's order as Shipped
@@ -108,7 +127,7 @@ const readAllOrders = asyncHandler(async (req, res) => {
 
 
 export { 
-  createUserOrder,
+  createUsersOrder,
   readAllUsersOrders,
   readUsersOrderById,
   updateUsersOrderByIdAsPaid,

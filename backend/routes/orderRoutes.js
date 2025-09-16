@@ -2,7 +2,7 @@
 import express from 'express';
 const router = express.Router();
 import {
-  createUserOrder,
+  createUsersOrder,
   readAllUsersOrders,
   readUsersOrderById,
   updateUsersOrderByIdAsPaid,
@@ -13,7 +13,7 @@ import {
 import { protectRoute, admin } from '../middleware/authHandler.js';
 
 
-router.route('/').post(protectRoute, createUserOrder).get(protectRoute, admin, readAllOrders);
+router.route('/').post(protectRoute, createUsersOrder).get(protectRoute, admin, readAllOrders);
 router.route('/myorders').get(protectRoute, readAllUsersOrders);
 router.route('/:id').get(protectRoute, readUsersOrderById);
 router.route('/:id/paid').put(protectRoute, updateUsersOrderByIdAsPaid);
