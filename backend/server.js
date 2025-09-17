@@ -31,6 +31,9 @@ app.get('/', (req, res) => {
 app.use('/api/products', productRoutes); // Links to productRoutes.js (e.g.: router.get)
 app.use('/api/users', userRoutes); // Links to userRoutes.js (e.g.: router.get)
 app.use('/api/orders', orderRoutes); // Links to orderRoutes.js (e.g.: router.get)
+app.get('/api/config/paypal', (req, res) => 
+  res.send({ clientId: process.env.PAYPAL_CLIENT_ID })); // Links to PayPal sandbox API
+
 
 app.use(notFound);
 app.use(errorHandler);
