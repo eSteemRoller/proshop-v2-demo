@@ -1,16 +1,59 @@
 
+import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Row, Col, Form, ListGroup, Card, Image, Button, ListGroupItem } from 'react-bootstrap';
+import { Row, Col, Form, ListGroup, ListGroupItem, Card, Image, Button } from 'react-bootstrap';
+import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
+import { 
+  useReadUsersOrderDetailsQuery,
+  usePayOrderMutation,
+  useReadPayPalClientIdQuery
+} from '../slices/ordersApiSlice';
 import Message from '../components/Message';
-import Loader from '../components/Loader';;
-import { useReadUserOrderDetailsQuery } from '../slices/ordersApiSlice';
+import Loader from '../components/Loader';
+import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 
 export default function OrderScreen() {
   const { id: orderId } = useParams();
-  const { data: order, refetch, isLoading, error } = 
-    useReadUserOrderDetailsQuery(orderId);
+  const { 
+    data: order, 
+    refetch, 
+    isLoading, 
+    error 
+  } = useReadUsersOrderDetailsQuery(orderId);
+  
+  const [payOrder, { isLoading:loadingPay }] = usePayOrderMutation();
 
+  const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
+
+  const { 
+    data: paypal, 
+    isLoading: loadingPayPal, 
+    error: errorPayPal 
+  } = useReadPayPalClientIdQuery();
+
+  const { userInfo } = useSelector((authState) => authState.auth);
+
+  useEffect(() => { 
+    if (!errorPayPal && !loadingPayPal && paypal.clientId) { 
+      const loadPayPalScript = async () => { 
+        paypalDispatch({ 
+          type: 'resetOptions',
+          value: { 
+            'client-id': paypal.clientId,
+            currency: 'USD',
+          }
+        });
+        paypalDispatch({ type: 'setLoadingStatus', value: 'pending' });
+      }
+      if (order && !order.isPaid) { 
+        if (!window.paypal) { 
+          loadPayPalScript();
+        }
+      }
+    }
+  }, [order, paypal, paypalDispatch, loadingPayPal, errorPayPal]);
 
   return isLoading ? <Loader /> : 
       error ? <Message variant='danger' /> : ( 
