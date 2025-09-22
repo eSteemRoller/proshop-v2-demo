@@ -17,7 +17,7 @@ export default function PlaceOrderScreen() {
   const dispatch = useDispatch();
   const cart = useSelector((cartState) => cartState.cart);
 
-  const [createUsersOrder, { isLoading, error }] = useCreateUsersOrdersMutation();
+  const [createUsersOrder, { isLoading, error }] = useCreateUsersOrderMutation();
   
 
   useEffect(() => { 
