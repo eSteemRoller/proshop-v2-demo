@@ -52,7 +52,7 @@ export default function Header() {
               </Nav.Link>
               { userInfo ? ( 
                 <NavDropdown title={ userInfo.email } id='username'>
-                  <NavDropdown.Item onClick={() => navigate('/user')}>
+                  <NavDropdown.Item onClick={() => navigate('/profile')}>
                     Profile
                   </NavDropdown.Item>
                   <NavDropdown.Item onClick={ signOutHandler }>
