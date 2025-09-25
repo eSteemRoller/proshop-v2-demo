@@ -15,7 +15,7 @@ import './assets/styles/index.css';
 
 import HomeScreen from './screens/HomeScreen';
 import SignInScreen from './screens/SignInScreen';
-import UserProfileScreen from './screens/UserProfileScreen';
+import MyProfileScreen from './screens/MyProfileScreen';
 import SignUpScreen from './screens/SignUpScreen';
 import ProductScreen from './screens/ProductScreen';
 import CartScreen from './screens/CartScreen';
@@ -37,7 +37,8 @@ const router = createBrowserRouter(
     <Route path='/' element={<App />}>
       <Route index={true} path='/' element={<HomeScreen />} />
       <Route path='/signin' element={<SignInScreen />} />
-      <Route path='/profile' element={<UserProfileScreen />} />
+      <Route path='/my_profile' element={<MyProfileScreen />} />
+      <Route path='/my_orders' element={<MyOrdersScreen />} />
       <Route path='/signup' element={<SignUpScreen />} />
       <Route path='/product/:id' element={<ProductScreen />} />
       <Route path='/cart' element={<CartScreen />} />
