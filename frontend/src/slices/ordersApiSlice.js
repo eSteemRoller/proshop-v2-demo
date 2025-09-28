@@ -38,6 +38,10 @@ export const ordersApiSlice = apiSlice.injectEndpoints({
       }),
       keepUnusedDataFor: 5,  // Seconds
     }),
+    getAllOrders: builder.query({ 
+      url: ORDERS_URL,
+    }),
+    keepUnusedDataFor: 5,  // Seconds
   }),
 });
 
@@ -47,4 +51,5 @@ export const {
   usePayOrderMutation,
   useReadPayPalClientIdQuery, 
   useGetMyOrdersQuery,
+  useGetAllOrdersQuery,
 } = ordersApiSlice;
