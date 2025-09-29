@@ -65,7 +65,7 @@ export default function Header() {
                 </Nav.Link>
               )}
               {userInfo && userInfo.isAdmin && ( 
-                <NavDropdown title={ Administrator } id='adminmenu'>
+                <NavDropdown title={ userInfo.lastName } id='adminmenu'>
                   <NavDropdown.Item onClick={() => navigate('/admin/all_orders')}>
                     All Orders
                   </NavDropdown.Item>

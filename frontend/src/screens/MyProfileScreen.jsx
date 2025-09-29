@@ -9,8 +9,8 @@ import {
   Button,
   FormLabel,
   FormControl,
+  Nav
 } from "react-bootstrap";
-import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Message from "../components/Message";
@@ -166,9 +166,9 @@ export default function MyProfileScreen() {
                   </td>
                   <td>
                     <Button className='btn-sm' variant='light'>
-                      <Navigate to={`/order/${order._id}`}>
+                      <Nav to={`/order/${order._id}`}>
                         Order Details
-                      </Navigate>
+                      </Nav>
                     </Button>
                   </td>
                 </tr>

@@ -114,7 +114,21 @@ const updateUsersOrderByIdAsShipped = asyncHandler(async (req, res) => {
 // @desc Update/PUT User's order as Delivered
 // @route PUT /api/orders/:id/delivered
 // @access Private
-const updateUsersOrderByIdAsDelivered = asyncHandler(async (req, res) => {
+const updateUsersOrderByIdAsDelivered = asyncHandler(async (req, res) => { 
+  const order = await Order.findById(req.params.id);
+
+  if (order) { 
+    order.isDelivered = true;
+    order.deliveredWhen = Date.now();
+
+    const updatedOrder = await order.save();
+
+    res.status(200).json(updatedOrder);
+  } else { 
+    res.status(404);
+    throw new Error('Order not found')
+  }
+
   res.send('updateUsersOrderByIdAsDelivered');
 });
 

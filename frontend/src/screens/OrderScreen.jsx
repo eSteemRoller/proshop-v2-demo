@@ -1,12 +1,13 @@
 
 import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Row, Col, Form, ListGroup, ListGroupItem, Card, Image, Button } from 'react-bootstrap';
+import { Row, Col, ListGroup, ListGroupItem, Card, Image, Button } from 'react-bootstrap';
 import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
 import { 
   useReadUsersOrderDetailsQuery,
   usePayOrderMutation,
-  useReadPayPalClientIdQuery
+  useReadPayPalClientIdQuery,
+  useUpdateOrderAsDeliveredMutation
 } from '../slices/ordersApiSlice';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
@@ -34,6 +35,8 @@ export default function OrderScreen() {
   } = useReadPayPalClientIdQuery();
 
   const { userInfo } = useSelector((authState) => authState.auth);
+
+  const [updateOrderAsDelivered, { isLoading: loadingDelivered }] = useUpdateOrderAsDeliveredMutation();
 
   useEffect(() => { 
     if (!errorPayPal && !loadingPayPal && paypal.clientId) { 
@@ -92,6 +95,15 @@ export default function OrderScreen() {
     toast.error(error.message);
   }
 
+  async function deliveredOrderHandler(isDelivered) { 
+    try { 
+      await updateOrderAsDelivered(orderId);
+      refetch();
+      toast.success('Order marked as delivered');
+    } catch (error) {
+      toast.error(error?.data?.message || error.message);
+    }
+  }
 
   return isLoading ? <Loader /> : 
       error ? <Message variant='danger' /> : ( 
@@ -217,7 +229,19 @@ export default function OrderScreen() {
                       )}
                     </ListGroupItem>
                   )}
-                  {/* mark as delivered placeholder */}
+                  {loadingDelivered && <Loader />}
+
+                  {userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered && ( 
+                    <ListGroupItem>
+                      <Button 
+                        type='button' 
+                        className='btn btn-block' 
+                        onClick={deliveredOrderHandler}
+                      >
+                        Mark As Delivered
+                      </Button>
+                    </ListGroupItem>
+                  )}
                 </ListGroup>
               </Card>
             </Col>
