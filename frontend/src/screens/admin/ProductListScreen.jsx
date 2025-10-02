@@ -21,7 +21,7 @@ export default function ProductListScreen() {
       </Col>
       <Col className='text-dend'>
         <Button className='btn-sm m-4'>
-          <FaEdit /> Create Product
+          <FaEdit /> Add Product
         </Button>
       </Col>
     </Row>

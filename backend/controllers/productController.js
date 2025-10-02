@@ -2,7 +2,7 @@
 import asyncHandler from "../middleware/asyncHandler.js";
 import Product from "../models/productModel.js";
 
-// @desc Fetch all products
+// @desc GET/Read all products
 // @route GET /api/products
 // @access Public
 const getProducts = asyncHandler(async (req, res) => {
@@ -10,7 +10,7 @@ const getProducts = asyncHandler(async (req, res) => {
   res.json(products);
 });
 
-// @desc Fetch a product by its Id.
+// @desc GET/Read a product by its Id.
 // @route GET /api/products/:id
 // @access Public
 const getProductById = asyncHandler(async (req, res) => {
@@ -23,4 +23,25 @@ const getProductById = asyncHandler(async (req, res) => {
   throw new Error("Resource(Product) not found");
 });
 
-export { getProducts, getProductById };
+// @desc POST/Create a new product template (to be edited afterward)
+// @route POST /api/products
+// @access Private (Admin)
+const postNewProduct = asyncHandler(async (req, res) => {
+  const product = new Product({ 
+    category: 'Sample category',
+    brand: 'Sample brand',
+    name: 'Sample name',
+    description: 'Sample description',
+    price: 0,
+    image: '/images/sample.jpg',
+    countInStock: 0,
+    numReviews: 0,
+    user: req.user._id,
+  })
+  const newProduct = await product.save();
+
+  res.status(201).json(newProduct);
+});
+
+
+export { getProducts, getProductById, postNewProduct };
