@@ -5,7 +5,7 @@ import Product from "../models/productModel.js";
 // @desc GET/Read all products
 // @route GET /api/products
 // @access Public
-const getProducts = asyncHandler(async (req, res) => {
+const getAllProducts = asyncHandler(async (req, res) => {
   const products = await Product.find({});
   res.json(products);
 });
@@ -20,7 +20,7 @@ const getProductById = asyncHandler(async (req, res) => {
     return res.json(product);
   }
   res.status(404);
-  throw new Error("Resource(Product) not found");
+  throw new Error("Resource (Product) not found");
 });
 
 // @desc POST/Create a new product template (to be edited afterward)
@@ -44,4 +44,4 @@ const postNewProduct = asyncHandler(async (req, res) => {
 });
 
 
-export { getProducts, getProductById, postNewProduct };
+export { getAllProducts, getProductById, postNewProduct };

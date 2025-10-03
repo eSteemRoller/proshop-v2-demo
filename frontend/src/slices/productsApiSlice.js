@@ -1,11 +1,12 @@
 
+import { postNewProduct } from "../../../backend/controllers/productController";
 import { PRODUCTS_URL } from "../constants";
 import { apiSlice } from "./apiSlice";
 
 
 export const productsApiSlice = apiSlice.injectEndpoints({ 
   endpoints: (builder) => ({ 
-    getProducts: builder.query({
+    getAllProducts: builder.query({
       query: () => ({
         url: PRODUCTS_URL,
       }),
@@ -17,11 +18,19 @@ export const productsApiSlice = apiSlice.injectEndpoints({
       }),
       keepUnusedDataFor: 5,
     })
+    postNewProduct: builder.mutation({ 
+      query: () => ({ 
+        url: PRODUCTS_URL,
+        method: 'POST',
+      }),
+      invalidatesTags: ['Product'],
+    })
   }),
 });
 
 export const { 
-  useGetProductsQuery, 
-  useGetProductDetailsQuery 
+  useGetAllProductsQuery, 
+  useGetProductDetailsQuery,
+  usePostNewProductMutation 
 } = 
   productsApiSlice;

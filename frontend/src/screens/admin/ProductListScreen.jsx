@@ -2,13 +2,27 @@
 import { Row, Col, Table, Button, Nav } from 'react-bootstrap';
 import { FaTimes, FaEdit, FaTrash } from 'react-icons/fa';
 import Message from '../../components/Message';
+import { toast } from 'react-toastify';
 import Loader from '../../components/Loader';
-import { useGetAllProductsQuery } from '../../slices/productsApiSlice';
+import { useGetAllProductsQuery, usePostNewProductMutation } from '../../slices/productsApiSlice';
 
 
 export default function ProductListScreen() {
-  const { data: products, isLoading, error } = useGetAllProductsQuery();
+  const { data: products, isLoading, refetch, error } = useGetAllProductsQuery();
   console.log(products);
+
+  const [postNewProduct, { isLoading: loadingPostNewProduct }] = usePostNewProductMutation();
+
+  async function postNewProductHandler() { 
+    if (window.confirm('Create the template for a new product below?')) { 
+      try {
+        await postNewProduct();
+        refetch();
+      } catch (error) {
+        toast.error(error?.data?.message || error.error);
+      }
+    }
+  }
 
   function deleteProductHandler(_id) {
     console.log('delete', id);
@@ -20,11 +34,12 @@ export default function ProductListScreen() {
         <h1>All Products</h1>
       </Col>
       <Col className='text-dend'>
-        <Button className='btn-sm m-4'>
-          <FaEdit /> Add Product
+        <Button className='btn-sm m-4' onClick={postNewProductHandler}>
+          <FaEdit /> Add New Product
         </Button>
       </Col>
     </Row>
+    {loadingPostNewProduct && <Loader />}
     {isLoading ? <Loader />
       : error ? <Message variant='danger'>{error}</Message>
         : ( 
