@@ -21,6 +21,7 @@ import CartScreen from './screens/CartScreen';
 
 import PrivateRoute from './components/PrivateRoute';
 import MyProfileScreen from './screens/MyProfileScreen';
+import MyOrdersScreen from './screens/OrderScreen';
 import BillingScreen from './screens/BillingScreen';
 import ShippingScreen from './screens/ShippingScreen';
 import PaymentScreen from './screens/PaymentScreen';
@@ -28,9 +29,10 @@ import PlaceOrderScreen from './screens/PlaceOrderScreen';
 import OrderScreen from './screens/OrderScreen';
 import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 
+import AdminRoute from './components/AdminRoute';
 import OrderListScreen from './screens/admin/OrderListScreen';
 import ProductListScreen from './screens/admin/ProductListScreen';
-import ProductEditScreen from './screens/admin/ProductListScreen';
+import ProductEditScreen from './screens/admin/ProductEditScreen';
 
 import reportWebVitals from './reportWebVitals';
 
@@ -39,10 +41,10 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<App />}>
       <Route index={true} path='/' element={<HomeScreen />} />
-      <Route path='/signin' element={<SignInScreen />} />
+      <Route path='/sign_in' element={<SignInScreen />} />
       <Route path='/my_profile' element={<MyProfileScreen />} />
       <Route path='/my_orders' element={<MyOrdersScreen />} />
-      <Route path='/signup' element={<SignUpScreen />} />
+      <Route path='/sign_up' element={<SignUpScreen />} />
       <Route path='/product/:id' element={<ProductScreen />} />
       <Route path='/cart' element={<CartScreen />} />
 
@@ -50,8 +52,8 @@ const router = createBrowserRouter(
         <Route path='/billing' element={<BillingScreen />} />
         <Route path='/shipping' element={<ShippingScreen />} />
         <Route path='/payment' element={<PaymentScreen />} />
-        <Route path='/place_order' element={<PlaceOrderScreen />} />
-        <Route path='/order' element={<OrderScreen />} />
+        <Route path='/submit_order' element={<PlaceOrderScreen />} />
+        <Route path='/order_confirmed' element={<OrderScreen />} />
       </Route>
 
       <Route path='' element={<AdminRoute />}>

@@ -8,6 +8,6 @@ export default function AdminRoute() {
   return userInfo && userInfo.isAdmin ? (
     <Outlet />
   ) : (
-    <Navigate to="/signin" replace />
+    <Navigate to="/sign_in" replace />
   );
 }

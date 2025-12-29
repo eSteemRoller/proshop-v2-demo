@@ -9,7 +9,7 @@ export default function CheckoutSteps({ step1, step2, step3, step4, step5 }) {
     <Nav className='justify-content-center mb-4'>
       <Nav.Item>
         { step1 ? ( 
-          <Nav.Link as={Link} to="/signin">
+          <Nav.Link as={Link} to="/sign_in">
             Sign In
           </Nav.Link>
         ) : ( 

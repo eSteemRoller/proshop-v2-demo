@@ -23,7 +23,7 @@ export default function Header() {
     try {
       await signOutApiCall().unwrap();
       dispatch(signOut());
-      navigate('/signin');
+      navigate('/sign_in');
     } catch (error) {
       console.log(error);
     }

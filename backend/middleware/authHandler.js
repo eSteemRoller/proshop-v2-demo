@@ -5,7 +5,7 @@ import User from '../models/userModel.js';
 
 
 // Protect routes
-export const protectRoute = asyncHandler(async (req, res, next) => { 
+export const protect = asyncHandler(async (req, res, next) => { 
   let JWToken;
 
   // Read the JWToken from the cookie

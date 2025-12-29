@@ -1,5 +1,5 @@
 
-import { postNewProduct, updateProduct } from "../../../backend/controllers/productController";
+// import { postNewProduct, updateProduct } from "../../../backend/controllers/productController";
 import { PRODUCTS_URL } from "../constants";
 import { apiSlice } from "./apiSlice";
 
@@ -25,7 +25,7 @@ export const productsApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Product'],
     }),
-    updateProduct: builder.mutation({ 
+    updateAProduct: builder.mutation({ 
       query: (data) => ({ 
         url: `${PRODUCTS_URL}/${data._id}`,
         method: 'PUT',
@@ -40,6 +40,6 @@ export const {
   useGetAllProductsQuery, 
   useGetProductDetailsQuery,
   usePostNewProductMutation, 
-  useUpdateProductMutation
+  useUpdateAProductMutation
 } = 
   productsApiSlice;

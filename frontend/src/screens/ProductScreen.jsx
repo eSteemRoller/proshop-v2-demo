@@ -109,10 +109,10 @@ export default function ProductScreen() {
                   <Button
                     className="flex-fill"
                     type="button"
-                    disabled={product.countInStock === 0}
+                    disabled={product.countInStock === 0 } // To Do: Disable cursor if item already in cart
                     style={
                       product.countInStock === 0
-                        ? { cursor: "not-allowed", pointerEvents: "auto" } // override Bootstrap from disabling cursor
+                        ? { cursor: "not-allowed", pointerEvents: "auto" } // overrides Bootstrap from disabling cursor
                         : {}
                     }
                     onClick={addToCartHandler}

@@ -56,7 +56,7 @@ const createUsersOrder = asyncHandler(async (req, res) => {
 // @desc Read/GET all User's orders
 // @route GET /api/orders/my_orders
 // @access Private
-const getMyOrders = asyncHandler(async (req, res) => { 
+const readAllUsersOrders = asyncHandler(async (req, res) => { 
   const allUsersOrders = await Order.find({ user: req.user._id });
   res.status(200).json(allUsersOrders);
   res.send('getMyOrders');
@@ -135,7 +135,7 @@ const updateUsersOrderByIdAsDelivered = asyncHandler(async (req, res) => {
 // @desc Read/GET all orders
 // @route GET /api/orders
 // @access Private (Admin)
-const getAllOrders = asyncHandler(async (req, res) => {
+const readAllOrders = asyncHandler(async (req, res) => {
   const orders = await Order.find({}).populate('user', 'id lastName');
   res.status(200).json(orders);
   res.send('getAllOrders');
@@ -144,11 +144,11 @@ const getAllOrders = asyncHandler(async (req, res) => {
 
 export { 
   createUsersOrder,
-  getMyOrders,
+  readAllUsersOrders,
   readUsersOrderById,
   updateUsersOrderByIdAsPaid,
   updateUsersOrderByIdAsShipped,
   updateUsersOrderByIdAsDelivered,
-  getAllOrders,
+  readAllOrders,
 };
 

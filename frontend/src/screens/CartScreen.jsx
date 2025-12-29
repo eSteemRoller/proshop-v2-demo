@@ -23,7 +23,7 @@ export default function CartScreen() {
   };
 
   const checkoutHandler = () => {
-    navigate('/signin?redirect=/billing');
+    navigate('/sign_in?redirect=/billing');
   };
 
   return (
@@ -89,10 +89,10 @@ export default function CartScreen() {
                 .toFixed(2) }
             </ListGroup.Item>
             <ListGroup.Item>
-              <Button 
-                type='button' 
-                className='btn-block' 
+              <Button
+                type='button'
                 disabled={ cartItems.length === 0 }
+                className={`btn-block ${cartItems.length === 0 ? 'cart-empty-hover' : ''}`}
                 onClick={ checkoutHandler }
               >
                 Proceed to Checkout

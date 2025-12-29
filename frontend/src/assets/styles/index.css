@@ -51,3 +51,11 @@ table th {
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
 }
+
+/* When cart is empty, show not-allowed cursor for the checkout button (hover and disabled) */
+button.cart-empty-hover,
+button.cart-empty-hover:hover,
+button.cart-empty-hover:disabled,
+button.cart-empty-hover[disabled] {
+  cursor: not-allowed !important;
+}

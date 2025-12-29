@@ -114,8 +114,8 @@ export default function SignUpScreen() {
       <Row className='py-4'>
         <Col>
           Already signed up? <Link to={ redirect ? 
-            `/signin?redirect=${redirect}` : 
-              '/signin'}>Sign In</Link>
+            `/sign_in?redirect=${redirect}` : 
+              '/sign_in'}>Sign In</Link>
         </Col>
       </Row>
     </FormContainer>

@@ -46,7 +46,7 @@ const postNewProduct = asyncHandler(async (req, res) => {
 // @desc PUT/Update a product
 // @route PUT /api/products/:id
 // @access Private (Admin)
-const updateProduct = asyncHandler(async (req, res) => {
+const updateAProduct = asyncHandler(async (req, res) => {  // aka updateProduct
   const { 
       category,
       brand,
@@ -68,8 +68,8 @@ const updateProduct = asyncHandler(async (req, res) => {
     product.image = image;
     product.countInStock = countInStock;
 
-    const updatedProduct = await product.save();
-    res.json(updatedProduct);
+    const updatedAProduct = await product.save();
+    res.json(updatedAProduct);
   } else { 
     res.status(404);
     throw new Error('Product not found');
@@ -79,5 +79,4 @@ const updateProduct = asyncHandler(async (req, res) => {
 });
 
 
-
-export { getAllProducts, getProductById, postNewProduct, updateProduct };
+export { getAllProducts, getProductById, postNewProduct, updateAProduct };

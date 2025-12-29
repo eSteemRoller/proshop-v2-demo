@@ -6,7 +6,7 @@ import genToken from "../utils/genToken.js";
 
 
 // @desc  Auth user & get JsonWebToken (Create authorization)
-// @route  POST /api/users/signin
+// @route  POST /api/users/sign_in
 // @access  Public
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
@@ -66,7 +66,7 @@ const signUpUser = asyncHandler(async (req, res) => {
 });
 
 // @desc  Sign out user & clear (delete, not just clear contents) cookie
-// @route  POST /api/users/signout
+// @route  POST /api/users/sign_out
 // @access  Private (User)
 const signOutUser = asyncHandler(async (req, res) => { 
   // if (req.user) {

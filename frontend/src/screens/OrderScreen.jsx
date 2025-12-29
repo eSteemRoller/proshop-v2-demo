@@ -15,7 +15,7 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 
-export default function OrderScreen() {
+export default function MyOrdersScreen() {
   const { id: orderId } = useParams();
   const { 
     data: order, 
