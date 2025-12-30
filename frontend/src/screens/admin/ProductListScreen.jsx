@@ -1,6 +1,7 @@
 
-import { Row, Col, Table, Button, Nav } from 'react-bootstrap';
-import { FaTimes, FaEdit, FaTrash } from 'react-icons/fa';
+import { Row, Col, Table, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import { FaTimes, FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
 import Message from '../../components/Message';
 import { toast } from 'react-toastify';
 import Loader from '../../components/Loader';
@@ -25,17 +26,17 @@ export default function ProductListScreen() {
   }
 
   function deleteProductHandler(_id) {
-    console.log('delete', id);
+    console.log('Product deleted: ', _id);
   };
 
   return <>
-    <Row className='align-items-center'>
+    <Row>
       <Col>
-        <h1>All Products</h1>
+        <h1 className='m-2'>All Products</h1>
       </Col>
-      <Col className='text-dend'>
-        <Button className='btn-sm m-4' onClick={postNewProductHandler}>
-          <FaEdit /> Add New Product
+      <Col className='d-flex align-items-center justify-content-end'>
+        <Button className='btn-sm me-2 align-items-center' onClick={postNewProductHandler}>
+          <FaPlus /> Add New Product
         </Button>
       </Col>
     </Row>
@@ -46,36 +47,38 @@ export default function ProductListScreen() {
           <>
             <Table striped hover responsive className='table-sm'>
               <thead>
-                <tr>
+                <tr className='text-center'>
                   <th>ID</th>
                   <th>CATEGORY</th>
                   <th>BRAND</th>
                   <th>NAME</th>
                   <th>PRICE</th>
-                  <th>EDIT?</th>
-                  <th>DELETE?</th>
+                  <th className='text-center'>EDIT?</th>
+                  <th className='text-center'>DELETE?</th>
                 </tr>
               </thead>
               <tbody>
-                {products.map((product) => ( 
-                  <tr key={product._id}>
-                    <td>{product._id}</td>
-                    <td>{product.category}</td>
-                    <td>{product.brand}</td>
-                    <td>{product.name}</td>
-                    <td>{product.price}</td>
-                    <td>
-                      <Nav to={`/admin/product/${product._id}/edit_product`}>
-                        <Button variant='light' className='btn-sm mx-4'>
+                {products.map((product) => (
+                  <tr key={product._id} className='align-middle text-center'>
+                    <td className='align-middle text-center'>{product._id}</td>
+                    <td className='align-middle text-center'>{product.category}</td>
+                    <td className='align-middle text-center'>{product.brand}</td>
+                    <td className='align-middle text-center'>{product.name}</td>
+                    <td className='align-middle text-center'>{product.price}</td>
+                    <td className='align-middle text-center'>
+                      <Link to={`/admin/product/${product._id}/edit_product`}>
+                        <Button variant='light' className='btn-sm d-flex justify-content-center align-items-center mx-auto'>
                           <FaEdit />
                         </Button>
-                      </Nav>
-                      <Button 
-                        onClick={() => deleteProductHandler(product._id)} 
-                        variant='danger' 
-                        className='btn-sm mx-4' 
+                      </Link>
+                    </td>
+                    <td className='align-middle text-center'>
+                      <Button
+                        onClick={() => deleteProductHandler(product._id)}
+                        variant='danger'
+                        className='btn-sm mx-4'
                       >
-                        <FaTrash style={{color: 'white'}}/>
+                        <FaTrash style={{color: 'white'}} />
                       </Button>
                     </td>
                   </tr>
