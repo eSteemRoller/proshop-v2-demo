@@ -5,7 +5,11 @@ import { Form, Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
-import { useGetProductDetailsQuery, useUpdateAProductMutation } from '../../slices/productsApiSlice';
+import { 
+  useGetProductDetailsQuery, 
+  useUpdateAProductMutation, 
+  useUploadProductImageMutation 
+} from '../../slices/productsApiSlice';
 
 
 export default function ProductEditScreen() { 
@@ -26,7 +30,11 @@ export default function ProductEditScreen() {
     error
   } = useGetProductDetailsQuery(productId);
 
-  const [updateProduct, { isLoading: loadingUpdate }] = useUpdateAProductMutation();
+  const [updateAProduct, { isLoading: loadingUpdate }] = 
+    useUpdateAProductMutation();
+
+  const [uploadProductImage, { isLoading: isUploading }] = 
+    useUploadProductImageMutation();
 
   const navigate = useNavigate();
 
@@ -63,6 +71,18 @@ export default function ProductEditScreen() {
     };
   };
 
+  const uploadFileHandler = async (e) => { 
+    const formData = new FormData();
+    formData.append('image', e.target.files[0]);
+    try {
+      const res = await uploadProductImage(formData).unwrap();
+      toast.success(res.message);
+      setImage(res.image);
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
+    }
+  };
+
   
   return (
     <>
@@ -77,6 +97,23 @@ export default function ProductEditScreen() {
           : error ? <Message variant='danger'>{error}</Message>
           : ( 
             <Form onSubmit={ submitHandler }>
+              <Form.Group controlId='image' className='mt-2 mb-3'>
+                <Form.Label>Image</Form.Label>
+                <Form.Text><br></br>Enter a product image URL:</Form.Text>
+                <Form.Control 
+                  type='text'
+                  placeholder="Enter product image URL"
+                  value={image}
+                  onChange={(e) => setImage(e.target.value)}
+                ></Form.Control>
+                <Form.Text><br></br>OR...</Form.Text>
+                <Form.Text><br></br>Select a local product image file:</Form.Text>
+                <Form.Control
+                  type='file'
+                  label="Select product image file"
+                  onChange={uploadFileHandler}
+                ></Form.Control>
+              </Form.Group>
               <Form.Group controlId='category' className='mt-2 mb-3'>
                 <Form.Label>Category</Form.Label>
                 <Form.Control 
@@ -132,7 +169,7 @@ export default function ProductEditScreen() {
                 ></Form.Control>
               </Form.Group>
               <div className='d-flex flex:space-between'>
-                <Button className='btn btn-light my-2' asChild>
+                <Button className='btn btn-light my-2'>
                   <Link to='/admin/all_products'>
                     Cancel
                   </Link>

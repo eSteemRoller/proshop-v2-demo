@@ -2,8 +2,10 @@
 import path from 'path';
 import express from 'express';
 import multer from 'multer';
-import { message } from 'statuses';
+import pkg from 'statuses';
 
+
+const { message } = pkg;
 
 const router = express.Router();
 
@@ -29,7 +31,7 @@ function validateUploadFileType(file, cb) {  // aka checkFileType
   } else { 
     cb("Only recognized image file types (jpg|jpeg|jpe|png|gif|bmp|tiff|tif|webp|svg|heif|heic|avif|raw|nef|cr2|arw|dng|psd|eps|apng) allowed");
   }
-}
+};
 
 const upload = multer({ 
   storage,
