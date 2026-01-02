@@ -59,7 +59,7 @@ export default function MyProfileScreen() {
           password,
         }).unwrap();
         dispatch(setCredentials(res));
-        toast.success("Profile updated successfully");
+        toast.success("Success: Profile updated successfully");
       } catch (error) {
         toast.error(error?.data?.message || error.error);
       }
@@ -117,9 +117,16 @@ export default function MyProfileScreen() {
               onChange={(e) => setConfirmPassword(e.target.value)}
             ></FormControl>
           </FormGroup>
-          <Button type="submit" variant="primary" className="my-2">
-            Update
-          </Button>
+          <div className="d-flex justify-content-end">
+            <Button 
+              type="submit"  
+              variant="primary" 
+              className="my-2" 
+              onClick={submitHandler}  // To do: Add functionality to button
+            >
+              Save
+            </Button>
+          </div>
           {loadingUpdateUserProfile && <Loader />}
         </Form>
       </Col>

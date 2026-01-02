@@ -5,28 +5,43 @@ import { FaTimes, FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
 import Message from '../../components/Message';
 import { toast } from 'react-toastify';
 import Loader from '../../components/Loader';
-import { useGetAllProductsQuery, usePostNewProductMutation } from '../../slices/productsApiSlice';
+import { 
+  useGetAllProductsQuery, 
+  usePostNewProductMutation, 
+  useDeleteAProductMutation
+} from '../../slices/productsApiSlice';
 
 
 export default function ProductListScreen() {
-  const { data: products, isLoading, refetch, error } = useGetAllProductsQuery();
+  const { data: products, product_id, isLoading, refetch, error } = useGetAllProductsQuery();
   console.log(products);
 
-  const [postNewProduct, { isLoading: loadingPostNewProduct }] = usePostNewProductMutation();
+  const [postNewProduct, { isLoading: isPostingNewProduct }] = usePostNewProductMutation();
 
   async function postNewProductHandler() { 
     if (window.confirm('Create the template for a new product below?')) { 
       try {
         await postNewProduct();
+        // toast.success(`Success: Product ${product._id, product.name} created`)
         refetch();
-      } catch (error) {
-        toast.error(error?.data?.message || error.error);
+      } catch (err) {
+        toast.error(err?.data?.message || err.error);
       }
     }
   }
 
-  function deleteProductHandler(_id) {
-    console.log('Product deleted: ', _id);
+  const [deleteAProduct, { isLoading: isDeletingAProduct }] = useDeleteAProductMutation();
+
+  const deleteAProductHandler = async (_id) => {
+    if (window.confirm("Are you sure?")) { 
+      try {
+        await deleteAProduct(_id);
+        // toast.success(`Success: Product ${product._id, product.name} deleted`)
+        refetch();
+      } catch (err) {
+        toast.error(err?.data?.message || err.error);
+      }
+    }
   };
 
   return <>
@@ -40,7 +55,8 @@ export default function ProductListScreen() {
         </Button>
       </Col>
     </Row>
-    {loadingPostNewProduct && <Loader />}
+    {isPostingNewProduct && <Loader />}
+    {isDeletingAProduct && <Loader />}
     {isLoading ? <Loader />
       : error ? <Message variant='danger'>{error}</Message>
         : ( 
@@ -74,7 +90,7 @@ export default function ProductListScreen() {
                     </td>
                     <td className='align-middle text-center'>
                       <Button
-                        onClick={() => deleteProductHandler(product._id)}
+                        onClick={() => deleteAProductHandler(product._id)}
                         variant='danger'
                         className='btn-sm mx-4'
                       >

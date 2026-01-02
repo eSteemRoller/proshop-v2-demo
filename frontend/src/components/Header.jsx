@@ -53,7 +53,7 @@ export default function Header() {
               { userInfo ? ( 
                 <NavDropdown title={ userInfo.email } id='username'>
                   <NavDropdown.Item onClick={() => navigate('/my_profile')}>
-                    Profile
+                    View/Edit My Profile
                   </NavDropdown.Item>
                   <NavDropdown.Item onClick={ signOutHandler }>
                     Sign Out
@@ -65,15 +65,15 @@ export default function Header() {
                 </Nav.Link>
               )}
               {userInfo && userInfo.isAdmin && ( 
-                <NavDropdown title={ userInfo.lastName } id='adminmenu'>
+                <NavDropdown title="Administrator Menu" id='adminmenu'>
                   <NavDropdown.Item onClick={() => navigate('/admin/all_orders')}>
-                    All Orders
+                    View/Edit All Orders
                   </NavDropdown.Item>
                   <NavDropdown.Item onClick={() => navigate('/admin/all_products')}>
-                    All Products
+                    View/Edit All Products
                   </NavDropdown.Item>
                   <NavDropdown.Item onClick={() => navigate('/admin/all_users')}>
-                    All Users
+                    View/Edit All Users
                   </NavDropdown.Item>
                 </NavDropdown>
               )}

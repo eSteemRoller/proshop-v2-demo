@@ -26,13 +26,17 @@ export default function CartScreen() {
     navigate('/sign_in?redirect=/billing');
   };
 
+  const continueShoppingHandler = () => { 
+    navigate('/sign_in?redirect=/');
+  }
+
   return (
     <Row>
       <Col md={8}>
         <h1 style={{marginBottom: '16px'}}>Shopping Cart</h1>
         { cartItems.length === 0 ? ( 
           <Message>
-            Your cart is empty! <Link to='/'>Return to Latest Products</Link>
+            Your cart is empty! <Link to='/'>Continue Shopping</Link>
           </Message>
           ) : ( 
           <ListGroup variant='flush'>
@@ -88,11 +92,29 @@ export default function CartScreen() {
               ${ cartItems.reduce((acc, item) => acc + item.productQty * item.price, 0)
                 .toFixed(2) }
             </ListGroup.Item>
-            <ListGroup.Item>
+            <ListGroup.Item className='d-flex justify-content-between'>
               <Button
                 type='button'
-                disabled={ cartItems.length === 0 }
-                className={`btn-block ${cartItems.length === 0 ? 'cart-empty-hover' : ''}`}
+                // disabled={cartItems.length === 0}
+                // style={
+                //   cartItems.length === 0
+                //     ? { cursor: "not-allowed", pointerEvents: "auto" } // overrides Bootstrap from disabling cursor
+                //     : {}
+                // }
+                className='btn-block'
+                onClick={ continueShoppingHandler }
+              >
+                Continue Shopping
+              </Button>
+              <Button
+                type='button'
+                disabled={cartItems.length === 0}
+                style={
+                  cartItems.length === 0
+                    ? { cursor: "not-allowed", pointerEvents: "auto" } // overrides Bootstrap from disabling cursor
+                    : {}
+                }
+                className='btn-block'
                 onClick={ checkoutHandler }
               >
                 Proceed to Checkout

@@ -168,7 +168,7 @@ export default function ProductEditScreen() {
                   onChange={(e) => setCountInStock(e.target.value)}
                 ></Form.Control>
               </Form.Group>
-              <div className='d-flex flex:space-between'>
+              <div className='d-flex justify-content-between'>
                 <Button className='btn btn-light my-2'>
                   <Link to='/admin/all_products'>
                     Cancel

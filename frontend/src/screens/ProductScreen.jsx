@@ -3,12 +3,13 @@ import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Form, Row, Col, Image, ListGroup, Card, Button } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Rating from '../components/Rating';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import { useGetProductDetailsQuery } from "../slices/productsApiSlice";
 import { addToCart } from '../slices/cartSlice';
+
 
 export default function ProductScreen() {
   const { id: productId } = useParams();
@@ -17,6 +18,7 @@ export default function ProductScreen() {
   const navigate = useNavigate();
 
   const [productQty, setProductQty] = useState(1);
+  const { cartItems } = useSelector((cartState) => cartState.cart);
   const [showGoToCartButton, setShowGoToCartButton] = useState(false)
 
   const {
@@ -29,6 +31,9 @@ export default function ProductScreen() {
     dispatch(addToCart({ ...product, productQty }));
     // navigate('/cart');
     setShowGoToCartButton(true);
+    // if (productQty > 0) { 
+    //   res.status(304).json({ message: "Error: Item quantity can be adjusted in your cart"});
+    // }
   }
 
   return (
@@ -112,6 +117,10 @@ export default function ProductScreen() {
                     disabled={product.countInStock === 0 } // To Do: Disable cursor if item already in cart
                     style={
                       product.countInStock === 0
+                        ? { cursor: "not-allowed", pointerEvents: "auto" } // overrides Bootstrap from disabling cursor
+                        : {}
+                      ||
+                      cartItems.productQty > 0
                         ? { cursor: "not-allowed", pointerEvents: "auto" } // overrides Bootstrap from disabling cursor
                         : {}
                     }
