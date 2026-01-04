@@ -6,7 +6,7 @@ import Loader from '../../components/Loader';
 import { useGetAllOrdersQuery } from '../../slices/ordersApiSlice';
 
 
-export default function OrderListScreen() {
+export default function AllOrdersListScreen() {
   const { data: orders, isLoading, error } = useGetAllOrdersQuery();
   console.log(orders);
 
@@ -74,7 +74,7 @@ export default function OrderListScreen() {
             </tbody>
           </Table>
         )
-      }
+      };
     </>
   )
-}
+};
