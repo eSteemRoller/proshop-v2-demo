@@ -32,7 +32,9 @@ export default function AllUsersListScreen() {
                 <th>FIRST NAME</th>
                 <th>LAST NAME</th>
                 <th>E-MAIL</th>
-                <th>ADMIN</th>
+                <th>ADMINISTRATOR</th>
+                <th>EDIT?</th>
+                <th>DELETE?</th>
               </tr>
             </thead>
             <tbody>
@@ -50,12 +52,16 @@ export default function AllUsersListScreen() {
                     )}
                   </td>
                   <td>
-                    <Nav to={`admin/all_users/${user._id}/edit_user`}>  {/* To do: Check if this is the right path */}
-                      <Button variant='light' className='btn-sm'>
+                    <Nav to={`admin/all_users/${user._id}/edit_user`} class=''>  {/* To do: Check if this is the right path */}
+                      <Button 
+                        variant='light' 
+                        className='btn-sm'>
                         <FaEdit />
                       </Button>
                     </Nav>
-                    <Nav to={`admin/all_users/${user._id}/edit_user`}>  {/* To do: Check if this is the right path */}
+                  </td>
+                  <td>
+                    <Nav to={`admin/all_users/${user._id}/edit_user`} class=''>  {/* To do: Check if this is the right path */}
                       <Button 
                         variant='danger' 
                         className='btn-sm' 
