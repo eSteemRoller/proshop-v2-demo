@@ -2,23 +2,37 @@ import { Table, Button, Nav } from 'react-bootstrap';
 import { FaTimes, FaTrash, FaEdit, FaCheck } from 'react-icons/fa';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
-import { useGetAllUsersQuery } from '../../slices/usersApiSlice';
+import { useGetAllUsersQuery, useDeleteUserMutation } from '../../slices/usersApiSlice';
+import { toast } from 'react-toastify';
 
 
 export default function AllUsersListScreen() {
   const { data: users, refetch, isLoading, error } = useGetAllUsersQuery();
   console.log(users);
 
-  const deleteAUserHandler = (id) => { 
+  const [ deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
 
-  }
+  const deleteUserHandler = async (id) => { 
+    if (window.confirm("Are you sure?")) { 
+      try {
+        await deleteUser(id);
+        toast.success("Success: User deleted");
+        refetch();
+      } catch (err) {
+        toast.error(err?.data?.message || err.error);
+      }
+    }
+  };
 
   return (
     <>
       <h1>All Users</h1>
-      {isLoading ? <Loader /> 
-        : error ? <Message variant='danger'>{error}</Message> 
-        : ( 
+      {isDeleting && <Loader />}
+      {isLoading ? (
+        <Loader /> 
+      ) : error ? (
+        <Message variant='danger'>{error}</Message> 
+      ) : ( 
           <Table 
             strong
             striped 
@@ -65,7 +79,7 @@ export default function AllUsersListScreen() {
                       <Button 
                         variant='danger' 
                         className='btn-sm' 
-                        onClick={() => deleteAUserHandler(user._id)}
+                        onClick={() => deleteUserHandler(user._id)}
                       >
                         <FaTrash style={{color: 'white'}}/>
                       </Button>
@@ -79,4 +93,4 @@ export default function AllUsersListScreen() {
       }
     </>
   )
-}
+};

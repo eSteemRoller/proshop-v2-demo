@@ -8,7 +8,7 @@ import Loader from '../../components/Loader';
 import { 
   useGetAllProductsQuery, 
   usePostNewProductMutation, 
-  useDeleteAProductMutation
+  useDeleteProductMutation
 } from '../../slices/productsApiSlice';
 
 
@@ -30,7 +30,7 @@ export default function ProductListScreen() {
     }
   }
 
-  const [deleteAProduct, { isLoading: isDeletingAProduct }] = useDeleteAProductMutation();
+  const [deleteProduct, { isLoading: isDeletingProduct }] = useDeleteAProductMutation();
 
   const deleteAProductHandler = async (_id) => {
     if (window.confirm("Are you sure?")) { 
@@ -56,7 +56,7 @@ export default function ProductListScreen() {
       </Col>
     </Row>
     {isPostingNewProduct && <Loader />}
-    {isDeletingAProduct && <Loader />}
+    {isDeletingProduct && <Loader />}
     {isLoading ? <Loader />
       : error ? <Message variant='danger'>{error}</Message>
         : ( 
@@ -90,7 +90,7 @@ export default function ProductListScreen() {
                     </td>
                     <td className='align-middle text-center'>
                       <Button
-                        onClick={() => deleteAProductHandler(product._id)}
+                        onClick={() => deleteProductHandler(product._id)}
                         variant='danger'
                         className='btn-sm mx-4'
                       >
