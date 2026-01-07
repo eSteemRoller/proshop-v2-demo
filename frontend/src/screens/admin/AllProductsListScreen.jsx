@@ -30,12 +30,12 @@ export default function ProductListScreen() {
     }
   }
 
-  const [deleteProduct, { isLoading: isDeletingProduct }] = useDeleteAProductMutation();
+  const [deleteProduct, { isLoading: isDeletingProduct }] = useDeleteProductMutation();
 
-  const deleteAProductHandler = async (_id) => {
+  const deleteProductHandler = async (_id) => {
     if (window.confirm("Are you sure?")) { 
       try {
-        await deleteAProduct(_id);
+        await deleteProduct(_id);
         // toast.success(`Success: Product ${product._id, product.name} deleted`)
         refetch();
       } catch (err) {

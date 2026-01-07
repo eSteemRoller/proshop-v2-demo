@@ -66,7 +66,7 @@ export default function AllUsersListScreen() {
                     )}
                   </td>
                   <td>
-                    <Nav to={`admin/all_users/${user._id}/edit_user`} class=''>  {/* To do: Check if this is the right path */}
+                    <Nav to={`/admin/all_users/${user._id}/edit_user`} class=''>  {/* To do: Check if this is the right path */}
                       <Button 
                         variant='light' 
                         className='btn-sm'>
@@ -75,7 +75,7 @@ export default function AllUsersListScreen() {
                     </Nav>
                   </td>
                   <td>
-                    <Nav to={`admin/all_users/${user._id}/edit_user`} class=''>  {/* To do: Check if this is the right path */}
+                    <Nav to={`/admin/all_users/${user._id}/edit_user`} class=''>  {/* To do: Check if this is the right path */}
                       <Button 
                         variant='danger' 
                         className='btn-sm' 

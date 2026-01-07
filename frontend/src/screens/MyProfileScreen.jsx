@@ -32,7 +32,7 @@ export default function MyProfileScreen() {
 
   const { userInfo } = useSelector((authState) => authState.auth);
 
-  const [updateUserProfile, { isLoading: loadingUpdateUserProfile }] =
+  const [updateUserProfile, { isLoading: isUpdating, UserProfile }] =
     useUserProfileMutation();
 
   const { data: orders, isLoading, error } = useGetMyOrdersQuery();
@@ -127,7 +127,7 @@ export default function MyProfileScreen() {
               Save
             </Button>
           </div>
-          {loadingUpdateUserProfile && <Loader />}
+          {isUpdatingUserProfile && <Loader />}
         </Form>
       </Col>
 

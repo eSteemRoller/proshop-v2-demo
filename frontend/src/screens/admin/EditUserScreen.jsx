@@ -1,3 +1,5 @@
+
+import React from 'react'
 import { useState, useEffect } from 'react';
 import { Link, Nav, useNavigate, useParams } from 'react-router-dom';
 import FormContainer from '../../components/FormContainer';
@@ -6,81 +8,56 @@ import { toast } from 'react-toastify';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import { 
-  useGetProductDetailsQuery, 
-  useEditProductMutation, 
-  useUploadProductImageMutation 
-} from '../../slices/productsApiSlice';
+  useGetUserDetailsQuery, 
+  useEditUserMutation, 
+} from '../../slices/usersApiSlice';
 
 
-export default function ProductEditScreen() { 
-  const { id: productId } = useParams();
+export default function EditUserScreen() { 
+  const { id: userId } = useParams();
 
-  const [image, setImage] = useState('');
-  const [category, setCategory] = useState('');
-  const [brand, setBrand] = useState('');
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [price, setPrice] = useState(0);
-  const [countInStock, setCountInStock] = useState(0);
+  const [email, setEmail] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const { 
-    data: product, 
+    data: user, 
     isLoading,
     refetch,
     error
-  } = useGetProductDetailsQuery(productId);
+  } = useGetUserDetailsQuery(userId);
 
-  const [editProduct, { isLoading: isUpdating }] = 
-    useEditProductMutation();
-
-  const [uploadProductImage, { isLoading: isUploading }] = 
-    useUploadProductImageMutation();
+  const [editUser, { isLoading: isUpdating }] = 
+    useEditUserMutation();
 
   const navigate = useNavigate();
 
   useEffect(() => { 
-    if (product) { 
-      setImage(product.image);
-      setCategory(product.category);
-      setBrand(product.brand);
-      setName(product.name);
-      setDescription(product.description);
-      setPrice(product.price);
-      setCountInStock(product.countInStock);
-    } }, [product]);
+    if (user) { 
+      setEmail(user.email);
+      setFirstName(user.firstName);
+      setLastName(user.lastName);
+      setIsAdmin(user.isAdmin);
+    } }, [user]);
 
   const submitHandler = async (e) => { 
     e.preventDefault();
-    const updatedProduct = { 
-      productId,
-      image,
-      category,
-      brand,
-      name,
-      description,
-      price,
-      countInStock
+    const updatedUser = { 
+      userId,
+      email,
+      firstName,
+      lastName,
+      isAdmin,
     };
 
-    const result = await editProduct(updatedProduct);
+    const result = await editUser(updatedUser);
     if (result.error) { 
       toast.error(result.error);
     } else { 
-      toast.success("Success: Product updated");
-      navigate('/admin/all_products');
+      toast.success("Success: User updated");
+      navigate('/admin/all_users');
     };
-  };
-
-  const uploadFileHandler = async (e) => { 
-    const formData = new FormData();
-    formData.append('image', e.target.files[0]);
-    try {
-      const res = await uploadProductImage(formData).unwrap();
-      toast.success(res.message);
-      setImage(res.image);
-    } catch (err) {
-      toast.error(err?.data?.message || err.error);
-    }
   };
 
   

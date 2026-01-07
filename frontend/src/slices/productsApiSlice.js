@@ -1,6 +1,6 @@
 
 // import { postNewProduct, updateProduct } from "../../../backend/controllers/productController";
-// import { deleteAProduct } from "../../../backend/controllers/productController";
+// import { deleteProduct } from "../../../backend/controllers/productController";
 import { PRODUCTS_URL, PRODUCT_IMAGE_UPLOAD_URL } from "../constants";
 import { apiSlice } from "./apiSlice";
 
@@ -27,7 +27,7 @@ export const productsApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Product'],
     }),
-    updateAProduct: builder.mutation({ 
+    editProduct: builder.mutation({  // aka updateProduct
       query: (data) => ({ 
         url: `${PRODUCTS_URL}/${data.productId}`,
         method: 'PUT',
@@ -42,7 +42,7 @@ export const productsApiSlice = apiSlice.injectEndpoints({
         body: data,
       })
     }),
-    deleteAProduct: builder.mutation({ 
+    deleteProduct: builder.mutation({ 
       query: (productId) => ({ 
         url: `${PRODUCTS_URL}/${productId}`,
         method: 'DELETE',
@@ -55,8 +55,8 @@ export const {
   useGetAllProductsQuery, 
   useGetProductDetailsQuery,
   usePostNewProductMutation, 
-  useUpdateAProductMutation,
+  useEditProductMutation,
   useUploadProductImageMutation,
-  useDeleteAProductMutation
+  useDeleteProductMutation
 } = 
   productsApiSlice;

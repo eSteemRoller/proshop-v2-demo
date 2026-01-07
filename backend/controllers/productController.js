@@ -47,7 +47,7 @@ const postNewProduct = asyncHandler(async (req, res) => {
 // @desc PUT/Update a product
 // @route PUT /api/products/:id
 // @access Private, Admin
-const updateAProduct = asyncHandler(async (req, res) => {  // aka updateProduct
+const editProduct = asyncHandler(async (req, res) => {  // aka updateProduct
   const { 
       category,
       brand,
@@ -80,7 +80,7 @@ const updateAProduct = asyncHandler(async (req, res) => {  // aka updateProduct
 // @desc DELETE/Remove a product
 // @route DELETE /api/products/:id
 // @access Private, Admin
-const deleteAProduct = asyncHandler(async (req, res) => {  // aka deleteProduct
+const deleteProduct = asyncHandler(async (req, res) => {  // aka deleteProduct
 
   const product = await Product.findById(req.params.id);
 
@@ -94,4 +94,4 @@ const deleteAProduct = asyncHandler(async (req, res) => {  // aka deleteProduct
 });
 
 
-export { getAllProducts, getProductById, postNewProduct, updateAProduct, deleteAProduct };
+export { getAllProducts, getProductById, postNewProduct, editProduct, deleteProduct };

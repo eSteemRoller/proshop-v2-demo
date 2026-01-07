@@ -33,9 +33,10 @@ import AdminRoute from './components/AdminRoute';
 import AllOrdersListScreen from './screens/admin/AllOrdersListScreen';
 import AllProductsListScreen from './screens/admin/AllProductsListScreen';
 import EditProductScreen from './screens/admin/EditProductScreen';
+import AllUsersListScreen from './screens/admin/AllUsersListScreen';
+import EditUserScreen from './screens/admin/EditUserScreen';
 
 import reportWebVitals from './reportWebVitals';
-import AllUsersListScreen from './screens/admin/AllUsersListScreen';
 
 
 const router = createBrowserRouter(
@@ -62,6 +63,7 @@ const router = createBrowserRouter(
         <Route path='/admin/all_products' element={<AllProductsListScreen />} />
         <Route path='/admin/product/:id/edit_product' element={<EditProductScreen />} />
         <Route path='/admin/all_users' element={<AllUsersListScreen />} />
+        <Route path='/admin/user/:id/edit_user' element={<EditUserScreen />} />
       </Route>
     </Route>
   )
