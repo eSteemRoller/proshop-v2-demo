@@ -13,13 +13,14 @@ import {
 } from '../../slices/usersApiSlice';
 
 
-export default function EditUserScreen() { 
+export default function EditUserScreen() {  // aka UserEditScreen
   const { id: userId } = useParams();
 
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
+  const [adminNotes, setAdminNotes] = useState('');
 
   const { 
     data: user, 
@@ -39,16 +40,18 @@ export default function EditUserScreen() {
       setFirstName(user.firstName);
       setLastName(user.lastName);
       setIsAdmin(user.isAdmin);
+      setAdminNotes(user.adminNotes);
     } }, [user]);
 
   const submitHandler = async (e) => { 
     e.preventDefault();
-    const updatedUser = { 
-      userId,
-      email,
-      firstName,
-      lastName,
-      isAdmin,
+    try {
+      await updatedUser({ userId, email, firstName, lastName, isAdmin, adminNotes});
+      toast.success("Success: User updated");
+      refetch();
+      navigate('/admin/all_users');
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
     };
 
     const result = await editUser(updatedUser);
@@ -64,85 +67,60 @@ export default function EditUserScreen() {
   return (
     <>
       <Link to='/admin/all_products' className='btn btn-light my-4'>
-        Return to All Products
+        Return to All Users
       </Link>
       <FormContainer>
-        <h1>Edit Product</h1>
+        <h1>Edit User</h1>
         {isUpdating && <Loader />}
 
-        { isLoading ? <Loader /> 
-          : error ? <Message variant='danger'>{error}</Message>
-          : ( 
+        { isLoading ? ( 
+          <Loader /> 
+        ) : error ? ( 
+          <Message variant='danger'>{error}</Message>
+        ) : ( 
             <Form onSubmit={ submitHandler }>
-              <Form.Group controlId='image' className='mt-2 mb-3'>
-                <Form.Label>Image</Form.Label>
-                <Form.Text><br></br>Enter a product image URL:</Form.Text>
+              <Form.Group controlId='email' className='mt-2 mb-3'>
+                <Form.Label>E-Mail</Form.Label>
                 <Form.Control 
-                  type='text'
-                  placeholder="Enter product image URL"
-                  value={image}
-                  onChange={(e) => setImage(e.target.value)}
-                ></Form.Control>
-                <Form.Text><br></br>OR...</Form.Text>
-                <Form.Text><br></br>Select a local product image file:</Form.Text>
-                <Form.Control
-                  type='file'
-                  label="Select product image file"
-                  onChange={uploadFileHandler}
-                ></Form.Control>
-              </Form.Group>
-              <Form.Group controlId='category' className='mt-2 mb-3'>
-                <Form.Label>Category</Form.Label>
-                <Form.Control 
-                  type='text'
+                  type='email'
                   placeholder='Enter category'
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 ></Form.Control>
               </Form.Group>
-              <Form.Group controlId='brand' className='my-2 mb-3'>
-                <Form.Label>Brand</Form.Label>
+              <Form.Group controlId='firstName' className='my-2 mb-3'>
+                <Form.Label>First Name</Form.Label>
                 <Form.Control 
                   type='text'
-                  placeholder='Enter brand'
-                  value={brand}
-                  onChange={(e) => setBrand(e.target.value)}
+                  placeholder='Enter first name'
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
                 ></Form.Control>
               </Form.Group>
-              <Form.Group controlId='name' className='my-2 mb-3'>
-                <Form.Label>Name</Form.Label>
+              <Form.Group controlId='lastName' className='my-2 mb-3'>
+                <Form.Label>Last Name</Form.Label>
                 <Form.Control 
                   type='text'
-                  placeholder='Enter name'
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  placeholder='Enter last name'
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
                 ></Form.Control>
               </Form.Group>
-              <Form.Group controlId='description' className='my-2 mb-3'>
-                <Form.Label>Description</Form.Label>
+              <Form.Group controlId='isAdmin' className='my-2 mb-3'>
+                <Form.Check 
+                  type='checkbox'
+                  label="Is Administrator"
+                  checked={isAdmin}
+                  onChange={(e) => setIsAdmin(e.target.checked)}
+                ></Form.Check>
+              </Form.Group>
+              <Form.Group controlId='adminNotes' className='my-2 mb-3'>
+                <Form.Label>Administrator Notes</Form.Label>
                 <Form.Control 
                   type='text'
-                  placeholder='Enter description'
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                ></Form.Control>
-              </Form.Group>
-              <Form.Group controlId='price' className='my-2 mb-3'>
-                <Form.Label>Price</Form.Label>
-                <Form.Control 
-                  type='number'
-                  placeholder='Enter price'
-                  value={price}
-                  onChange={(e) => setPrice(e.target.value)}
-                ></Form.Control>
-              </Form.Group>
-              <Form.Group controlId='countInStock' className='my-2 mb-3'>
-                <Form.Label>Count In Stock</Form.Label>
-                <Form.Control 
-                  type='number'
-                  placeholder='Enter Count In Stock'
-                  value={countInStock}
-                  onChange={(e) => setCountInStock(e.target.value)}
+                  placeholder='Enter notes, if applicable'
+                  value={adminNotes}
+                  onChange={(e) => setAdminNotes(e.target.value)}
                 ></Form.Control>
               </Form.Group>
               <div className='d-flex justify-content-between'>
