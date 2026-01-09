@@ -32,6 +32,7 @@ export default function AllOrdersListScreen() {
                 <th>PAID</th>
                 <th>SHIPPED</th>
                 <th>DELIVERED</th>
+                <th>REVIEWED</th>
               </tr>
             </thead>
             <tbody>

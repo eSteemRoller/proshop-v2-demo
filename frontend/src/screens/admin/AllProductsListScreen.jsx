@@ -1,7 +1,7 @@
 
 import { Row, Col, Table, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { FaTimes, FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
 import Message from '../../components/Message';
 import { toast } from 'react-toastify';
 import Loader from '../../components/Loader';
@@ -13,10 +13,10 @@ import {
 
 
 export default function ProductListScreen() {
-  const { data: products, product_id, isLoading, refetch, error } = useGetAllProductsQuery();
+  const { data: products, isLoading, refetch, error } = useGetAllProductsQuery();
   console.log(products);
 
-  const [postNewProduct, { isLoading: isPostingNewProduct }] = usePostNewProductMutation();
+  const [postNewProduct, { isLoading: isPosting }] = usePostNewProductMutation();
 
   async function postNewProductHandler() { 
     if (window.confirm('Create the template for a new product below?')) { 
@@ -30,7 +30,7 @@ export default function ProductListScreen() {
     }
   }
 
-  const [deleteProduct, { isLoading: isDeletingProduct }] = useDeleteProductMutation();
+  const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
 
   const deleteProductHandler = async (_id) => {
     if (window.confirm("Are you sure?")) { 
@@ -50,13 +50,12 @@ export default function ProductListScreen() {
         <h1 className='m-2'>All Products</h1>
       </Col>
       <Col className='d-flex align-items-center justify-content-end'>
-        <Button className='btn-sm me-2 align-items-center' onClick={postNewProductHandler}>
-          <FaPlus /> Add New Product
-        </Button>
-      </Col>
-    </Row>
-    {isPostingNewProduct && <Loader />}
-    {isDeletingProduct && <Loader />}
+          <Button className='btn-sm me-2 align-items-center' onClick={postNewProductHandler}>
+            <FaPlus /> Add New Product
+          </Button>
+        </Col>
+      </Row>
+      {(isPosting || isDeleting) && <Loader />}
     {isLoading ? <Loader />
       : error ? <Message variant='danger'>{error}</Message>
         : ( 

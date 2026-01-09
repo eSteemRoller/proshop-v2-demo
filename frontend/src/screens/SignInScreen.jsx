@@ -8,6 +8,7 @@ import Loader from '../components/Loader';
 import { useSignInMutation } from '../slices/usersApiSlice';
 import { setCredentials } from '../slices/authSlice';
 import { toast } from 'react-toastify';
+import Message from '../components/Message';
 
 
 export default function SignInScreen() { 
@@ -24,6 +25,7 @@ export default function SignInScreen() {
   const { search } = useLocation();
   const searchParams = new URLSearchParams(search);
   const redirect = searchParams.get('redirect') || '/';
+  const sessionExpired = searchParams.get('sessionExpired');
 
   useEffect(() => { 
       if (userInfo) { 
@@ -47,6 +49,11 @@ export default function SignInScreen() {
   return ( 
     <FormContainer>
       <h1>Sign In</h1>
+      {sessionExpired && (
+        <Message variant='warning'>
+          Your session expired. Please sign in again.
+        </Message>
+      )}
       <Form onSubmit={signInHandler}>
         <Form.Group controlId='email' className='my-4'>
           <Form.Label>E-mail Address:</Form.Label>

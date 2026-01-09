@@ -16,7 +16,7 @@ import { toast } from "react-toastify";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { FaTimes } from 'react-icons/fa';
-import { useUserProfileMutation } from "../slices/usersApiSlice";
+import { useEditMyProfileMutation } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authSlice";
 import { useGetMyOrdersQuery } from "../slices/ordersApiSlice";
 
@@ -32,8 +32,8 @@ export default function MyProfileScreen() {
 
   const { userInfo } = useSelector((authState) => authState.auth);
 
-  const [updateUserProfile, { isLoading: isUpdating, UserProfile }] =
-    useUserProfileMutation();
+  const [updateUserProfile, { isLoading: isUpdating }] =
+    useEditMyProfileMutation();
 
   const { data: orders, isLoading, error } = useGetMyOrdersQuery();
 
@@ -127,7 +127,7 @@ export default function MyProfileScreen() {
               Save
             </Button>
           </div>
-          {isUpdatingUserProfile && <Loader />}
+          {isUpdating && UserProfile && <Loader />}
         </Form>
       </Col>
 

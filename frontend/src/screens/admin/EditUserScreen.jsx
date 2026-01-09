@@ -1,7 +1,6 @@
 
-import React from 'react'
 import { useState, useEffect } from 'react';
-import { Link, Nav, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import FormContainer from '../../components/FormContainer';
 import { Form, Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
@@ -9,7 +8,7 @@ import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import { 
   useGetUserDetailsQuery, 
-  useEditUserMutation, 
+  useEditUserDetailsMutation, 
 } from '../../slices/usersApiSlice';
 
 
@@ -30,7 +29,7 @@ export default function EditUserScreen() {  // aka UserEditScreen
   } = useGetUserDetailsQuery(userId);
 
   const [editUser, { isLoading: isUpdating }] = 
-    useEditUserMutation();
+    useEditUserDetailsMutation();
 
   const navigate = useNavigate();
 
@@ -46,21 +45,13 @@ export default function EditUserScreen() {  // aka UserEditScreen
   const submitHandler = async (e) => { 
     e.preventDefault();
     try {
-      await updatedUser({ userId, email, firstName, lastName, isAdmin, adminNotes});
+      await editUser({ userId, email, firstName, lastName, isAdmin, adminNotes});
       toast.success("Success: User updated");
       refetch();
       navigate('/admin/all_users');
     } catch (err) {
       toast.error(err?.data?.message || err.error);
-    };
-
-    const result = await editUser(updatedUser);
-    if (result.error) { 
-      toast.error(result.error);
-    } else { 
-      toast.success("Success: User updated");
-      navigate('/admin/all_users');
-    };
+    }
   };
 
   
