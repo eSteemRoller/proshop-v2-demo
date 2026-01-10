@@ -115,11 +115,9 @@ export default function EditUserScreen() {  // aka UserEditScreen
                 ></Form.Control>
               </Form.Group>
               <div className='d-flex justify-content-between'>
-                <Button className='btn btn-light my-2'>
-                  <Link to='/admin/all_products'>
-                    Cancel
-                  </Link>
-                </Button>
+                <Link to='/admin/all_users' className='btn btn-light my-2 text-decoration-none'>
+                  Cancel
+                </Link>
                 <Button 
                   type='submit'
                   variant='primary'

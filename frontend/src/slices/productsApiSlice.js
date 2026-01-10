@@ -1,6 +1,4 @@
 
-// import { postNewProduct, updateProduct } from "../../../backend/controllers/productController";
-// import { deleteProduct } from "../../../backend/controllers/productController";
 import { PRODUCTS_URL, PRODUCT_IMAGE_UPLOAD_URL } from "../constants";
 import { apiSlice } from "./apiSlice";
 
@@ -12,13 +10,13 @@ export const productsApiSlice = apiSlice.injectEndpoints({
         url: PRODUCTS_URL,
       }),
       providesTags: ['Products'],
-      keepUnusedDataFor: 5,
+      keepUnusedDataFor: 5
     }),
     getProductDetails: builder.query({ 
       query: (productId) => ({ 
         url: `${PRODUCTS_URL}/${productId}`,
       }),
-      keepUnusedDataFor: 5,
+      keepUnusedDataFor: 5
     }),
     postNewProduct: builder.mutation({ 
       query: () => ({ 

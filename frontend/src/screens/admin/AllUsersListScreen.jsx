@@ -1,4 +1,5 @@
 import { Table, Button, Nav } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import { FaTimes, FaTrash, FaEdit, FaCheck } from 'react-icons/fa';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
@@ -91,6 +92,9 @@ export default function AllUsersListScreen() {
           </Table>
         )
       }
+      <Link to='/' className='btn btn-light my-2 text-decoration-none'>
+        Cancel
+      </Link>
     </>
   )
 };

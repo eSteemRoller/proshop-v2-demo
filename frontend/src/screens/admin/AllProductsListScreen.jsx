@@ -8,7 +8,7 @@ import Loader from '../../components/Loader';
 import { 
   useGetAllProductsQuery, 
   usePostNewProductMutation, 
-  useDeleteProductMutation
+  useDeleteProductMutation,
 } from '../../slices/productsApiSlice';
 
 
@@ -21,8 +21,8 @@ export default function ProductListScreen() {
   async function postNewProductHandler() { 
     if (window.confirm('Create the template for a new product below?')) { 
       try {
-        await postNewProduct();
-        // toast.success(`Success: Product ${product._id, product.name} created`)
+        const newProduct = await postNewProduct().unwrap();
+        toast.success(`Success: Product ${newProduct._id} created`);
         refetch();
       } catch (err) {
         toast.error(err?.data?.message || err.error);
@@ -33,10 +33,11 @@ export default function ProductListScreen() {
   const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
 
   const deleteProductHandler = async (_id) => {
-    if (window.confirm("Are you sure?")) { 
+    if (window.confirm(`Are you sure you want to delete product ${_id}?`)) { 
+      const productToDelete = products?.find((p) => p._id === _id) || { _id, name: '' };
       try {
-        await deleteProduct(_id);
-        // toast.success(`Success: Product ${product._id, product.name} deleted`)
+        await deleteProduct(_id).unwrap();
+        toast.success(`Success: Product ${productToDelete._id} ${productToDelete.name} is deleted`);
         refetch();
       } catch (err) {
         toast.error(err?.data?.message || err.error);
@@ -50,58 +51,61 @@ export default function ProductListScreen() {
         <h1 className='m-2'>All Products</h1>
       </Col>
       <Col className='d-flex align-items-center justify-content-end'>
-          <Button className='btn-sm me-2 align-items-center' onClick={postNewProductHandler}>
-            <FaPlus /> Add New Product
-          </Button>
-        </Col>
-      </Row>
-      {(isPosting || isDeleting) && <Loader />}
+        <Button className='btn-sm me-2 align-items-center' onClick={postNewProductHandler}>
+          <FaPlus /> Add New Product
+        </Button>
+      </Col>
+    </Row>
+    {(isPosting || isDeleting) && <Loader />}
     {isLoading ? <Loader />
       : error ? <Message variant='danger'>{error}</Message>
-        : ( 
-          <>
-            <Table striped hover responsive className='table-sm'>
-              <thead>
-                <tr className='text-center'>
-                  <th>ID</th>
-                  <th>CATEGORY</th>
-                  <th>BRAND</th>
-                  <th>NAME</th>
-                  <th>PRICE</th>
-                  <th className='text-center'>EDIT?</th>
-                  <th className='text-center'>DELETE?</th>
-                </tr>
-              </thead>
-              <tbody>
-                {products.map((product) => (
-                  <tr key={product._id} className='align-middle text-center'>
-                    <td className='align-middle text-center'>{product._id}</td>
-                    <td className='align-middle text-center'>{product.category}</td>
-                    <td className='align-middle text-center'>{product.brand}</td>
-                    <td className='align-middle text-center'>{product.name}</td>
-                    <td className='align-middle text-center'>{product.price}</td>
-                    <td className='align-middle text-center'>
-                      <Link to={`/admin/product/${product._id}/edit_product`}>
-                        <Button variant='light' className='btn-sm d-flex justify-content-center align-items-center mx-auto'>
-                          <FaEdit />
-                        </Button>
-                      </Link>
-                    </td>
-                    <td className='align-middle text-center'>
-                      <Button
-                        onClick={() => deleteProductHandler(product._id)}
-                        variant='danger'
-                        className='btn-sm mx-4'
-                      >
-                        <FaTrash style={{color: 'white'}} />
+      : ( 
+        <>
+          <Table striped hover responsive className='table-sm'>
+            <thead>
+              <tr className='text-center'>
+                <th>ID</th>
+                <th>CATEGORY</th>
+                <th>BRAND</th>
+                <th>NAME</th>
+                <th>PRICE</th>
+                <th className='text-center'>EDIT?</th>
+                <th className='text-center'>DELETE?</th>
+              </tr>
+            </thead>
+            <tbody>
+              {products.map((product) => (
+                <tr key={product._id} className='align-middle text-center'>
+                  <td className='align-middle text-center'>{product._id}</td>
+                  <td className='align-middle text-center'>{product.category}</td>
+                  <td className='align-middle text-center'>{product.brand}</td>
+                  <td className='align-middle text-center'>{product.name}</td>
+                  <td className='align-middle text-center'>{product.price}</td>
+                  <td className='align-middle text-center'>
+                    <Link to={`/admin/product/${product._id}/edit_product`}>
+                      <Button variant='light' className='btn-sm d-flex justify-content-center align-items-center mx-auto'>
+                        <FaEdit />
                       </Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-          </>
-        )
+                    </Link>
+                  </td>
+                  <td className='align-middle text-center'>
+                    <Button
+                      onClick={() => deleteProductHandler(product._id)}
+                      variant='danger'
+                      className='btn-sm mx-4'
+                    >
+                      <FaTrash style={{color: 'white'}} />
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+          <Link to='/' className='btn btn-light my-2 text-decoration-none'>
+            Cancel
+          </Link>
+        </>
+      )
     }
   </>
 }
