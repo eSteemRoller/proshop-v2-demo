@@ -22,6 +22,6 @@ router.route('/usersByAdmin').post(protect, admin, createUser).get(protect, admi
 router.post('/sign_out', signOutUser);
 router.post('/sign_in', authUser);
 router.route('/my_profile').get(protect, getUserProfile).put(protect, updateUserProfile);
-router.route('/all_users/_id').get(protect, getUserById).put(protect, updateUserById).delete(protect, admin, deleteUserById);
+router.route('/:id').get(protect, getUserById).put(protect, updateUserById).delete(protect, admin, deleteUserById);
 
 export default router;

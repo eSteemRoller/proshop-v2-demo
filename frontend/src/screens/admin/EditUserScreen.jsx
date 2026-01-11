@@ -8,7 +8,7 @@ import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import { 
   useGetUserDetailsQuery, 
-  useEditUserDetailsMutation, 
+  useUpdateUserDetailsMutation, 
 } from '../../slices/usersApiSlice';
 
 
@@ -29,7 +29,7 @@ export default function EditUserScreen() {  // aka UserEditScreen
   } = useGetUserDetailsQuery(userId);
 
   const [editUser, { isLoading: isUpdating }] = 
-    useEditUserDetailsMutation();
+    useUpdateUserDetailsMutation();
 
   const navigate = useNavigate();
 
@@ -57,7 +57,7 @@ export default function EditUserScreen() {  // aka UserEditScreen
   
   return (
     <>
-      <Link to='/admin/all_products' className='btn btn-light my-4'>
+      <Link to='/admin/all_users' className='btn btn-light my-4'>
         Return to All Users
       </Link>
       <FormContainer>

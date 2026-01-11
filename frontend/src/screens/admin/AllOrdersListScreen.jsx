@@ -34,6 +34,7 @@ export default function AllOrdersListScreen() {
                 <th>SHIPPED</th>
                 <th>DELIVERED</th>
                 <th>REVIEWED</th>
+                <th>SUBSCRIBED (BEFORE)</th>
               </tr>
             </thead>
             <tbody>

@@ -11,12 +11,13 @@ import {
   FormControl,
   Nav
 } from "react-bootstrap";
+import { Link } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { FaTimes } from 'react-icons/fa';
-import { useEditMyProfileMutation } from "../slices/usersApiSlice";
+import { useUpdateMyProfileMutation } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authSlice";
 import { useGetMyOrdersQuery } from "../slices/ordersApiSlice";
 
@@ -33,7 +34,7 @@ export default function MyProfileScreen() {
   const { userInfo } = useSelector((authState) => authState.auth);
 
   const [updateUserProfile, { isLoading: isUpdating }] =
-    useEditMyProfileMutation();
+    useUpdateMyProfileMutation();
 
   const { data: orders, isLoading, error } = useGetMyOrdersQuery();
 
@@ -59,7 +60,7 @@ export default function MyProfileScreen() {
           password,
         }).unwrap();
         dispatch(setCredentials(res));
-        toast.success("Success: Profile updated successfully");
+        toast.success("Success: Profile updated");
       } catch (error) {
         toast.error(error?.data?.message || error.error);
       }
@@ -69,13 +70,15 @@ export default function MyProfileScreen() {
 
   return (
     <Row>
-      <Col md={4}>
+      <Col md={4} className='mr-10'>
         <h2>My Profile</h2>
+        <h3>General</h3>
+        {/* <h5>* = Required</h5> */}
         <Form onSubmit={submitHandler}>
           <FormGroup controlId="firstName" className="my-2">
             <FormLabel>First Name:</FormLabel>
             <FormControl
-              type="name"
+              type='text'
               placeholder="Enter first name"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
@@ -84,17 +87,44 @@ export default function MyProfileScreen() {
           <FormGroup controlId="lastName" className="my-2">
             <FormLabel>Last Name:</FormLabel>
             <FormControl
-              type="name"
+              type='text'
               placeholder="Enter last name"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
             ></FormControl>
           </FormGroup>
           <FormGroup controlId="email" className="my-2">
-            <FormLabel>E-Mail Address:</FormLabel>
+            <FormLabel>Primary E-Mail Address (part of your log-in credentials):</FormLabel>
             <FormControl
               type="email"
               placeholder="Enter e-mail address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            ></FormControl>
+          </FormGroup>
+          <FormGroup controlId="email" className="my-2">
+            <FormLabel>Secondary E-Mail Address:</FormLabel>
+            <FormControl
+              type="email"
+              placeholder="Enter e-mail address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            ></FormControl>
+          </FormGroup>
+          <FormGroup controlId="phone" className="my-2">
+            <FormLabel>Primary Phone Number:</FormLabel>
+            <FormControl
+              type="text"
+              placeholder="Enter primary phone number"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            ></FormControl>
+          </FormGroup>
+          <FormGroup controlId="phone" className="my-2">
+            <FormLabel>Secondary Phone Number:</FormLabel>
+            <FormControl
+              type="text"
+              placeholder="Enter secondary phone number"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             ></FormControl>
@@ -117,7 +147,10 @@ export default function MyProfileScreen() {
               onChange={(e) => setConfirmPassword(e.target.value)}
             ></FormControl>
           </FormGroup>
-          <div className="d-flex justify-content-end">
+          <div className="d-flex justify-content-between">
+            <Link to='/' className='btn btn-light my-2 text-decoration-none'>
+              Cancel
+            </Link>
             <Button 
               type="submit"  
               variant="primary" 
@@ -127,11 +160,11 @@ export default function MyProfileScreen() {
               Save
             </Button>
           </div>
-          {isUpdating && UserProfile && <Loader />}
+          {isUpdating && userInfo && <Loader />}
         </Form>
       </Col>
 
-      <Col md={8}>
+      <Col md={8} className='ml-10'>
         <h2>My Orders</h2>
         {isLoading ? (
           <Loader />
@@ -147,7 +180,9 @@ export default function MyProfileScreen() {
                 <th>DATE</th>
                 <th>TOTAL</th>
                 <th>PAID</th>
+                <th>SHIPPED</th>
                 <th>DELIVERED</th>
+                <th>REVIEWED</th>
                 <th>{/*button placeholder*/}</th>
               </tr>
             </thead>

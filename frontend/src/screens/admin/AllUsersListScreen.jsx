@@ -1,4 +1,4 @@
-import { Table, Button, Nav } from 'react-bootstrap';
+import { Table, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { FaTimes, FaTrash, FaEdit, FaCheck } from 'react-icons/fa';
 import Message from '../../components/Message';
@@ -25,6 +25,18 @@ export default function AllUsersListScreen() {
     }
   };
 
+  const renderError = (err) => {
+    if (!err) return '';
+    if (typeof err === 'string') return err;
+    if (err.data && err.data.message) return err.data.message;
+    if (err.error) return err.error;
+    try {
+      return JSON.stringify(err);
+    } catch {
+      return String(err);
+    }
+  };
+
   return (
     <>
       <h1>All Users</h1>
@@ -32,7 +44,7 @@ export default function AllUsersListScreen() {
       {isLoading ? (
         <Loader /> 
       ) : error ? (
-        <Message variant='danger'>{error}</Message> 
+        <Message variant='danger'>{renderError(error)}</Message> 
       ) : ( 
           <Table 
             strong
@@ -67,24 +79,18 @@ export default function AllUsersListScreen() {
                     )}
                   </td>
                   <td>
-                    <Nav to={`/admin/all_users/${user._id}/edit_user`} class=''>  {/* To do: Check if this is the right path */}
-                      <Button 
-                        variant='light' 
-                        className='btn-sm'>
-                        <FaEdit />
-                      </Button>
-                    </Nav>
+                    <Link to={`/admin/user/${user._id}/edit_user`} className='btn btn-light btn-sm text-decoration-none'>
+                      <FaEdit />
+                    </Link>
                   </td>
                   <td>
-                    <Nav to={`/admin/all_users/${user._id}/edit_user`} class=''>  {/* To do: Check if this is the right path */}
-                      <Button 
-                        variant='danger' 
-                        className='btn-sm' 
-                        onClick={() => deleteUserHandler(user._id)}
-                      >
-                        <FaTrash style={{color: 'white'}}/>
-                      </Button>
-                    </Nav>
+                    <Button 
+                      variant='danger' 
+                      className='btn-sm' 
+                      onClick={() => deleteUserHandler(user._id)}
+                    >
+                      <FaTrash style={{color: 'white'}}/>
+                    </Button>
                   </td>
                 </tr>
               )) }

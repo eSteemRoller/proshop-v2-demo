@@ -205,7 +205,7 @@ const deleteUserById = asyncHandler(async (req, res) => {
       throw new Error('Cannot delete admin user')
     }
     await User.deleteOne({_id: user._id});
-    res.status(201).json({ message: `Success: ${user._id, user.name} has been deleted`});
+    res.status(201).json({ message: `Success: ${user._id} ${user.name} has been deleted`});
   } else { 
     res.status(404);
       throw new Error('User not found')
