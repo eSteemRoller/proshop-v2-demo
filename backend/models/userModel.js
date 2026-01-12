@@ -13,30 +13,66 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        email: {
+        primaryEmail: {
             type: String,
             required: true,
+        },
+        secondaryEmail: {
+            type: String,
+            required: false,
         },
         password: {
             type: String,
             required: true,
         },
-        phone: {
+        primaryPhone: {
             type: String,
-            required: true,
+            required: false,
+        },
+        secondaryPhone: {
+            type: String,
+            required: false,
         },
         primaryBillingAddress: {
             type: String,
-            required: true,
+            required: false,
+        },
+        secondaryBillingAddress: {
+            type: String,
+            required: false,
         },
         primaryShippingAddress: {
             type: String,
             required: false,
         },
+        secondaryShippingAddress: {
+            type: String,
+            required: false,
+        },
+        isSubscribedToEmail: {
+            type: Boolean,
+            required: true,
+            default: false,
+        },
+        isSubscribedToText: {
+            type: Boolean,
+            required: true,
+            default: false,
+        },
         isAdmin: {
             type: Boolean,
             required: true,
             default: false,
+        },
+        createdBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+        },
+        resetPasswordToken: {
+            type: String,
+        },
+        resetPasswordExpire: {
+            type: Date,
         },
     },
     {

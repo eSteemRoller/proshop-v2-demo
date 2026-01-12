@@ -15,9 +15,11 @@ import {
 export default function EditUserScreen() {  // aka UserEditScreen
   const { id: userId } = useParams();
 
-  const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [primaryEmail, setPrimaryEmail] = useState('');
+  const [primaryBillingAddress, setPrimaryBillingAddress] = useState('');
+  const [primaryShippingAddress, setPrimaryShippingAddress] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
   const [adminNotes, setAdminNotes] = useState('');
 
@@ -35,19 +37,26 @@ export default function EditUserScreen() {  // aka UserEditScreen
 
   useEffect(() => { 
     if (user) { 
-      setEmail(user.email);
       setFirstName(user.firstName);
       setLastName(user.lastName);
+      setPrimaryEmail(user.primaryEmail || user.email || '');
+      setPrimaryBillingAddress(user.primaryBillingAddress);
+      setPrimaryShippingAddress(user.primaryShippingAddress);
       setIsAdmin(user.isAdmin);
       setAdminNotes(user.adminNotes);
     } }, [user]);
 
+  const hasValidUser = Boolean(
+    user && (
+      user._id || user.firstName || user.lastName || user.primaryEmail || user.email || user.primaryBillingAddress || user.primaryShippingAddress
+    )
+  );
+
   const submitHandler = async (e) => { 
     e.preventDefault();
     try {
-      await editUser({ userId, email, firstName, lastName, isAdmin, adminNotes});
-      toast.success("Success: User updated");
-      refetch();
+      await editUser({ userId, firstName, lastName, primaryEmail, primaryBillingAddress, primaryShippingAddress, isAdmin, adminNotes}).unwrap();
+      toast.success('Success: User updated');
       navigate('/admin/all_users');
     } catch (err) {
       toast.error(err?.data?.message || err.error);
@@ -68,23 +77,16 @@ export default function EditUserScreen() {  // aka UserEditScreen
           <Loader /> 
         ) : error ? ( 
           <Message variant='danger'>{error}</Message>
+        ) : !hasValidUser ? (
+          <Message variant='warning'>No user data available to edit.</Message>
         ) : ( 
             <Form onSubmit={ submitHandler }>
-              <Form.Group controlId='email' className='mt-2 mb-3'>
-                <Form.Label>E-Mail</Form.Label>
-                <Form.Control 
-                  type='email'
-                  placeholder='Enter category'
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                ></Form.Control>
-              </Form.Group>
               <Form.Group controlId='firstName' className='my-2 mb-3'>
                 <Form.Label>First Name</Form.Label>
                 <Form.Control 
                   type='text'
                   placeholder='Enter first name'
-                  value={firstName}
+                  value={firstName ?? ''}
                   onChange={(e) => setFirstName(e.target.value)}
                 ></Form.Control>
               </Form.Group>
@@ -93,8 +95,35 @@ export default function EditUserScreen() {  // aka UserEditScreen
                 <Form.Control 
                   type='text'
                   placeholder='Enter last name'
-                  value={lastName}
+                  value={lastName ?? ''}
                   onChange={(e) => setLastName(e.target.value)}
+                ></Form.Control>
+              </Form.Group>
+              <Form.Group controlId='primaryEmail' className='mt-2 mb-3'>
+                <Form.Label>Primary E-Mail</Form.Label>
+                <Form.Control 
+                  type='email'
+                  placeholder='Enter primary e-mail'
+                  value={primaryEmail ?? ''}
+                  onChange={(e) => setPrimaryEmail(e.target.value)}
+                ></Form.Control>
+              </Form.Group>
+              <Form.Group controlId='primaryBillingAddress' className='mt-2 mb-3'>
+                <Form.Label>Primary Billing Address</Form.Label>
+                <Form.Control 
+                  type='text'
+                  placeholder='Enter primary billing address'
+                  value={primaryBillingAddress ?? ''}
+                  onChange={(e) => setPrimaryBillingAddress(e.target.value)}
+                ></Form.Control>
+              </Form.Group>
+              <Form.Group controlId='primaryShippingAddress' className='mt-2 mb-3'>
+                <Form.Label>Primary Shipping Address</Form.Label>
+                <Form.Control 
+                  type='text'
+                  placeholder='Enter primary shipping address'
+                  value={primaryShippingAddress ?? ''}
+                  onChange={(e) => setPrimaryShippingAddress(e.target.value)}
                 ></Form.Control>
               </Form.Group>
               <Form.Group controlId='isAdmin' className='my-2 mb-3'>

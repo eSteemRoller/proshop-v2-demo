@@ -35,6 +35,8 @@ import AllProductsListScreen from './screens/admin/AllProductsListScreen';
 import EditProductScreen from './screens/admin/EditProductScreen';
 import AllUsersListScreen from './screens/admin/AllUsersListScreen';
 import EditUserScreen from './screens/admin/EditUserScreen';
+import CreateUserScreen from './screens/admin/CreateUserScreen';
+import ResetPasswordScreen from './screens/ResetPasswordScreen';
 
 import reportWebVitals from './reportWebVitals';
 
@@ -63,8 +65,10 @@ const router = createBrowserRouter(
         <Route path='/admin/all_products' element={<AllProductsListScreen />} />
         <Route path='/admin/product/:id/edit_product' element={<EditProductScreen />} />
         <Route path='/admin/all_users' element={<AllUsersListScreen />} />
+        <Route path='/admin/user/create' element={<CreateUserScreen />} />
         <Route path='/admin/user/:id/edit_user' element={<EditUserScreen />} />
       </Route>
+      <Route path='/reset_password/:token' element={<ResetPasswordScreen />} />
     </Route>
   )
 );

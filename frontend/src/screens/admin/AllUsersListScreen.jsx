@@ -40,6 +40,9 @@ export default function AllUsersListScreen() {
   return (
     <>
       <h1>All Users</h1>
+      <Link to='/admin/user/create' className='btn btn-primary my-2'>
+        Create User
+      </Link>
       {isDeleting && <Loader />}
       {isLoading ? (
         <Loader /> 
@@ -68,9 +71,13 @@ export default function AllUsersListScreen() {
               {users.map((user) => ( 
                 <tr key={user._id}>
                   <td>{user._id}</td>
-                  <td>{user.firstName && user.lastName}</td>
-                  <td><a href={`mailto:${user.email}`}>{ user.email }</a></td>
-                  <td><a href={`mailto:${user.email}`}>{ user.email }</a></td>  {/* To do: Add secondary e-mail field*/}
+                  <td>{user.firstName}</td>
+                  <td>{user.lastName}</td>
+                  <td>
+                    <a href={`mailto:${user.primaryEmail || user.email}`}>
+                      { user.primaryEmail || user.email }
+                    </a>
+                  </td>
                   <td>
                     {user.isAdmin ? ( 
                       <FaCheck style={{ color: 'green' }} />

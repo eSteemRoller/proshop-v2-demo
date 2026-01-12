@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser';
 dotenv.config();
 import connectDB from './config/db.js';
 import { notFound, errorHandler } from './middleware/errorHandlers.js';
+import { globalLimiter } from './middleware/rateLimit.js';
 import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
@@ -25,6 +26,9 @@ app.use(express.urlencoded({ extended: true }));
 
 // Cookie parser middleware
 app.use(cookieParser());
+
+// Global rate limiter (light)
+app.use(globalLimiter);
 
 // app.use(cors());
 

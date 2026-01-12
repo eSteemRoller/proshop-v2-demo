@@ -3,15 +3,17 @@ import message from "statuses"; // not { message }
 import asyncHandler from "../middleware/asyncHandler.js";
 import User from "../models/userModel.js";
 import genToken from "../utils/genToken.js";
+import nodemailer from 'nodemailer';
+import crypto from 'crypto';
 
 
 // @desc  Auth user & get JsonWebToken (Create authorization)
 // @route  POST /api/users/sign_in
 // @access  Public
 const authUser = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
+  const { primaryEmail, password } = req.body;
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ primaryEmail });
 
   if (user && (await user.verifyPassword(password))) {
     genToken(res, user._id);
@@ -20,7 +22,7 @@ const authUser = asyncHandler(async (req, res) => {
       _id: user._id,
       firstName: user.firstName,
       lastName: user.lastName,
-      email: user.email,
+      primaryEmail: user.primaryEmail,
       isAdmin: user.isAdmin,
     });
 
@@ -34,9 +36,9 @@ const authUser = asyncHandler(async (req, res) => {
 // @route  POST /api/users
 // @access  Public
 const signUpUser = asyncHandler(async (req, res) => { 
-  const { firstName, lastName, email, password } = req.body;
+  const { firstName, lastName, primaryEmail, password } = req.body;
 
-  const userExists = await User.findOne({ email });
+  const userExists = await User.findOne({ primaryEmail });
 
   if (userExists) { 
     res.status(400);
@@ -45,7 +47,7 @@ const signUpUser = asyncHandler(async (req, res) => {
   const user = await User.create({ 
     firstName,
     lastName,
-    email,
+    primaryEmail,
     password,
   });
 
@@ -56,7 +58,7 @@ const signUpUser = asyncHandler(async (req, res) => {
       _id: user._id,
       firstName: user.firstName,
       lastName: user.lastName,
-      email: user.email,
+      primaryEmail: user.primaryEmail,
       isAdmin: user.isAdmin,
     });
   } else { 
@@ -92,7 +94,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
       _id: user._id,
       firstName: user.firstName,
       lastName: user.lastName,
-      email: user.email,
+      primaryEmail: user.primaryEmail,
       isAdmin: user.isAdmin,
     });
   } else {
@@ -110,7 +112,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   if (user) { 
     user.firstName = req.body.firstName || user.firstName;
     user.lastName = req.body.lastName || user.lastName;
-    user.email = req.body.email || user.email;
+    user.primaryEmail = req.body.primaryEmail || user.primaryEmail;
 
     if (req.body.password) { 
       user.password = req.body.password;
@@ -122,7 +124,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       _id: updatedUser._id,
       firstName: updatedUser.firstName,
       lastName: updatedUser.lastName,
-      email: updatedUser.email,
+      primaryEmail: updatedUser.primaryEmail,
       isAdmin: updatedUser.isAdmin,
     });
   } else { 
@@ -135,14 +137,131 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 // @route  POST /api/usersByAdmin
 // @access  Private (Admin)
 const createUser = asyncHandler(async (req, res) => {
-  res.send('(POST) Admin - Create user by Admin');
+  const { firstName, lastName, primaryEmail, password, isSubscribedToEmail, isSubscribedToText, isAdmin, adminNotes } = req.body;
+
+  // Basic Email format validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!primaryEmail || !emailRegex.test(primaryEmail)) {
+    res.status(400);
+    throw new Error('Invalid e-mail address');
+  }
+
+  const userExists = await User.findOne({ primaryEmail });
+
+  if (userExists) {
+    res.status(400);
+    throw new Error('User already exists');
+  }
+
+  // Create the user with a random password (required by schema) and then generate a password-reset token
+  const randomPassword = crypto.randomBytes(8).toString('hex');
+
+  const user = await User.create({
+    firstName,
+    lastName,
+    primaryEmail,
+    password: password || randomPassword,
+    isSubscribedToEmail: Boolean(isSubscribedToEmail),
+    isSubscribedToText: Boolean(isSubscribedToText),
+    isAdmin: Boolean(isAdmin),
+    adminNotes: adminNotes || '',
+    createdBy: req.user ? req.user._id : undefined,
+  });
+
+  if (!user) {
+    res.status(400);
+    throw new Error('Invalid user data');
+  }
+
+  // Generate a password reset token and expiry
+  const resetToken = crypto.randomBytes(20).toString('hex');
+  const hashedToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+
+  user.resetPasswordToken = hashedToken;
+  user.resetPasswordExpire = Date.now() + 60 * 60 * 1000; // 1 hour
+
+  await user.save();
+
+  // Build reset URL for email
+  const frontendBase = process.env.FRONTEND_URL || '';
+  const resetUrl = frontendBase
+    ? `${frontendBase.replace(/\/$/, '')}/reset_password/${resetToken}`
+    : `Reset token: ${resetToken}`;
+
+  // Try to send reset email
+  try {
+    const transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: process.env.SMTP_PORT ? Number(process.env.SMTP_PORT) : undefined,
+      secure: process.env.SMTP_SECURE === 'true',
+      auth: process.env.SMTP_USER
+        ? { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS }
+        : undefined,
+    });
+
+    const fromAddress = process.env.FROM_EMAIL || process.env.SMTP_USER || 'no-reply@example.com';
+
+    if (process.env.SMTP_HOST && transporter) {
+      await transporter.sendMail({
+        from: fromAddress,
+        to: user.primaryEmail,
+        subject: 'Complete your account setup',
+        text: `An account has been created for you. To set your password, visit: ${resetUrl}\nThe link expires in 1 hour.`,
+      });
+    } else {
+      console.warn('SMTP not configured. Reset URL:', resetUrl);
+    }
+  } catch (err) {
+    console.error('Failed to send reset email:', err.message || String(err));
+  }
+
+  res.status(201).json({
+    _id: user._id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    primaryEmail: user.primaryEmail,
+    isAdmin: user.isAdmin,
+    adminNotes: user.adminNotes || '',
+    message: 'User created. Password setup instructions sent if SMTP configured.'
+  });
+});
+
+// @desc Reset password using token
+// @route PUT /api/users/reset_password/:token
+// @access Public
+const resetPassword = asyncHandler(async (req, res) => {
+  const token = req.params.token;
+  const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
+  const user = await User.findOne({
+    resetPasswordToken: hashedToken,
+    resetPasswordExpire: { $gt: Date.now() }
+  });
+
+  if (!user) {
+    res.status(400);
+    throw new Error('Invalid or expired token');
+  }
+
+  if (!req.body.password) {
+    res.status(400);
+    throw new Error('Password is required');
+  }
+
+  user.password = req.body.password;
+  user.resetPasswordToken = undefined;
+  user.resetPasswordExpire = undefined;
+
+  await user.save();
+
+  res.status(200).json({ message: 'Password has been reset successfully' });
 });
 
 // @desc  Get/Read all users
 // @route  GET /api/users
 // @access  Private (Admin)
 const getAllUsers = asyncHandler(async (req, res) => {
-  const users = await User.find({});
+  const users = await User.find({}).populate('createdBy', 'firstName lastName primaryEmail');
   res.status(200).json(users);
 });
 
@@ -150,14 +269,15 @@ const getAllUsers = asyncHandler(async (req, res) => {
 // @route  GET /api/users/usersByAdmin
 // @access  Private (Admin)
 const getAllUsersByAdmin = asyncHandler(async (req, res) => {
-  res.send('(GET) Admin - Read all users by Admin');
+  const users = await User.find({}).populate('createdBy', 'firstName lastName primaryEmail');
+  res.status(200).json(users);
 });
 
 // @desc  Read/Get user by Id.
 // @route  GET /api/users/:id
 // @access  Private (Admin)
 const getUserById = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id).select('-password');
+  const user = await User.findById(req.params.id).select('-password').populate('createdBy', 'firstName lastName primaryEmail');
 
   if (user) { 
     res.status(200).json(user);
@@ -174,9 +294,13 @@ const updateUserById = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id).select('-password');
 
   if (user) { 
-    user.name = req.body.name || user.name;
-    user.email = req.body.email || user.email;
+    user.firstName = req.body.firstName || user.firstName;
+    user.lastName = req.body.lastName || user.lastName;
+    user.primaryEmail = req.body.primaryEmail || user.primaryEmail;
+    user.primaryBillingAddress = req.body.primaryBillingAddress || user.primaryBillingAddress;
+    user.primaryShippingAddress = req.body.primaryShippingAddress || user.primaryShippingAddress;
     user.isAdmin = Boolean(req.body.isAdmin);
+    user.adminNotes = req.body.adminNotes || user.adminNotes;
 
     const updatedUser = await user.save();
 
@@ -184,8 +308,9 @@ const updateUserById = asyncHandler(async (req, res) => {
       _id: updatedUser._id,
       firstName: updatedUser.firstName,
       lastName: updatedUser.lastName,
-      email: updatedUser.email,
-      isAdmin: updatedUser.isAdmin
+      primaryEmail: updatedUser.primaryEmail,
+      isAdmin: updatedUser.isAdmin,
+      adminNotes: updatedUser.adminNotes || ''
     });
   } else { 
     res.status(404);
@@ -205,7 +330,7 @@ const deleteUserById = asyncHandler(async (req, res) => {
       throw new Error('Cannot delete admin user')
     }
     await User.deleteOne({_id: user._id});
-    res.status(201).json({ message: `Success: ${user._id} ${user.name} has been deleted`});
+    res.status(200).json({ message: `Success: ${user._id} ${user.primaryEmail} has been deleted`});
   } else { 
     res.status(404);
       throw new Error('User not found')
@@ -224,4 +349,5 @@ export {
   getUserById,
   updateUserById,
   deleteUserById,
+  resetPassword,
 };
