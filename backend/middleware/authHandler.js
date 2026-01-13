@@ -19,11 +19,11 @@ export const protect = asyncHandler(async (req, res, next) => {
     } catch (error) { 
       console.log(error);
       res.status(401);
-      throw new Error('Not authorized, token not permitted');
+      throw new Error("Not authorized, token not permitted");
     }
   } else {
     res.status(401);
-    throw new Error('Not authorized, no token');
+    throw new Error("Not authorized, no token");
   }
 });
 
@@ -33,6 +33,6 @@ export const admin = (req, res, next) => {
     next();
   } else {
     res.status(401);
-    throw new Error('Not authorized as an Administrator');
+    throw new Error("Not authorized as an Administrator");
   } 
 };

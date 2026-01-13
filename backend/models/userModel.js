@@ -1,6 +1,6 @@
 
 import mongoose from "mongoose";
-// import { bcrypt } from "globalthis/implementation"; ?
+// import { bcrypt } from "globalthis/implementation"; Research the diff
 import bcrypt from 'bcryptjs';
 
 const userSchema = new mongoose.Schema(
