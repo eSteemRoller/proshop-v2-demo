@@ -8,7 +8,7 @@ const initialState = {
       null,
 }
 
-const authSlice = createSlice({ 
+const authApiSlice = createSlice({ 
   name: 'signIn',
   initialState,
   reducers: { 
@@ -23,6 +23,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { setCredentials, signOut } = authSlice.actions;
+export const { setCredentials, signOut } = authApiSlice.actions;
 
-export default authSlice.reducer;
+export default authApiSlice.reducer;

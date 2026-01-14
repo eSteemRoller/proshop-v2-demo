@@ -109,11 +109,17 @@ const postProductReview = asyncHandler(async (req, res) => {  // aka deleteProdu
       throw new Error(`Error: Product ${product._id} ${product.name} already reviewed`);
     }
 
-    const review = { 
-      name: req.user.firstName,
+    if (!req.user.firstName || !req.user.lastName) {
+      res.status(400);
+      throw new Error("Please, complete your profile with first and last name before submitting a review");
+    }
+
+    const review = {
+      firstName: req.user.firstName,
+      lastName: req.user.lastName,
       rating: Number(rating),
       comment,
-      user: req.user._id
+      user: req.user._id,
     };
 
     product.reviews.push(review);

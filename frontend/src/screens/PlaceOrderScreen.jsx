@@ -8,7 +8,7 @@ import CheckoutSteps from '../components/CheckoutSteps';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { useCreateUsersOrderMutation } from '../slices/ordersApiSlice';
-import { clearCartAfterOrder } from '../slices/cartSlice';
+import { clearCartAfterOrder } from '../slices/cartApiSlice';
 import { ListGroupItem } from "react-bootstrap";
 
 

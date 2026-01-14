@@ -18,14 +18,17 @@ import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { FaTimes } from 'react-icons/fa';
 import { useUpdateMyProfileMutation } from "../slices/usersApiSlice";
-import { setCredentials } from "../slices/authSlice";
+import { setCredentials } from "../slices/authApiSlice";
 import { useGetMyOrdersQuery } from "../slices/ordersApiSlice";
 
 
 export default function MyProfileScreen() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
+  const [primaryEmail, setPrimaryEmail] = useState("");
+  const [secondaryEmail, setSecondaryEmail] = useState("");
+  const [primaryPhone, setPrimaryPhone] = useState("");
+  const [secondaryPhone, setSecondaryPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -42,9 +45,19 @@ export default function MyProfileScreen() {
     if (userInfo) {
       setFirstName(userInfo.firstName);
       setLastName(userInfo.lastName);
-      setEmail(userInfo.email);
+      setPrimaryEmail(userInfo.primaryEmail);
+      setSecondaryEmail(userInfo.secondaryEmail);
+      setPrimaryPhone(userInfo.primaryPhone)
+      setSecondaryPhone(userInfo.secondaryPhone)
     }
-  }, [userInfo, userInfo.firstName, userInfo.lastName, userInfo.email]);
+  }, [userInfo, 
+    userInfo.firstName, 
+    userInfo.lastName, 
+    userInfo.primaryEmail,
+    userInfo.secondaryEmail,
+    userInfo.primaryPhone,
+    userInfo.secondaryPhone
+  ]);
 
   async function submitHandler(e) {
     e.preventDefault();
@@ -56,13 +69,16 @@ export default function MyProfileScreen() {
           _id: userInfo._id,
           firstName,
           lastName,
-          email,
+          primaryEmail,
+          secondaryEmail,
+          primaryPhone,
+          secondaryPhone,
           password,
         }).unwrap();
         dispatch(setCredentials(res));
         toast.success("Success: Profile updated");
-      } catch (error) {
-        toast.error(error?.data?.message || error.error);
+      } catch (err) {
+        toast.error(err?.data?.message || err.error);
       }
     }
     console.log("submitHandler");
@@ -93,40 +109,40 @@ export default function MyProfileScreen() {
               onChange={(e) => setLastName(e.target.value)}
             ></FormControl>
           </FormGroup>
-          <FormGroup controlId="email" className="my-2">
+          <FormGroup controlId="primaryEmail" className="my-2">
             <FormLabel>Primary E-Mail Address (part of your log-in credentials):</FormLabel>
             <FormControl
               type="email"
               placeholder="Enter e-mail address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={primaryEmail}
+              onChange={(e) => setPrimaryEmail(e.target.value)}
             ></FormControl>
           </FormGroup>
-          <FormGroup controlId="email" className="my-2">
+          <FormGroup controlId="secondaryEmail" className="my-2">
             <FormLabel>Secondary E-Mail Address:</FormLabel>
             <FormControl
               type="email"
               placeholder="Enter e-mail address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={secondaryEmail}
+              onChange={(e) => setSecondaryEmail(e.target.value)}
             ></FormControl>
           </FormGroup>
-          <FormGroup controlId="phone" className="my-2">
+          <FormGroup controlId="primaryPhone" className="my-2">
             <FormLabel>Primary Phone Number:</FormLabel>
             <FormControl
               type="text"
               placeholder="Enter primary phone number"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={primaryPhone}
+              onChange={(e) => setPrimaryPhone(e.target.value)}
             ></FormControl>
           </FormGroup>
-          <FormGroup controlId="phone" className="my-2">
+          <FormGroup controlId="secondaryPhone" className="my-2">
             <FormLabel>Secondary Phone Number:</FormLabel>
             <FormControl
               type="text"
               placeholder="Enter secondary phone number"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={secondaryPhone}
+              onChange={(e) => setSecondaryPhone(e.target.value)}
             ></FormControl>
           </FormGroup>
           <FormGroup controlId="password" className="my-2">

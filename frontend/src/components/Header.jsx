@@ -4,7 +4,7 @@ import { FaShoppingCart, FaUser } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSignOutMutation } from '../slices/usersApiSlice';
-import { signOut } from '../slices/authSlice';
+import { signOut } from '../slices/authApiSlice';
 import logo from '../assets/logo.png';
 
 
@@ -51,7 +51,7 @@ export default function Header() {
                 }
               </Nav.Link>
               { userInfo ? ( 
-                <NavDropdown title={ userInfo.email } id='username'>
+                <NavDropdown title={ userInfo.primaryEmail } id='username'>
                   <NavDropdown.Item onClick={() => navigate('/my_profile')}>
                     View/Edit My Profile
                   </NavDropdown.Item>

@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import FormContainer from '../components/FormContainer';
 import Loader from '../components/Loader';
 import { useSignInMutation } from '../slices/usersApiSlice';
-import { setCredentials } from '../slices/authSlice';
+import { setCredentials } from '../slices/authApiSlice';
 import { toast } from 'react-toastify';
 import Message from '../components/Message';
 
