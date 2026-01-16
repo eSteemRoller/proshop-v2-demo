@@ -10,8 +10,8 @@ import logo from '../assets/logo.png';
 
 
 export default function Header() { 
-  const { cartItems } = useSelector((cartState) => cartState.cart);
-  const { userInfo } = useSelector((authState) => authState.auth);
+  const { cartItems } = useSelector((state) => state.cart);
+  const { userInfo } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();

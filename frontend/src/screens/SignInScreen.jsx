@@ -12,7 +12,7 @@ import Message from '../components/Message';
 
 
 export default function SignInScreen() { 
-  const [email, setEmail] = useState('');
+  const [primaryEmail, setPrimaryEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const dispatch = useDispatch();
@@ -20,7 +20,7 @@ export default function SignInScreen() {
 
   const [signIn, { isSigningIn }] = useSignInMutation();
 
-  const { userInfo } = useSelector((authState) => authState.auth);
+  const { userInfo } = useSelector((state) => state.auth);
 
   const { search } = useLocation();
   const searchParams = new URLSearchParams(search);
@@ -38,7 +38,7 @@ export default function SignInScreen() {
     signInFormSubmit.preventDefault();
     console.log('Sign in form submit');
     try {
-      const dbResponse = await signIn({ email, password }).unwrap();
+      const dbResponse = await signIn({ primaryEmail, password }).unwrap();
       dispatch(setCredentials({...dbResponse, }));
       navigate(redirect);
     } catch (error) {
@@ -55,13 +55,13 @@ export default function SignInScreen() {
         </Message>
       )}
       <Form onSubmit={signInHandler}>
-        <Form.Group controlId='email' className='my-4'>
+        <Form.Group controlId='primaryEmail' className='my-4'>
           <Form.Label>E-mail Address:</Form.Label>
           <Form.Control
             type='email'
             placeholder='Enter e-mail'
-            value={email}
-            onChange={(formSubmit) => setEmail(formSubmit.target.value)}
+            value={primaryEmail}
+            onChange={(formSubmit) => setPrimaryEmail(formSubmit.target.value)}
           >
           </Form.Control>
         </Form.Group>

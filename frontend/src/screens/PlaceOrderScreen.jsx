@@ -15,7 +15,7 @@ import { ListGroupItem } from "react-bootstrap";
 export default function PlaceOrderScreen() { 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const cart = useSelector((cartState) => cartState.cart);
+  const cart = useSelector((state) => state.cart);
 
   const [createUsersOrder, { isLoading, error }] = useCreateUsersOrderMutation();
   

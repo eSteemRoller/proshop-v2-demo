@@ -34,7 +34,7 @@ export default function MyProfileScreen() {
 
   const dispatch = useDispatch();
 
-  const { userInfo } = useSelector((authState) => authState.auth);
+  const { userInfo } = useSelector((state) => state.auth);
 
   const [updateUserProfile, { isLoading: isUpdating }] =
     useUpdateMyProfileMutation();

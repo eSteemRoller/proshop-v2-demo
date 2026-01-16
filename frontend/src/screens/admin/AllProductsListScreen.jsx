@@ -51,7 +51,7 @@ export default function ProductListScreen() {
         <h1 className='m-2'>All Products</h1>
       </Col>
       <Col className='d-flex align-items-center justify-content-end'>
-        <Button className='btn-sm me-2 align-items-center' onClick={postNewProductHandler}>
+        <Button className='btn-sm my-2 align-items-center' onClick={postNewProductHandler}>
           <FaPlus /> Add New Product
         </Button>
       </Col>

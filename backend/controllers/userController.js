@@ -7,7 +7,7 @@ import nodemailer from 'nodemailer';
 import crypto from 'crypto';
 
 
-// @desc  Auth user & get JsonWebToken (Create authorization)
+// @desc  Auth user & generate JsonWebToken (Create authorization)
 // @route  POST /api/users/sign_in
 // @access  Public
 const authUser = asyncHandler(async (req, res) => {
@@ -205,7 +205,7 @@ const createUser = asyncHandler(async (req, res) => {
       await transporter.sendMail({
         from: fromAddress,
         to: user.primaryEmail,
-        subject: 'Complete your account setup',
+        subject: "Please, complete your account setup",
         text: `An account has been created for you. To set your password, visit: ${resetUrl}\nThe link expires in 1 hour.`,
       });
     } else {
@@ -254,7 +254,7 @@ const resetPassword = asyncHandler(async (req, res) => {
 
   await user.save();
 
-  res.status(200).json({ message: 'Password has been reset successfully' });
+  res.status(200).json({ message: "Success: Password has been reset" });
 });
 
 // @desc  Get/Read all users
@@ -283,7 +283,7 @@ const getUserById = asyncHandler(async (req, res) => {
     res.status(200).json(user);
   } else { 
     res.status(404);
-    throw new Error("User not found");
+    throw new Error("Failure: User not found");
   }
 });
 
@@ -314,7 +314,7 @@ const updateUserById = asyncHandler(async (req, res) => {
     });
   } else { 
     res.status(404);
-    throw new Error("User not found");
+    throw new Error("Failure: User not found");
   }
 });
 

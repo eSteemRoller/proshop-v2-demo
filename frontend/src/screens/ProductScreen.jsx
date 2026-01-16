@@ -19,7 +19,7 @@ export default function ProductScreen() {
   const navigate = useNavigate();
 
   const [productQty, setProductQty] = useState(1);
-  const { cartItems } = useSelector((cartState) => cartState.cart);
+  const { cartItems } = useSelector((state) => state.cart);
   const [showGoToCartButton, setShowGoToCartButton] = useState(false)
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
@@ -34,7 +34,7 @@ export default function ProductScreen() {
   const [postProductReview, { isLoading: isLoadingProductReview }] = 
     usePostProductReviewMutation();
 
-  const { userInfo } = useSelector((authState) => authState.auth);
+  const { userInfo } = useSelector((state) => state.auth);
   const missingProfileName = userInfo && (!userInfo.firstName || !userInfo.lastName);
 
   const addToCartHandler = () => { 

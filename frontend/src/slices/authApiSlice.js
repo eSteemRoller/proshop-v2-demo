@@ -12,12 +12,12 @@ const authApiSlice = createSlice({
   name: 'signIn',
   initialState,
   reducers: { 
-    setCredentials (authState, action) { 
-      authState.userInfo = action.payload;
+    setCredentials (state, action) { 
+      state.userInfo = action.payload;
       localStorage.setItem('userInfo', JSON.stringify(action.payload));
     },
-    signOut: (authState, action) => { 
-      authState.userInfo = null;
+    signOut: (state, action) => { 
+      state.userInfo = null;
       localStorage.removeItem('userInfo');
     }
   },

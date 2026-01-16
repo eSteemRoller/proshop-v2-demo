@@ -11,7 +11,7 @@ export default function CartScreen() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const cart = useSelector((cartState) => cartState.cart);
+  const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
 
   const addToCartHandler = async (product, productQty) => { 

@@ -34,7 +34,7 @@ export default function MyOrdersScreen() {
     error: errorPayPal 
   } = useReadPayPalClientIdQuery();
 
-  const { userInfo } = useSelector((authState) => authState.auth);
+  const { userInfo } = useSelector((state) => state.auth);
 
   const [updateOrderAsDelivered, { isLoading: loadingDelivered }] = useUpdateOrderAsDeliveredMutation();
 

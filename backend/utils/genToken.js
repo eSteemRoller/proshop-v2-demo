@@ -2,7 +2,7 @@
 import jwt from 'jsonwebtoken';
 
 
-const genToken = (res, userId) => { 
+export default function genToken(res, userId) { 
   const JWToken = jwt.sign( 
       { userId }, 
       process.env.JWT_SECRET, {
@@ -17,6 +17,4 @@ const genToken = (res, userId) => {
     sameSite: 'strict',
     maxAge: 30 * 24 * 60 * 1000, // Time target amount (30 days) * ... * --> time measurement (milliseconds)
   });
-}
-
-export default genToken;
+};

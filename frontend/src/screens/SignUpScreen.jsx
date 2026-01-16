@@ -13,7 +13,7 @@ import { toast } from 'react-toastify';
 export default function SignUpScreen() { 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
+  const [primaryEmail, setPrimaryEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -22,7 +22,7 @@ export default function SignUpScreen() {
 
   const [signUp, { isSigningIn }] = useSignUpMutation();
 
-  const { userInfo } = useSelector((authState) => authState.auth);
+  const { userInfo } = useSelector((state) => state.auth);
 
   const { search } = useLocation();
   const searchParams = new URLSearchParams(search);
@@ -42,7 +42,7 @@ export default function SignUpScreen() {
       return;
     } else { 
       try {
-      const dbResponse = await signUp({ firstName, lastName, email, password }).unwrap();
+      const dbResponse = await signUp({ firstName, lastName, primaryEmail, password }).unwrap();
       dispatch(setCredentials({...dbResponse, }));
       navigate(redirect);
       console.log('Sign in form submit');
@@ -74,13 +74,13 @@ export default function SignUpScreen() {
             onChange={(formSubmit) => setLastName(formSubmit.target.value)}
           ></Form.Control>
         </Form.Group>
-        <Form.Group controlId='email' className='my-4'>
+        <Form.Group controlId='primaryEmail' className='my-4'>
           <Form.Label>E-mail Address:</Form.Label>
           <Form.Control
             type='email'
             placeholder='Enter e-mail'
-            value={email}
-            onChange={(formSubmit) => setEmail(formSubmit.target.value)}
+            value={primaryEmail}
+            onChange={(formSubmit) => setPrimaryEmail(formSubmit.target.value)}
           ></Form.Control>
         </Form.Group>
         <Form.Group controlId='password' className='my-4'>

@@ -9,7 +9,7 @@ import CheckoutSteps from '../components/CheckoutSteps';
 
 
 export default function BillingScreen() { 
-  const cart = useSelector((cartState) => cartState.cart);
+  const cart = useSelector((state) => state.cart);
   const { cartBillingAddress } = cart;
 
   const [billingAddress, setBillingAddress] = 

@@ -1,6 +1,6 @@
-import { Table, Button } from 'react-bootstrap';
+import { Col, Table, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { FaTimes, FaTrash, FaEdit, FaCheck } from 'react-icons/fa';
+import { FaPlus, FaTimes, FaTrash, FaEdit, FaCheck } from 'react-icons/fa';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import { useGetAllUsersQuery, useDeleteUserMutation } from '../../slices/usersApiSlice';
@@ -39,10 +39,14 @@ export default function AllUsersListScreen() {
 
   return (
     <>
-      <h1>All Users</h1>
-      <Link to='/admin/user/create' className='btn btn-primary my-2'>
-        Create User
-      </Link>
+      <Col>
+        <h1>All Users</h1>
+      </Col>
+      <Col className='d-flex align-items-center justify-content-end'>
+        <Button to='/admin/user/create' className='btn btn-primary my-2 d-flex align-items-center justify-content-end'>
+          <FaPlus />Add New User
+        </Button>
+      </Col>
       {isDeleting && <Loader />}
       {isLoading ? (
         <Loader /> 

@@ -14,7 +14,7 @@ export default function PaymentScreen() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const cart = useSelector((cartState) => cartState.cart);
+  const cart = useSelector((state) => state.cart);
   const { billingAddress, shippingAddress } = cart;
 
   useEffect(() => { 
