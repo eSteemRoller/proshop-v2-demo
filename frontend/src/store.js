@@ -10,8 +10,8 @@ const store = configureStore({
     auth: authApiSliceReducer,
     cart: cartApiSliceReducer,
   },
-  middleware: (getDefaultMiddleware) => 
-    getDefaultMiddleware().concat
+  middleware: (readDefaultMiddleware) => 
+    readDefaultMiddleware().concat
       (apiSlice.middleware),
   devTools: true,
 });

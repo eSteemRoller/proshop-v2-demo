@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import { 
-  useGetUserDetailsQuery, 
+  useReadUserDetailsQuery, 
   useUpdateUserDetailsMutation, 
 } from '../../slices/usersApiSlice';
 
@@ -28,9 +28,9 @@ export default function EditUserScreen() {  // aka UserEditScreen
     isLoading,
     refetch,
     error
-  } = useGetUserDetailsQuery(userId);
+  } = useReadUserDetailsQuery(userId);
 
-  const [editUser, { isLoading: isUpdating }] = 
+  const [updateUser, { isLoading: isUpdatingUser }] = 
     useUpdateUserDetailsMutation();
 
   const navigate = useNavigate();
@@ -55,7 +55,7 @@ export default function EditUserScreen() {  // aka UserEditScreen
   const submitHandler = async (e) => { 
     e.preventDefault();
     try {
-      await editUser({ userId, firstName, lastName, primaryEmail, primaryBillingAddress, primaryShippingAddress, isAdmin, adminNotes}).unwrap();
+      await updateUser({ userId, firstName, lastName, primaryEmail, primaryBillingAddress, primaryShippingAddress, isAdmin, adminNotes}).unwrap();
       toast.success('Success: User updated');
       navigate('/admin/all_users');
     } catch (err) {
@@ -71,14 +71,14 @@ export default function EditUserScreen() {  // aka UserEditScreen
       </Link>
       <FormContainer>
         <h1>Edit User</h1>
-        {isUpdating && <Loader />}
+        {isUpdatingUser && <Loader />}
 
         { isLoading ? ( 
           <Loader /> 
         ) : error ? ( 
           <Message variant='danger'>{error}</Message>
         ) : !hasValidUser ? (
-          <Message variant='warning'>No user data available to edit.</Message>
+          <Message variant='warning'>Failure: User not found</Message>
         ) : ( 
             <Form onSubmit={ submitHandler }>
               <Form.Group controlId='firstName' className='my-2 mb-3'>

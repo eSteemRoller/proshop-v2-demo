@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom';
 import { FaPlus, FaTimes, FaTrash, FaEdit, FaCheck } from 'react-icons/fa';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
-import { useGetAllUsersQuery, useDeleteUserMutation } from '../../slices/usersApiSlice';
+import { useReadAllUsersQuery, useDeleteUserMutation } from '../../slices/usersApiSlice';
 import { toast } from 'react-toastify';
 
 
 export default function AllUsersListScreen() {
-  const { data: users, refetch, isLoading, error } = useGetAllUsersQuery();
+  const { data: users, refetch, isLoading, error } = useReadAllUsersQuery();
   console.log(users);
 
   const [ deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();

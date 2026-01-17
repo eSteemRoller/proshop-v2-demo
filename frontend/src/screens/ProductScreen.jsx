@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Rating from '../components/Rating';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import { useGetProductDetailsQuery, usePostProductReviewMutation } from "../slices/productsApiSlice";
+import { useReadProductDetailsQuery, useCreateProductReviewMutation } from "../slices/productsApiSlice";
 import { addToCart } from '../slices/cartApiSlice';
 import { toast } from 'react-toastify';
 
@@ -29,10 +29,10 @@ export default function ProductScreen() {
     isLoading,
     refetch,
     error,
-  } = useGetProductDetailsQuery(productId);
+  } = useReadProductDetailsQuery(productId);
 
-  const [postProductReview, { isLoading: isLoadingProductReview }] = 
-    usePostProductReviewMutation();
+  const [createProductReview, { isLoading: isLoadingProductReview }] = 
+    useCreateProductReviewMutation();
 
   const { userInfo } = useSelector((state) => state.auth);
   const missingProfileName = userInfo && (!userInfo.firstName || !userInfo.lastName);
@@ -49,7 +49,7 @@ export default function ProductScreen() {
   const submitReviewHandler = async (e) => { 
     e.preventDefault();
     try {
-      await postProductReview({ 
+      await createProductReview({ 
         productId,
         rating,
         comment

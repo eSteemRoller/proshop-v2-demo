@@ -3,27 +3,27 @@ import express from "express";
 const router = express.Router();
 // import products from '../data/products.js'; // original local pseudo-server data file
 import { 
-  getAllProducts, 
-  getProductById, 
-  postNewProduct, 
+  readAllProducts, 
+  readProductById, 
+  createNewProduct, 
   putProduct, 
   deleteProduct,
-  postProductReview
+  createProductReview
 } from "../controllers/productController.js";
 import { protect, admin } from '../middleware/authHandler.js';
 
 
 router
   .route('/')
-  .get(getAllProducts)
-  .post(protect, admin, postNewProduct);
+  .get(readAllProducts)
+  .post(protect, admin, createNewProduct);
 router
   .route('/:id')
-  .get(getProductById)
+  .get(readProductById)
   .put(protect, admin, putProduct)
   .delete(protect, admin, deleteProduct);
 router 
   .route('/:id/reviews')
-  .post(protect, postProductReview);
+  .post(protect, createProductReview);
 
 export default router;

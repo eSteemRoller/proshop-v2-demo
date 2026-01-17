@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom';
 import { FaTimes } from 'react-icons/fa';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
-import { useGetAllOrdersQuery } from '../../slices/ordersApiSlice';
+import { useReadAllOrdersQuery } from '../../slices/ordersApiSlice';
 
 
 export default function AllOrdersListScreen() {
-  const { data: orders, isLoading, error } = useGetAllOrdersQuery();
+  const { data: orders, isLoading, error } = useReadAllOrdersQuery();
   console.log(orders);
 
   return (

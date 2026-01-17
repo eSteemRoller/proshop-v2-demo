@@ -6,7 +6,7 @@ import Product from "../models/productModel.js";
 // @desc GET/Read all products
 // @route GET /api/products
 // @access Public
-const getAllProducts = asyncHandler(async (req, res) => {
+const readAllProducts = asyncHandler(async (req, res) => {
   const products = await Product.find({});
   res.json(products);
 });
@@ -14,7 +14,7 @@ const getAllProducts = asyncHandler(async (req, res) => {
 // @desc GET/Read a product by its Id.
 // @route GET /api/products/:id
 // @access Public
-const getProductById = asyncHandler(async (req, res) => {
+const readProductById = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
 
   if (product) {
@@ -27,7 +27,7 @@ const getProductById = asyncHandler(async (req, res) => {
 // @desc POST/Create a new product template (to be edited afterward)
 // @route POST /api/products
 // @access Private, Admin
-const postNewProduct = asyncHandler(async (req, res) => {
+const createNewProduct = asyncHandler(async (req, res) => {
   const product = new Product({ 
     category: "Sample category",
     brand: "Sample brand",
@@ -92,10 +92,10 @@ const deleteProduct = asyncHandler(async (req, res) => {  // aka deleteProduct
   }
 });
 
-// @desc Create a new product review
+// @desc POST/Create a new product review
 // @route POST /api/products/:id/reviews
 // @access Private
-const postProductReview = asyncHandler(async (req, res) => {  // aka deleteProduct
+const createProductReview = asyncHandler(async (req, res) => {  // aka deleteProduct
   const { rating, comment } = req.body;
   const product = await Product.findById(req.params.id);
 
@@ -140,10 +140,10 @@ const postProductReview = asyncHandler(async (req, res) => {  // aka deleteProdu
 
 
 export { 
-  getAllProducts, 
-  getProductById, 
-  postNewProduct, 
+  readAllProducts, 
+  readProductById, 
+  createNewProduct, 
   putProduct, 
   deleteProduct, 
-  postProductReview
+  createProductReview
 };

@@ -6,13 +6,13 @@ import { toast } from 'react-toastify';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import { 
-  useGetProductDetailsQuery, 
-  useEditProductDetailsMutation, 
+  useReadProductDetailsQuery, 
+  useUpdateProductDetailsMutation, 
   useUploadProductImageMutation 
 } from '../../slices/productsApiSlice';
 
 
-export default function ProductEditScreen() { 
+export default function EditProductScreen() { 
   const { id: productId } = useParams();
 
   const [image, setImage] = useState('');
@@ -28,12 +28,12 @@ export default function ProductEditScreen() {
     isLoading,
     refetch,
     error
-  } = useGetProductDetailsQuery(productId);
+  } = useReadProductDetailsQuery(productId);
 
-  const [editProduct, { isLoading: isUpdating }] = 
-    useEditProductDetailsMutation();
+  const [updateProduct, { isLoading: isUpdatingProduct }] = 
+    useUpdateProductDetailsMutation();
 
-  const [uploadProductImage, { isLoading: isUploading }] = 
+  const [uploadProductImage, { isLoading: isUploadingImage }] = 
     useUploadProductImageMutation();
 
   const navigate = useNavigate();
@@ -62,7 +62,7 @@ export default function ProductEditScreen() {
       countInStock
     };
 
-    const result = await editProduct(updatedProduct);
+    const result = await updateProduct(updatedProduct);
     if (result.error) { 
       toast.error(result.error);
     } else { 
@@ -91,12 +91,12 @@ export default function ProductEditScreen() {
       </Link>
       <FormContainer>
         <h1>Edit Product</h1>
-        {isUpdating && <Loader />}
+        {isUpdatingProduct && <Loader />}
         {isLoading ? <Loader /> 
           : error ? <Message variant='danger'>{error}</Message>
           : ( 
             <Form onSubmit={ submitHandler }>
-              {isUploading ? <Loader />
+              {isUploadingImage ? <Loader />
                 : error ? <Message variant='danger'>{error}</Message>
                 : (
                   <Form.Group controlId='image' className='mt-2 mb-3'>

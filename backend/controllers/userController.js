@@ -86,7 +86,7 @@ const signOutUser = asyncHandler(async (req, res) => {
 // @desc  Read/Get user profile
 // @route  GET /api/users/profile
 // @access  Private (User)
-const getUserProfile = asyncHandler(async (req, res) => { 
+const readUserProfile = asyncHandler(async (req, res) => { 
   const user = await User.findById(req.user._id);
 
   if (user) { 
@@ -260,7 +260,7 @@ const resetPassword = asyncHandler(async (req, res) => {
 // @desc  Get/Read all users
 // @route  GET /api/users
 // @access  Private (Admin)
-const getAllUsers = asyncHandler(async (req, res) => {
+const readAllUsers = asyncHandler(async (req, res) => {
   const users = await User.find({}).populate('createdBy', 'firstName lastName primaryEmail');
   res.status(200).json(users);
 });
@@ -268,7 +268,7 @@ const getAllUsers = asyncHandler(async (req, res) => {
 // @desc  Get/Read all users by Admin
 // @route  GET /api/users/usersByAdmin
 // @access  Private (Admin)
-const getAllUsersByAdmin = asyncHandler(async (req, res) => {
+const readAllUsersByAdmin = asyncHandler(async (req, res) => {
   const users = await User.find({}).populate('createdBy', 'firstName lastName primaryEmail');
   res.status(200).json(users);
 });
@@ -276,7 +276,7 @@ const getAllUsersByAdmin = asyncHandler(async (req, res) => {
 // @desc  Read/Get user by Id.
 // @route  GET /api/users/:id
 // @access  Private (Admin)
-const getUserById = asyncHandler(async (req, res) => {
+const readUserById = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id).select('-password').populate('createdBy', 'firstName lastName primaryEmail');
 
   if (user) { 
@@ -341,12 +341,12 @@ export {
   authUser,
   signUpUser,
   signOutUser,
-  getUserProfile,
+  readUserProfile,
   updateUserProfile,
   createUser,
-  getAllUsers,
-  getAllUsersByAdmin,
-  getUserById,
+  readAllUsers,
+  readAllUsersByAdmin,
+  readUserById,
   updateUserById,
   deleteUserById,
   resetPassword,

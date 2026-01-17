@@ -3,11 +3,11 @@ import { Row, Col } from 'react-bootstrap';
 import Product from '../components/Product';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import { useGetAllProductsQuery } from '../slices/productsApiSlice';
+import { useReadAllProductsQuery } from '../slices/productsApiSlice';
 
 
 export default function HomeScreen() {
-  const { data: products, isLoading, error } = useGetAllProductsQuery();
+  const { data: products, isLoading, error } = useReadAllProductsQuery();
 
   return (
     <>

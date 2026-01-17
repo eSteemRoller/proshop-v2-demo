@@ -59,7 +59,7 @@ const createUsersOrder = asyncHandler(async (req, res) => {
 const readAllUsersOrders = asyncHandler(async (req, res) => { 
   const allUsersOrders = await Order.find({ user: req.user._id });
   res.status(200).json(allUsersOrders);
-  res.send('getMyOrders');
+  res.send('readMyOrders');
 });
 
 // @desc Read/GET User's order by Id
@@ -138,7 +138,7 @@ const updateUsersOrderByIdAsDelivered = asyncHandler(async (req, res) => {
 const readAllOrders = asyncHandler(async (req, res) => {
   const orders = await Order.find({}).populate('user', 'id lastName');
   res.status(200).json(orders);
-  res.send('getAllOrders');
+  res.send('readAllOrders');
 });
 
 

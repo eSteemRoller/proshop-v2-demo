@@ -5,27 +5,27 @@ import { apiSlice } from "./apiSlice";
 
 export const productsApiSlice = apiSlice.injectEndpoints({ 
   endpoints: (builder) => ({ 
-    getAllProducts: builder.query({
+    readAllProducts: builder.query({
       query: () => ({
         url: PRODUCTS_URL,
       }),
       providesTags: ['Products'],
       keepUnusedDataFor: 5
     }),
-    getProductDetails: builder.query({ 
+    readProductDetails: builder.query({ 
       query: (productId) => ({ 
         url: `${PRODUCTS_URL}/${productId}`,
       }),
       keepUnusedDataFor: 5
     }),
-    postNewProduct: builder.mutation({ 
+    createProduct: builder.mutation({ 
       query: () => ({ 
         url: PRODUCTS_URL,
         method: 'POST',
       }),
       invalidatesTags: ['Products'],
     }),
-    editProductDetails: builder.mutation({  // aka updateProduct
+    updateProductDetails: builder.mutation({  // aka updateProduct
       query: (data) => ({ 
         url: `${PRODUCTS_URL}/${data.productId}`,
         method: 'PUT',
@@ -47,7 +47,7 @@ export const productsApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Products']
     }),
-    postProductReview: builder.mutation({  // aka createReview
+    createProductReview: builder.mutation({  // aka createReview
       query: (data) => ({ 
         url: `${PRODUCTS_URL}/${data.productId}/reviews`,
         method: 'POST',
@@ -59,12 +59,12 @@ export const productsApiSlice = apiSlice.injectEndpoints({
 });
 
 export const { 
-  useGetAllProductsQuery, 
-  useGetProductDetailsQuery,
-  usePostNewProductMutation, 
-  useEditProductDetailsMutation,
+  useReadAllProductsQuery, 
+  useReadProductDetailsQuery,
+  useCreateProductMutation, 
+  useUpdateProductDetailsMutation,
   useUploadProductImageMutation,
   useDeleteProductMutation,
-  usePostProductReviewMutation
+  useCreateProductReviewMutation
 } = 
   productsApiSlice;

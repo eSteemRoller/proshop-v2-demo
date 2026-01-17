@@ -6,22 +6,22 @@ import Message from '../../components/Message';
 import { toast } from 'react-toastify';
 import Loader from '../../components/Loader';
 import { 
-  useGetAllProductsQuery, 
-  usePostNewProductMutation, 
+  useReadAllProductsQuery, 
+  useCreateProductMutation, 
   useDeleteProductMutation,
 } from '../../slices/productsApiSlice';
 
 
-export default function ProductListScreen() {
-  const { data: products, isLoading, refetch, error } = useGetAllProductsQuery();
+export default function AllProductsListScreen() {
+  const { data: products, isLoading, refetch, error } = useReadAllProductsQuery();
   console.log(products);
 
-  const [postNewProduct, { isLoading: isPosting }] = usePostNewProductMutation();
+  const [createProduct, { isLoading: isCreatingProduct }] = useCreateProductMutation();
 
-  async function postNewProductHandler() { 
+  async function createProductHandler() { 
     if (window.confirm('Create the template for a new product below?')) { 
       try {
-        const newProduct = await postNewProduct().unwrap();
+        const newProduct = await createProduct().unwrap();
         toast.success(`Success: Product ${newProduct._id} created`);
         refetch();
       } catch (err) {
@@ -30,7 +30,7 @@ export default function ProductListScreen() {
     }
   }
 
-  const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
+  const [deleteProduct, { isLoading: isDeletingProduct }] = useDeleteProductMutation();
 
   const deleteProductHandler = async (_id) => {
     if (window.confirm(`Are you sure you want to delete product ${_id}?`)) { 
@@ -51,12 +51,12 @@ export default function ProductListScreen() {
         <h1 className='m-2'>All Products</h1>
       </Col>
       <Col className='d-flex align-items-center justify-content-end'>
-        <Button className='btn-sm my-2 align-items-center' onClick={postNewProductHandler}>
+        <Button className='btn-sm my-2 align-items-center' onClick={createProductHandler}>
           <FaPlus /> Add New Product
         </Button>
       </Col>
     </Row>
-    {(isPosting || isDeleting) && <Loader />}
+    {(isCreatingProduct || isDeletingProduct) && <Loader />}
     {isLoading ? <Loader />
       : error ? <Message variant='danger'>{error}</Message>
       : ( 
@@ -108,4 +108,4 @@ export default function ProductListScreen() {
       )
     }
   </>
-}
+};

@@ -19,7 +19,7 @@ import Loader from "../components/Loader";
 import { FaTimes } from 'react-icons/fa';
 import { useUpdateMyProfileMutation } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authApiSlice";
-import { useGetMyOrdersQuery } from "../slices/ordersApiSlice";
+import { useReadMyOrdersQuery } from "../slices/ordersApiSlice";
 
 
 export default function MyProfileScreen() {
@@ -39,7 +39,7 @@ export default function MyProfileScreen() {
   const [updateUserProfile, { isLoading: isUpdating }] =
     useUpdateMyProfileMutation();
 
-  const { data: orders, isLoading, error } = useGetMyOrdersQuery();
+  const { data: orders, isLoading, error } = useReadMyOrdersQuery();
 
   useEffect(() => {
     if (userInfo) {
