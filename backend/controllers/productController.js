@@ -7,8 +7,14 @@ import Product from "../models/productModel.js";
 // @route GET /api/products
 // @access Public
 const readAllProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({});
-  res.json(products);
+  const pageSize = 2;  // Number of products allowed per page
+  const currentPage = Number(req.query.pageNumber) || 1;
+  const pageCount = await Product.countDocuments();
+
+  const products = await Product.find({})
+    .limit(pageSize)
+    .skip(pageSize * (currentPage - 1));
+  res.json({products, currentPage, pages: Math.ceil(count / pageSize)});
 });
 
 // @desc GET/Read a product by its Id.
@@ -111,7 +117,7 @@ const createProductReview = asyncHandler(async (req, res) => {  // aka deletePro
 
     if (!req.user.firstName || !req.user.lastName) {
       res.status(400);
-      throw new Error("Please, complete your profile with first and last name before submitting a review");
+      throw new Error("Please, complete your profile with your first and last name before submitting a review");
     }
 
     const review = {
