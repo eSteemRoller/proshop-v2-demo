@@ -119,5 +119,5 @@ export default function SignUpScreen() {
         </Col>
       </Row>
     </FormContainer>
-  )
-}
+  );
+};

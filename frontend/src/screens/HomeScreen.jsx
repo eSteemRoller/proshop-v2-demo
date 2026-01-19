@@ -1,13 +1,17 @@
 
 import { Row, Col } from 'react-bootstrap';
+import { useParams } from 'react-router';
 import Product from '../components/Product';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
+import Paginate from '../components/Paginate';
 import { useReadAllProductsQuery } from '../slices/productsApiSlice';
 
 
-export default function HomeScreen() {
-  const { data: products, isLoading, error } = useReadAllProductsQuery();
+export default function HomeScreen() { 
+  const { pageNumber } = useParams();
+
+  const { data, isLoading, error } = useReadAllProductsQuery({ pageNumber });
 
   return (
     <>
@@ -20,18 +24,22 @@ export default function HomeScreen() {
       ) : (
         <>
           <h1>Latest Products</h1>
-            <Row>
-              {products.map(product => (
-                <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-                  <div className='h-100 d-flex'>
-                    <Product product={product} />
-                  </div>
-                </Col>
-              )) }
-            </Row>
-          </>
-        ) }
-      </>
-    );
+          <Row>
+            {data.products.map((product) => (
+              <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+                <div className='h-100 w-100 d-flex'>
+                  <Product product={product} />
+                </div>
+              </Col>
+            )) }
+          </Row>
+          <Paginate 
+            pages={data.pages}
+            page={data.page}
+          />
+        </>
+      )}
+    </>
+  );
 };
 

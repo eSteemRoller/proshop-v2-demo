@@ -12,12 +12,10 @@ import crypto from 'crypto';
 // @access  Public
 const authUser = asyncHandler(async (req, res) => {
   const { primaryEmail, password } = req.body;
-
   const user = await User.findOne({ primaryEmail });
 
   if (user && (await user.verifyPassword(password))) {
     genToken(res, user._id);
-
     res.status(200).json({ 
       _id: user._id,
       firstName: user.firstName,
@@ -25,7 +23,6 @@ const authUser = asyncHandler(async (req, res) => {
       primaryEmail: user.primaryEmail,
       isAdmin: user.isAdmin,
     });
-
   } else { 
     res.status(401);
     throw new Error('Invalid e-mail or password');
@@ -37,12 +34,11 @@ const authUser = asyncHandler(async (req, res) => {
 // @access  Public
 const signUpUser = asyncHandler(async (req, res) => { 
   const { firstName, lastName, primaryEmail, password } = req.body;
-
   const userExists = await User.findOne({ primaryEmail });
 
   if (userExists) { 
     res.status(400);
-    throw new Error('User already exists');
+    throw new Error('Failure: User already exists');
   }
   const user = await User.create({ 
     firstName,
@@ -63,7 +59,7 @@ const signUpUser = asyncHandler(async (req, res) => {
     });
   } else { 
     res.status(400);
-    throw new Error('Invalid user data');
+    throw new Error('Failure: Invalid user data');
   }
 });
 
@@ -133,10 +129,10 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc  Create/Signup/Register user by Admin
+// @desc  Add/Signup/Register user by Admin
 // @route  POST /api/usersByAdmin
 // @access  Private (Admin)
-const createUser = asyncHandler(async (req, res) => {
+const addUserByAdmin = asyncHandler(async (req, res) => {
   const { firstName, lastName, primaryEmail, password, isSubscribedToEmail, isSubscribedToText, isAdmin, adminNotes } = req.body;
 
   // Basic Email format validation
@@ -265,14 +261,6 @@ const readAllUsers = asyncHandler(async (req, res) => {
   res.status(200).json(users);
 });
 
-// @desc  Get/Read all users by Admin
-// @route  GET /api/users/usersByAdmin
-// @access  Private (Admin)
-const readAllUsersByAdmin = asyncHandler(async (req, res) => {
-  const users = await User.find({}).populate('createdBy', 'firstName lastName primaryEmail');
-  res.status(200).json(users);
-});
-
 // @desc  Read/Get user by Id.
 // @route  GET /api/users/:id
 // @access  Private (Admin)
@@ -343,9 +331,8 @@ export {
   signOutUser,
   readUserProfile,
   updateUserProfile,
-  createUser,
+  addUserByAdmin,
   readAllUsers,
-  readAllUsersByAdmin,
   readUserById,
   updateUserById,
   deleteUserById,

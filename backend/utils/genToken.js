@@ -12,9 +12,10 @@ export default function genToken(res, userId) {
 
   // Set JWToken as HTTP-only cookie
   res.cookie('jwt', JWToken, { 
-    httpOnly: true,
+    httpOnly: true,  // cookie not stored in client local storage = better security
     secure: process.env.NODE_ENV !== 'development',
     sameSite: 'strict',
-    maxAge: 30 * 24 * 60 * 60 * 1000, // Time target amount (30 days) * ... * --> time measurement (milliseconds)
+    maxAge: 30 * 24 * 60 * 60 * 1000  
+    // Auth session duration (30 days = 30 days * 24 hrs * 60 min * 60 sec * 1000 ms)
   });
 };

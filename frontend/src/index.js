@@ -35,7 +35,7 @@ import AllProductsListScreen from './screens/admin/AllProductsListScreen';
 import EditProductScreen from './screens/admin/EditProductScreen';
 import AllUsersListScreen from './screens/admin/AllUsersListScreen';
 import EditUserScreen from './screens/admin/EditUserScreen';
-import CreateUserScreen from './screens/admin/CreateUserScreen';
+import AddUserScreen from './screens/admin/AddUserByAdminScreen';
 import ResetPasswordScreen from './screens/ResetPasswordScreen';
 
 import reportWebVitals from './reportWebVitals';
@@ -45,14 +45,15 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<App />}>
       <Route index={true} path='/' element={<HomeScreen />} />
+      <Route path='/page/:pageNumber' element={<HomeScreen />} />
       <Route path='/sign_in' element={<SignInScreen />} />
-      <Route path='/my_profile' element={<MyProfileScreen />} />
-      <Route path='/my_orders' element={<MyOrdersScreen />} />
       <Route path='/sign_up' element={<SignUpScreen />} />
       <Route path='/product/:id' element={<ProductScreen />} />
       <Route path='/cart' element={<CartScreen />} />
 
       <Route path='' element={<PrivateRoute />}>
+        <Route path='/my_profile' element={<MyProfileScreen />} />
+        <Route path='/my_orders' element={<MyOrdersScreen />} />
         <Route path='/billing' element={<BillingScreen />} />
         <Route path='/shipping' element={<ShippingScreen />} />
         <Route path='/payment' element={<PaymentScreen />} />
@@ -65,7 +66,7 @@ const router = createBrowserRouter(
         <Route path='/admin/all_products' element={<AllProductsListScreen />} />
         <Route path='/admin/product/:id/edit_product' element={<EditProductScreen />} />
         <Route path='/admin/all_users' element={<AllUsersListScreen />} />
-        <Route path='/admin/user/create' element={<CreateUserScreen />} />
+        <Route path='/admin/user/add_user' element={<AddUserScreen />} />
         <Route path='/admin/user/:id/edit_user' element={<EditUserScreen />} />
       </Route>
       <Route path='/reset_password/:token' element={<ResetPasswordScreen />} />

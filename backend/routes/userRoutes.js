@@ -8,9 +8,8 @@ import {
   resetPassword,
   readUserProfile,
   updateUserProfile,
-  createUser,
+  addUserByAdmin,
   readAllUsers,
-  readAllUsersByAdmin,
   readUserById,
   updateUserById,
   deleteUserById,
@@ -19,8 +18,8 @@ import { protect, admin } from "../middleware/authHandler.js";
 import { authLimiter, sensitiveLimiter } from "../middleware/rateLimit.js";
 
 
-router.route('/').post(authLimiter, signUpUser).get(protect, admin, readAllUsers);
-router.route('/usersByAdmin').post(protect, admin, sensitiveLimiter, createUser).get(protect, admin, readAllUsersByAdmin).put(protect, admin, updateUserById).delete(protect, admin, deleteUserById);
+router.route('/').post(authLimiter, signUpUser);
+router.route('/usersByAdmin').get(protect, admin, readAllUsers).post(protect, admin, sensitiveLimiter, addUserByAdmin).put(protect, admin, updateUserById).delete(protect, admin, deleteUserById);
 router.post('/sign_out', signOutUser);
 router.post('/sign_in', authLimiter, authUser);
 router.put('/reset_password/:token', sensitiveLimiter, resetPassword);

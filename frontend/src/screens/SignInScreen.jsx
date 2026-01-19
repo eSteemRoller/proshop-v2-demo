@@ -85,10 +85,10 @@ export default function SignInScreen() {
       <Row className='py-4'>
         <Col>
           First visit? <Link to={ redirect ? 
-            `/signup?redirect=${redirect}` : 
-              '/signup'}>Sign Up</Link>
+            `/sign_up?redirect=${redirect}` : 
+              '/sign_up'}>Sign Up</Link>
         </Col>
       </Row>
     </FormContainer>
-  )
-}
+  );
+};

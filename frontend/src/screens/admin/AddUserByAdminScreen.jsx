@@ -5,28 +5,30 @@ import { Form, Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
-import { useCreateUserMutation } from '../../slices/usersApiSlice';
+import { useAddUserByAdminMutation } from '../../slices/usersApiSlice';
 
-export default function CreateUserScreen() {
+export default function AddUserByAdminScreen() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [primaryEmail, setPrimaryEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isSignedUpForEmail, setIsSignedUpForEmail] = useState(false);
+  const [isSignedUpForText, setIsSignedUpForText] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [adminNotes, setAdminNotes] = useState('');
 
-  const [ createUser, { isLoading, error } ] = useCreateUserMutation();
+  const [ addUser, { isLoading, error } ] = useAddUserByAdminMutation();
 
   const navigate = useNavigate();
 
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      await createUser({ firstName, lastName, primaryEmail, password, isAdmin, adminNotes }).unwrap();
-      toast.success('Success: User created');
+      await addUser({ firstName, lastName, primaryEmail, password, isAdmin, adminNotes }).unwrap();
+      toast.success('Success: User added');
       navigate('/admin/all_users');
     } catch (err) {
-      toast.error(err?.data?.message || err.error || 'Failed to create user');
+      toast.error(err?.data?.message || err.error || 'Failure: User not added');
     }
   };
 

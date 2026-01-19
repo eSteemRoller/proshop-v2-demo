@@ -11,7 +11,7 @@ import {
   FormControl,
   Nav
 } from "react-bootstrap";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Message from "../components/Message";
@@ -82,7 +82,12 @@ export default function MyProfileScreen() {
       }
     }
     console.log("submitHandler");
-  }
+  };
+
+  const navigate = useNavigate();
+  const { search } = useLocation();
+  const searchParams = new URLSearchParams(search);
+  const redirect = searchParams.get('redirect') || '/';
 
   return (
     <Row>
@@ -164,14 +169,14 @@ export default function MyProfileScreen() {
             ></FormControl>
           </FormGroup>
           <div className="d-flex justify-content-between">
-            <Link to='/' className='btn btn-light my-2 text-decoration-none'>
+            <Link to={redirect} className='btn btn-light my-2 text-decoration-none'>
               Cancel
             </Link>
             <Button 
               type="submit"  
               variant="primary" 
               className="my-2" 
-              onClick={submitHandler}  // To do: Add functionality to button
+              onClick={submitHandler}
             >
               Save
             </Button>
@@ -237,4 +242,4 @@ export default function MyProfileScreen() {
       </Col>
     </Row>
   );
-}
+};

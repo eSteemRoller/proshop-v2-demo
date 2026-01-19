@@ -1,6 +1,6 @@
 
 import { Row, Col, Table, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
 import Message from '../../components/Message';
 import { toast } from 'react-toastify';
@@ -12,9 +12,10 @@ import {
 } from '../../slices/productsApiSlice';
 
 
-export default function AllProductsListScreen() {
-  const { data: products, isLoading, refetch, error } = useReadAllProductsQuery();
-  console.log(products);
+export default function AllProductsListScreen() { 
+  const {pageNumber} = useParams();
+  const { data, isLoading, refetch, error } = useReadAllProductsQuery({pageNumber});
+  console.log(data.products);
 
   const [createProduct, { isLoading: isCreatingProduct }] = useCreateProductMutation();
 
@@ -34,7 +35,7 @@ export default function AllProductsListScreen() {
 
   const deleteProductHandler = async (_id) => {
     if (window.confirm(`Are you sure you want to delete product ${_id}?`)) { 
-      const productToDelete = products?.find((p) => p._id === _id) || { _id, name: '' };
+      const productToDelete = data?.products?.find((p) => p._id === _id) || { _id, name: '' };
       try {
         await deleteProduct(_id).unwrap();
         toast.success(`Success: Product ${productToDelete._id} ${productToDelete.name} is deleted`);
@@ -74,7 +75,7 @@ export default function AllProductsListScreen() {
               </tr>
             </thead>
             <tbody>
-              {products.map((product) => (
+              {data.products.map((product) => (
                 <tr key={product._id} className='align-middle text-center'>
                   <td className='align-middle text-center'>{product._id}</td>
                   <td className='align-middle text-center'>{product.category}</td>

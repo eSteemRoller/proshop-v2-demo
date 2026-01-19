@@ -14,7 +14,7 @@ const readAllProducts = asyncHandler(async (req, res) => {
   const products = await Product.find({})
     .limit(pageSize)
     .skip(pageSize * (currentPage - 1));
-  res.json({products, currentPage, pages: Math.ceil(count / pageSize)});
+  res.json({products, currentPage, pages: Math.ceil(pageCount / pageSize)});
 });
 
 // @desc GET/Read a product by its Id.
@@ -33,7 +33,7 @@ const readProductById = asyncHandler(async (req, res) => {
 // @desc POST/Create a new product template (to be edited afterward)
 // @route POST /api/products
 // @access Private, Admin
-const createNewProduct = asyncHandler(async (req, res) => {
+const createProduct = asyncHandler(async (req, res) => {
   const product = new Product({ 
     category: "Sample category",
     brand: "Sample brand",
@@ -53,7 +53,7 @@ const createNewProduct = asyncHandler(async (req, res) => {
 // @desc PUT/Update a product
 // @route PUT /api/products/:id
 // @access Private, Admin
-const putProduct = asyncHandler(async (req, res) => {  // aka updateProduct
+const updateProduct = asyncHandler(async (req, res) => {  // aka updateProduct
   const { 
       category,
       brand,
@@ -148,8 +148,8 @@ const createProductReview = asyncHandler(async (req, res) => {  // aka deletePro
 export { 
   readAllProducts, 
   readProductById, 
-  createNewProduct, 
-  putProduct, 
+  createProduct, 
+  updateProduct, 
   deleteProduct, 
   createProductReview
 };

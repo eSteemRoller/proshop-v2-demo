@@ -5,8 +5,8 @@ const router = express.Router();
 import { 
   readAllProducts, 
   readProductById, 
-  createNewProduct, 
-  putProduct, 
+  createProduct, 
+  updateProduct, 
   deleteProduct,
   createProductReview
 } from "../controllers/productController.js";
@@ -16,11 +16,11 @@ import { protect, admin } from '../middleware/authHandler.js';
 router
   .route('/')
   .get(readAllProducts)
-  .post(protect, admin, createNewProduct);
+  .post(protect, admin, createProduct);
 router
   .route('/:id')
   .get(readProductById)
-  .put(protect, admin, putProduct)
+  .put(protect, admin, updateProduct)
   .delete(protect, admin, deleteProduct);
 router 
   .route('/:id/reviews')

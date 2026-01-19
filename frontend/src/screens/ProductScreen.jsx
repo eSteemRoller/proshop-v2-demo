@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Rating from '../components/Rating';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import { useReadProductDetailsQuery, useCreateProductReviewMutation } from "../slices/productsApiSlice";
+import { useReadProductQuery, useCreateProductReviewMutation } from "../slices/productsApiSlice";
 import { addToCart } from '../slices/cartApiSlice';
 import { toast } from 'react-toastify';
 
@@ -29,7 +29,7 @@ export default function ProductScreen() {
     isLoading,
     refetch,
     error,
-  } = useReadProductDetailsQuery(productId);
+  } = useReadProductQuery(productId);
 
   const [createProductReview, { isLoading: isLoadingProductReview }] = 
     useCreateProductReviewMutation();

@@ -11,7 +11,7 @@ const errorHandler = (err, req, res, next) => {
 
     // Check for CastError(500 Internal Server Error;invalid Mongoose ObjectId)
     if(err.name === 'CastError' && err.kind === 'ObjectId') {
-        message = 'Resource(Product) not found';
+        message = 'Resource (Product?) not found';
         statusCode = 404;
     }
 

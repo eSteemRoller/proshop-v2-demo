@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useSignOutMutation } from '../slices/usersApiSlice';
 import { signOut } from '../slices/authApiSlice';
 import logo from '../assets/logo.png';
-
+import { toast } from 'react-toastify';
 
 
 export default function Header() { 
@@ -19,13 +19,15 @@ export default function Header() {
   const [signOutApiCall] = useSignOutMutation();
 
   const signOutHandler = async () => { 
-    console.log('signOut')
     try {
       await signOutApiCall().unwrap();
       dispatch(signOut());
+      toast.success('Success: You have signed out');
       navigate('/sign_in');
-    } catch (error) {
-      console.log(error);
+      console.log('signOut');
+    } catch (err) { 
+      toast.error(err?.data?.message || err.error);
+      console.log(err);
     }
   };
 
@@ -83,5 +85,4 @@ export default function Header() {
       </Navbar>
     </header>
   );
-}
-
+};

@@ -6,8 +6,8 @@ import { toast } from 'react-toastify';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import { 
-  useReadProductDetailsQuery, 
-  useUpdateProductDetailsMutation, 
+  useReadProductQuery, 
+  useUpdateProductMutation, 
   useUploadProductImageMutation 
 } from '../../slices/productsApiSlice';
 
@@ -28,10 +28,10 @@ export default function EditProductScreen() {
     isLoading,
     refetch,
     error
-  } = useReadProductDetailsQuery(productId);
+  } = useReadProductQuery(productId);
 
   const [updateProduct, { isLoading: isUpdatingProduct }] = 
-    useUpdateProductDetailsMutation();
+    useUpdateProductMutation();
 
   const [uploadProductImage, { isLoading: isUploadingImage }] = 
     useUploadProductImageMutation();

@@ -6,13 +6,16 @@ import { apiSlice } from "./apiSlice";
 export const productsApiSlice = apiSlice.injectEndpoints({ 
   endpoints: (builder) => ({ 
     readAllProducts: builder.query({
-      query: () => ({
+      query: ({ pageNumber}) => ({
         url: PRODUCTS_URL,
+        params: { 
+          pageNumber,
+        }
       }),
       providesTags: ['Products'],
       keepUnusedDataFor: 5
     }),
-    readProductDetails: builder.query({ 
+    readProduct: builder.query({ 
       query: (productId) => ({ 
         url: `${PRODUCTS_URL}/${productId}`,
       }),
@@ -25,7 +28,7 @@ export const productsApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Products'],
     }),
-    updateProductDetails: builder.mutation({  // aka updateProduct
+    updateProduct: builder.mutation({  // aka updateProduct
       query: (data) => ({ 
         url: `${PRODUCTS_URL}/${data.productId}`,
         method: 'PUT',
@@ -60,9 +63,9 @@ export const productsApiSlice = apiSlice.injectEndpoints({
 
 export const { 
   useReadAllProductsQuery, 
-  useReadProductDetailsQuery,
+  useReadProductQuery,
   useCreateProductMutation, 
-  useUpdateProductDetailsMutation,
+  useUpdateProductMutation,
   useUploadProductImageMutation,
   useDeleteProductMutation,
   useCreateProductReviewMutation
