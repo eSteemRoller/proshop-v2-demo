@@ -55,7 +55,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
     }),
     addUserByAdmin: builder.mutation({
       query: (userData) => ({
-        url: `${USERS_URL}/usersByAdmin`,
+        url: `${USERS_URL}/add_user`,
         method: 'POST',
         body: userData
       }),

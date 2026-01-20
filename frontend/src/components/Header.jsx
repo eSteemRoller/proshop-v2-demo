@@ -10,8 +10,8 @@ import { toast } from 'react-toastify';
 
 
 export default function Header() { 
-  const { cartItems } = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.auth);
+  const { cartItems } = useSelector((state) => state.cart);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();

@@ -72,7 +72,7 @@ const signOutUser = asyncHandler(async (req, res) => {
     httpOnly: true,
     expires: new Date(0)
   });
-  res.status(200).json({ message: 'Signed out successfully'});
+  res.status(200).json({ message: 'Success: You have signed out'});
   // } else {
   //   res.status(400);
   //   throw new Error('Invalid request. Please, sign in.');

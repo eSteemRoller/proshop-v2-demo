@@ -38,7 +38,7 @@ export default function SignUpScreen() {
   const signInHandler = async (signInFormSubmit) => { 
     signInFormSubmit.preventDefault();
     if (password !== confirmPassword) { 
-      toast.error('Passwords do not match');
+      toast.error("Error: Passwords do not match");
       return;
     } else { 
       try {
@@ -78,7 +78,7 @@ export default function SignUpScreen() {
           <Form.Label>E-mail Address:</Form.Label>
           <Form.Control
             type='email'
-            placeholder='Enter e-mail'
+            placeholder='Enter your best e-mail address'
             value={primaryEmail}
             onChange={(formSubmit) => setPrimaryEmail(formSubmit.target.value)}
           ></Form.Control>

@@ -23,14 +23,14 @@ import { useReadMyOrdersQuery } from "../slices/ordersApiSlice";
 
 
 export default function MyProfileScreen() {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [primaryEmail, setPrimaryEmail] = useState("");
-  const [secondaryEmail, setSecondaryEmail] = useState("");
-  const [primaryPhone, setPrimaryPhone] = useState("");
-  const [secondaryPhone, setSecondaryPhone] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [primaryEmail, setPrimaryEmail] = useState('');
+  const [secondaryEmail, setSecondaryEmail] = useState('');
+  const [primaryPhone, setPrimaryPhone] = useState('');
+  const [secondaryPhone, setSecondaryPhone] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const dispatch = useDispatch();
 
@@ -59,8 +59,8 @@ export default function MyProfileScreen() {
     userInfo.secondaryPhone
   ]);
 
-  async function submitHandler(e) {
-    e.preventDefault();
+  async function submitHandler(formSubmit) {
+    formSubmit.preventDefault();
     if (password !== confirmPassword) {
       toast.error("Passwords do not match");
     } else {
@@ -84,7 +84,6 @@ export default function MyProfileScreen() {
     console.log("submitHandler");
   };
 
-  const navigate = useNavigate();
   const { search } = useLocation();
   const searchParams = new URLSearchParams(search);
   const redirect = searchParams.get('redirect') || '/';
@@ -102,7 +101,7 @@ export default function MyProfileScreen() {
               type='text'
               placeholder="Enter first name"
               value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
+              onChange={(formSubmit) => setFirstName(formSubmit.target.value)}
             ></FormControl>
           </FormGroup>
           <FormGroup controlId="lastName" className="my-2">
@@ -111,7 +110,7 @@ export default function MyProfileScreen() {
               type='text'
               placeholder="Enter last name"
               value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
+              onChange={(formSubmit) => setLastName(formSubmit.target.value)}
             ></FormControl>
           </FormGroup>
           <FormGroup controlId="primaryEmail" className="my-2">
@@ -120,7 +119,7 @@ export default function MyProfileScreen() {
               type="email"
               placeholder="Enter e-mail address"
               value={primaryEmail}
-              onChange={(e) => setPrimaryEmail(e.target.value)}
+              onChange={(formSubmit) => setPrimaryEmail(formSubmit.target.value)}
             ></FormControl>
           </FormGroup>
           <FormGroup controlId="secondaryEmail" className="my-2">
@@ -129,7 +128,7 @@ export default function MyProfileScreen() {
               type="email"
               placeholder="Enter e-mail address"
               value={secondaryEmail}
-              onChange={(e) => setSecondaryEmail(e.target.value)}
+              onChange={(formSubmit) => setSecondaryEmail(formSubmit.target.value)}
             ></FormControl>
           </FormGroup>
           <FormGroup controlId="primaryPhone" className="my-2">
@@ -138,7 +137,7 @@ export default function MyProfileScreen() {
               type="text"
               placeholder="Enter primary phone number"
               value={primaryPhone}
-              onChange={(e) => setPrimaryPhone(e.target.value)}
+              onChange={(formSubmit) => setPrimaryPhone(formSubmit.target.value)}
             ></FormControl>
           </FormGroup>
           <FormGroup controlId="secondaryPhone" className="my-2">
@@ -147,7 +146,7 @@ export default function MyProfileScreen() {
               type="text"
               placeholder="Enter secondary phone number"
               value={secondaryPhone}
-              onChange={(e) => setSecondaryPhone(e.target.value)}
+              onChange={(formSubmit) => setSecondaryPhone(formSubmit.target.value)}
             ></FormControl>
           </FormGroup>
           <FormGroup controlId="password" className="my-2">
@@ -156,7 +155,7 @@ export default function MyProfileScreen() {
               type="password"
               placeholder="Enter password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(formSubmit) => setPassword(formSubmit.target.value)}
             ></FormControl>
           </FormGroup>
           <FormGroup controlId="confirmPassword" className="my-2">
@@ -165,7 +164,7 @@ export default function MyProfileScreen() {
               type="password"
               placeholder="Confirm password"
               value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              onChange={(formSubmit) => setConfirmPassword(formSubmit.target.value)}
             ></FormControl>
           </FormGroup>
           <div className="d-flex justify-content-between">

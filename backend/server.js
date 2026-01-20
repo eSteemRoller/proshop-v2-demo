@@ -1,5 +1,4 @@
 
-// import cors from 'cors';
 import path from 'path';
 import express from 'express';
 import dotenv from 'dotenv';
@@ -30,14 +29,12 @@ app.use(cookieParser());
 // Global rate limiter (light)
 app.use(globalLimiter);
 
-// app.use(cors());
-
 app.get('/', (req, res) => {
     res.send('API is running...');
 });
 
 app.use('/api/products', productRoutes); // Links to productRoutes.js (e.g.: router.get)
-app.use('/api/users', userRoutes); // Links to userRoutes.js (e.g.: router.get)
+app.use('/api/users', userRoutes); // Links to backend/routes/userRoutes.js (e.g.: router.get)
 app.use('/api/orders', orderRoutes); // Links to orderRoutes.js (e.g.: router.get)
 app.use('/api/product_image_upload', imageUploadRoutes); // Links to imageUploadRoutes.js (e.g.: router.get)
 
