@@ -16,7 +16,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       query: (userData) => ({ 
         url: `${USERS_URL}`,
         method: 'POST',
-        body: userData
+        body: userData,
       }),
     }),
     signOut: builder.mutation({ 
@@ -26,30 +26,30 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     updateMyProfile: builder.mutation({ 
-      query: (data) => ({ 
-        url: `${USERS_URL}/my_profile`,
+      query: (userData) => ({ 
+        url: `${USERS_URL}/${userData.userId}/my_profile`,
         method: 'PUT',
-        body: data,
+        body: userData,
       }),
     }),
     readAllUsers: builder.query({ 
       query: () => ({ 
-        url: USERS_URL
+        url: USERS_URL,
       }),
       providesTags: ['Users'],
       keepUnusedDataFor: 5
     }),
     readUserDetails: builder.query({ 
       query: (userId) => ({ 
-        url: `${USERS_URL}/${userId}`
+        url: `${USERS_URL}/${userId}`,
       }),
       keepUnusedDataFor: 5
     }),
     updateUserDetails: builder.mutation({  // aka updateUser
-      query: (data) => ({ 
+      query: (userData) => ({ 
         url: `${USERS_URL}/${data.userId}`,
         method: 'PUT',
-        body: data
+        body: userData,
       }),
       invalidatesTags: ['Users']
     }),
@@ -57,7 +57,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       query: (userData) => ({
         url: `${USERS_URL}/add_user`,
         method: 'POST',
-        body: userData
+        body: userData,
       }),
       invalidatesTags: ['Users']
     }),
@@ -65,14 +65,15 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       query: ({ token, password }) => ({
         url: `${USERS_URL}/reset_password/${token}`,
         method: 'PUT',
-        body: { password }
+        body: { password },
       }),
     }),
     deleteUser: builder.mutation({ 
       query: (userId) => ({ 
         url: `${USERS_URL}/${userId}`,
-        method: 'DELETE'
+        method: 'DELETE',
       }),
+      invalidatesTags: ['Users']
     }),
   }),
 });

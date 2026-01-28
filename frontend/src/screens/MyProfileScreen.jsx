@@ -36,10 +36,10 @@ export default function MyProfileScreen() {
 
   const { userInfo } = useSelector((state) => state.auth);
 
-  const [updateUserProfile, { isLoading: isUpdating }] =
+  const [updateMyUserProfile, { isLoading: isUpdating }] =
     useUpdateMyProfileMutation();
 
-  const { data: orders, isLoading, error } = useReadMyOrdersQuery();
+  const { data: orders, isLoading, err } = useReadMyOrdersQuery();
 
   useEffect(() => {
     if (userInfo) {
@@ -65,7 +65,7 @@ export default function MyProfileScreen() {
       toast.error("Passwords do not match");
     } else {
       try {
-        const res = await updateUserProfile({
+        const res = await updateMyUserProfile({
           _id: userInfo._id,
           firstName,
           lastName,
@@ -188,9 +188,9 @@ export default function MyProfileScreen() {
         <h2>My Orders</h2>
         {isLoading ? (
           <Loader />
-        ) : error ? (
+        ) : err ? (
           <Message variant="danger">
-            {error?.data?.message || error.error}
+            {err?.data?.message || err.error}
           </Message>
         ) : (
           <Table striped bordered hover responsive className="table-sm">

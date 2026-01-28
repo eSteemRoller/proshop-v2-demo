@@ -41,8 +41,8 @@ export default function SignInScreen() {
       const dbResponse = await signIn({ primaryEmail, password }).unwrap();
       dispatch(setCredentials({...dbResponse, }));
       navigate(redirect);
-    } catch (error) {
-      toast.error(error?.data?.message || error.error);
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
     }
   };
 

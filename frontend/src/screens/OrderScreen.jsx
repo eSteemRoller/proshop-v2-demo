@@ -21,25 +21,25 @@ export default function MyOrdersScreen() {
     data: order, 
     refetch, 
     isLoading, 
-    error 
+    err 
   } = useReadUsersOrderDetailsQuery(orderId);
   
-  const [payOrder, { isLoading:loadingPay }] = usePayOrderMutation();
+  const [payOrder, { isLoading:isLoadingPaid }] = usePayOrderMutation();
 
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 
   const { 
     data: paypal, 
-    isLoading: loadingPayPal, 
-    error: errorPayPal 
+    isLoading: isLoadingPayPal, 
+    err: errPayPal 
   } = useReadPayPalClientIdQuery();
 
   const { userInfo } = useSelector((state) => state.auth);
 
-  const [updateOrderAsDelivered, { isLoading: loadingDelivered }] = useUpdateOrderAsDeliveredMutation();
+  const [updateOrderAsDelivered, { isLoading: isLoadingDelivered }] = useUpdateOrderAsDeliveredMutation();
 
   useEffect(() => { 
-    if (!errorPayPal && !loadingPayPal && paypal.clientId) { 
+    if (!errPayPal && !loadingPayPal && paypal.clientId) { 
       const loadPayPalScript = async () => { 
         paypalDispatch({ 
           type: 'resetOptions',
@@ -56,7 +56,7 @@ export default function MyOrdersScreen() {
         }
       }
     }
-  }, [order, paypal, paypalDispatch, loadingPayPal, errorPayPal]);
+  }, [order, paypal, paypalDispatch, isLoadingPayPal, errPayPal]);
 
 
   async function onApproveTester() { 
@@ -85,14 +85,14 @@ export default function MyOrdersScreen() {
         await payOrder({ orderId, details });
         refetch();
         toast.success('Payment successful');
-      } catch (error) { 
-        toast.error(error?.data?.message || error.message);
+      } catch (err) { 
+        toast.error(err?.data?.message || err.message);
       }
     });
   }
 
-  function onError(error) { 
-    toast.error(error.message);
+  function onError(err) { 
+    toast.error(err.message);
   }
 
   async function deliveredOrderHandler(isDelivered) { 
@@ -100,13 +100,13 @@ export default function MyOrdersScreen() {
       await updateOrderAsDelivered(orderId);
       refetch();
       toast.success('Order marked as delivered');
-    } catch (error) {
-      toast.error(error?.data?.message || error.message);
+    } catch (err) {
+      toast.error(err?.data?.message || err.message);
     }
   }
 
   return isLoading ? <Loader /> : 
-      error ? <Message variant='danger' /> : ( 
+      err ? <Message variant='danger' /> : ( 
         <>
           <h1>Order {order._id} Review</h1>
           <Row>
@@ -118,15 +118,15 @@ export default function MyOrdersScreen() {
                     <strong>Name: </strong> { (order.user.firstName, order.user.lastName) }
                   </p>
                   <p>
-                    <strong>E-mail: </strong> { order.user.email }
+                    <strong>E-mail: </strong> { order.user.primaryEmail }
                   </p>
                   <p>
                     <strong>Address: </strong> 
-                    { order.billingAddress.address },
-                    { order.billingAddress.unitOrSte },
-                    { order.billingAddress.city }{' '},
-                    { order.billingAddress.postalCode },
-                    { order.billingAddress.country },
+                    { order.primaryBillingAddress.address },
+                    { order.primaryBillingAddress.unitOrSte },
+                    { order.primaryBillingAddress.city }{' '},
+                    { order.primaryBillingAddress.postalCode },
+                    { order.primaryBillingAddress.country },
                   </p>
                   { order.isDelivered ? ( 
                     <Message variant='success'>
@@ -208,7 +208,7 @@ export default function MyOrdersScreen() {
                   </ListGroupItem>
                   { !order.isPaid && ( 
                     <ListGroupItem>
-                      {loadingPay && <Loader />}
+                      {isLoadingPaid && <Loader />}
 
                       {isPending ? <Loader /> : (
                         <div>
@@ -229,7 +229,7 @@ export default function MyOrdersScreen() {
                       )}
                     </ListGroupItem>
                   )}
-                  {loadingDelivered && <Loader />}
+                  {isLoadingDelivered && <Loader />}
 
                   {userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered && ( 
                     <ListGroupItem>

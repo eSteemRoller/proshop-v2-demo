@@ -28,7 +28,7 @@ export default function ProductScreen() {
     data: product,
     isLoading,
     refetch,
-    error,
+    err,
   } = useReadProductQuery(productId);
 
   const [createProductReview, { isLoading: isLoadingProductReview }] = 
@@ -71,9 +71,9 @@ export default function ProductScreen() {
       </Link>
       {isLoading ? (
         <Loader />
-      ) : error ? (
+      ) : err ? (
         <Message variant='danger'> 
-          { error?.data?.message || error.error } 
+          { err?.data?.message || err.error } 
         </Message>
       ) : ( 
         <>

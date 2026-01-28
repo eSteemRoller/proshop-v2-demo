@@ -82,7 +82,7 @@ const signOutUser = asyncHandler(async (req, res) => {
 // @desc  Read/Get user profile
 // @route  GET /api/users/profile
 // @access  Private (User)
-const readUserProfile = asyncHandler(async (req, res) => { 
+const readMyUserProfile = asyncHandler(async (req, res) => { 
   const user = await User.findById(req.user._id);
 
   if (user) { 
@@ -102,7 +102,7 @@ const readUserProfile = asyncHandler(async (req, res) => {
 // @desc  Update user profile
 // @route  PUT /api/users/profile
 // @access  Private (User)
-const updateUserProfile = asyncHandler(async (req, res) => { 
+const updateMyUserProfile = asyncHandler(async (req, res) => { 
   const user = await User.findById(req.user._id);
 
   if (user) { 
@@ -265,7 +265,7 @@ const readAllUsers = asyncHandler(async (req, res) => {
 // @route  GET /api/users/:id
 // @access  Private (Admin)
 const readUserById = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id).select('-password').populate('createdBy', 'firstName lastName primaryEmail');
+  const user = await User.findById(req.params.id).select('-password').populate('createdBy', 'firstName lastName primaryEmail secondaryEmail primaryPhone secondaryPhone isSubscribedToEmail isSubscribedToText isAdmin adminNotes');
 
   if (user) { 
     res.status(200).json(user);
@@ -329,8 +329,8 @@ export {
   authUser,
   signUpUser,
   signOutUser,
-  readUserProfile,
-  updateUserProfile,
+  readMyUserProfile,
+  updateMyUserProfile,
   addUserByAdmin,
   readAllUsers,
   readUserById,

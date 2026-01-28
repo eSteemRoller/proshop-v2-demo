@@ -46,8 +46,8 @@ export default function SignUpScreen() {
       dispatch(setCredentials({...dbResponse, }));
       navigate(redirect);
       console.log('Sign in form submit');
-      } catch (error) {
-        toast.error(error?.data?.message || error.error);
+      } catch (err) {
+        toast.error(err?.data?.message || err.error);
       }
     }
   };
