@@ -39,7 +39,7 @@ export default function MyOrdersScreen() {
   const [updateOrderAsDelivered, { isLoading: isLoadingDelivered }] = useUpdateOrderAsDeliveredMutation();
 
   useEffect(() => { 
-    if (!errPayPal && !loadingPayPal && paypal.clientId) { 
+    if (!errPayPal && !isLoadingPayPal && paypal.clientId) { 
       const loadPayPalScript = async () => { 
         paypalDispatch({ 
           type: 'resetOptions',

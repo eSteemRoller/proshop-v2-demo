@@ -14,8 +14,22 @@ export const usersApiSlice = apiSlice.injectEndpoints({
     }),
     signUp: builder.mutation({ 
       query: (userData) => ({ 
-        url: `${USERS_URL}`,
+        url: `${USERS_URL}/sign_up`,
         method: 'POST',
+        body: userData,
+      }),
+    }),
+    readMyUserProfile: builder.query({ 
+      query: (userData) => ({ 
+        url: `${USERS_URL}/user/${userData.userId}/my_profile`,
+        method: 'PUT',
+        body: userData,
+      }),
+    }),
+    updateMyUserProfile: builder.mutation({ 
+      query: (userData) => ({ 
+        url: `${USERS_URL}/user/${userData.userId}/my_profile`,
+        method: 'PUT',
         body: userData,
       }),
     }),
@@ -25,29 +39,22 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         method: 'POST',
       }),
     }),
-    updateMyProfile: builder.mutation({ 
-      query: (userData) => ({ 
-        url: `${USERS_URL}/${userData.userId}/my_profile`,
-        method: 'PUT',
-        body: userData,
-      }),
-    }),
     readAllUsers: builder.query({ 
       query: () => ({ 
-        url: USERS_URL,
+        url: `${USERS_URL}/admin/all_users`,
       }),
       providesTags: ['Users'],
       keepUnusedDataFor: 5
     }),
     readUserDetails: builder.query({ 
-      query: (userId) => ({ 
-        url: `${USERS_URL}/${userId}`,
+      query: (userData) => ({ 
+        url: `${USERS_URL}/admin/user/${userData.userId}/my_profile`,
       }),
       keepUnusedDataFor: 5
     }),
     updateUserDetails: builder.mutation({  // aka updateUser
       query: (userData) => ({ 
-        url: `${USERS_URL}/${data.userId}`,
+        url: `${USERS_URL}/admin/user/${userData.userId}/my_profile`,
         method: 'PUT',
         body: userData,
       }),
@@ -81,12 +88,13 @@ export const usersApiSlice = apiSlice.injectEndpoints({
 export const { 
   useSignInMutation, 
   useSignUpMutation, 
+  useReadMyUserProfileQuery,
+  useUpdateMyUserProfileMutation, 
   useSignOutMutation, 
-  useUpdateMyProfileMutation, 
+  useResetPasswordMutation, 
   useReadAllUsersQuery,
+  useReadUserDetailsQuery, 
+  useUpdateUserDetailsMutation, 
+  useAddUserByAdminMutation, 
   useDeleteUserMutation,
-  useAddUserByAdminMutation,
-  useResetPasswordMutation,
-  useReadUserDetailsQuery,
-  useUpdateUserDetailsMutation
 } = usersApiSlice;

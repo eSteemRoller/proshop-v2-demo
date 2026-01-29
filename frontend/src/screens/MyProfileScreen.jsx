@@ -11,13 +11,13 @@ import {
   FormControl,
   Nav
 } from "react-bootstrap";
-import { Link, useLocation, useNavigate } from "react-router";
+import { Link, useLocation } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { FaTimes } from 'react-icons/fa';
-import { useUpdateMyProfileMutation } from "../slices/usersApiSlice";
+import { useUpdateMyUserProfileMutation } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authApiSlice";
 import { useReadMyOrdersQuery } from "../slices/ordersApiSlice";
 
@@ -37,7 +37,7 @@ export default function MyProfileScreen() {
   const { userInfo } = useSelector((state) => state.auth);
 
   const [updateMyUserProfile, { isLoading: isUpdating }] =
-    useUpdateMyProfileMutation();
+    useUpdateMyUserProfileMutation();
 
   const { data: orders, isLoading, err } = useReadMyOrdersQuery();
 

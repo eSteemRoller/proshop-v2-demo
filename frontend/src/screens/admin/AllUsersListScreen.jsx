@@ -44,7 +44,7 @@ export default function AllUsersListScreen() {
       </Col>
       <Col className='d-flex align-items-center justify-content-end'>
         <Button to='/admin/user/add_user' className='btn btn-primary my-2 d-flex align-items-center justify-content-end'>
-          <FaPlus />Add New User
+          <FaPlus />&nbsp;Add New User
         </Button>
       </Col>
       {isDeleting && <Loader />}

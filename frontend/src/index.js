@@ -50,6 +50,7 @@ const router = createBrowserRouter(
       <Route path='/sign_up' element={<SignUpScreen />} />
       <Route path='/product/:id' element={<ProductScreen />} />
       <Route path='/cart' element={<CartScreen />} />
+      <Route path='/reset_password/:token' element={<ResetPasswordScreen />} />
 
       <Route path='' element={<PrivateRoute />}>
         <Route path='/my_profile' element={<MyProfileScreen />} />
@@ -62,14 +63,15 @@ const router = createBrowserRouter(
       </Route>
 
       <Route path='' element={<AdminRoute />}>
-        <Route path='/admin/all_orders' element={<AllOrdersListScreen />} />
+        <Route path='/admin/all_users' element={<AllUsersListScreen />} />
+        <Route path='/admin/all_users/user/:id/edit_user' element={<EditUserScreen />} />
+        <Route path='/admin/all_users/add_user' element={<AddUserByAdminScreen />} />
+        
         <Route path='/admin/all_products' element={<AllProductsListScreen />} />
-        <Route path='/admin/product/:id/edit_product' element={<EditProductScreen />} />
-        <Route path='/users' element={<AllUsersListScreen />} />
-        <Route path='/admin/user/add_user' element={<AddUserByAdminScreen />} />
-        <Route path='/admin/user/:id/edit_user' element={<EditUserScreen />} />
+        <Route path='/admin/all_products/product/:id/edit_product' element={<EditProductScreen />} />
+        
+        <Route path='/admin/all_orders' element={<AllOrdersListScreen />} />
       </Route>
-      <Route path='/reset_password/:token' element={<ResetPasswordScreen />} />
     </Route>
   )
 );

@@ -11,15 +11,15 @@ import { useReadAllProductsQuery } from '../slices/productsApiSlice';
 export default function HomeScreen() { 
   const { pageNumber } = useParams();
 
-  const { data, isLoading, error } = useReadAllProductsQuery({ pageNumber });
+  const { data, isLoading, err } = useReadAllProductsQuery({ pageNumber });
 
   return (
     <>
       {isLoading ? ( 
         <Loader />
-      ) : error ? (
+      ) : err ? (
         <Message variant='danger'> 
-          { error?.data?.message || error.error } 
+          { err?.data?.message || err.error } 
         </Message>
       ) : (
         <>
