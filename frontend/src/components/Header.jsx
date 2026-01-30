@@ -54,7 +54,7 @@ export default function Header() {
               </Nav.Link>
               { userInfo ? ( 
                 <NavDropdown title={ userInfo.primaryEmail } id='username'>
-                  <NavDropdown.Item onClick={() => navigate('/my_profile')}>
+                  <NavDropdown.Item onClick={() => navigate(`/user/${userInfo._id}/my_profile`)}>
                     View/Edit My Profile
                   </NavDropdown.Item>
                   <NavDropdown.Item onClick={ signOutHandler }>
@@ -71,10 +71,10 @@ export default function Header() {
                   <NavDropdown.Item onClick={() => navigate('/admin/all_orders')}>
                     View/Edit All Orders
                   </NavDropdown.Item>
-                  <NavDropdown.Item onClick={() => navigate('/admin/all_products')}>
+                  <NavDropdown.Item onClick={() => navigate('/admin/all_products/:pageNumber')}>
                     View/Edit All Products
                   </NavDropdown.Item>
-                  <NavDropdown.Item onClick={() => navigate('/admin/all_users')}>
+                  <NavDropdown.Item onClick={() => navigate('/admin/all_users/:pageNumber')}>
                     View/Edit All Users
                   </NavDropdown.Item>
                 </NavDropdown>

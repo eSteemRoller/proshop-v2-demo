@@ -8,30 +8,32 @@ import Loader from '../../components/Loader';
 import { 
   useReadAllProductsQuery, 
   useCreateProductMutation, 
-  useDeleteProductMutation,
+  useDeleteProductByIdMutation,
 } from '../../slices/productsApiSlice';
+import Paginate from '../../components/Paginate';
 
 
 export default function AllProductsListScreen() { 
-  const {pageNumber} = useParams();
-  const { data, isLoading, refetch, error } = useReadAllProductsQuery({pageNumber});
-  console.log(data.products);
+  const { pageNumber } = useParams();
+  const page = pageNumber || 1;
+  const { data, isLoading, refetch, error } = useReadAllProductsQuery({ pageNumber: page });
+  console.log(data);
 
-  const [createProduct, { isLoading: isCreatingProduct }] = useCreateProductMutation();
+  const [createProduct, { isLoading: isAddingProduct }] = useCreateProductMutation();
 
   async function createProductHandler() { 
     if (window.confirm('Create the template for a new product below?')) { 
       try {
         const newProduct = await createProduct().unwrap();
-        toast.success(`Success: Product ${newProduct._id} created`);
         refetch();
+        toast.success(`Success: Product ${newProduct._id} created`);
       } catch (err) {
         toast.error(err?.data?.message || err.error);
       }
     }
   }
 
-  const [deleteProduct, { isLoading: isDeletingProduct }] = useDeleteProductMutation();
+  const [deleteProduct, { isLoading: isDeletingProduct }] = useDeleteProductByIdMutation();
 
   const deleteProductHandler = async (_id) => {
     if (window.confirm(`Are you sure you want to delete product ${_id}?`)) { 
@@ -53,11 +55,11 @@ export default function AllProductsListScreen() {
       </Col>
       <Col className='d-flex align-items-center justify-content-end'>
         <Button className='btn-sm my-2 align-items-center' onClick={createProductHandler}>
-          <FaPlus /> Add New Product
+          <FaPlus />&nbsp;Add New Product
         </Button>
       </Col>
     </Row>
-    {(isCreatingProduct || isDeletingProduct) && <Loader />}
+    {(isAddingProduct || isDeletingProduct) && <Loader />}
     {isLoading ? <Loader />
       : error ? <Message variant='danger'>{error}</Message>
       : ( 
@@ -102,6 +104,10 @@ export default function AllProductsListScreen() {
               ))}
             </tbody>
           </Table>
+          <Paginate 
+            totalPages={data?.totalPages || 1}
+            currentPage={data?.currentPage || 1}
+          />
           <Link to='/' className='btn btn-light my-2 text-decoration-none'>
             Cancel
           </Link>

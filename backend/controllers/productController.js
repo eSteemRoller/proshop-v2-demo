@@ -14,7 +14,7 @@ const readAllProducts = asyncHandler(async (req, res) => {
   const products = await Product.find({})
     .limit(pageSize)
     .skip(pageSize * (currentPage - 1));
-  res.json({products, currentPage, pages: Math.ceil(pageCount / pageSize)});
+  res.json({products, currentPage, totalPages: Math.ceil(pageCount / pageSize)});
 });
 
 // @desc GET/Read a product by its Id.
@@ -53,7 +53,7 @@ const createProduct = asyncHandler(async (req, res) => {
 // @desc PUT/Update a product
 // @route PUT /api/products/:id
 // @access Private, Admin
-const updateProduct = asyncHandler(async (req, res) => {  // aka updateProduct
+const updateProductById = asyncHandler(async (req, res) => {  // aka updateProduct
   const { 
       category,
       brand,
@@ -86,7 +86,7 @@ const updateProduct = asyncHandler(async (req, res) => {  // aka updateProduct
 // @desc DELETE/Remove a product
 // @route DELETE /api/products/:id
 // @access Private, Admin
-const deleteProduct = asyncHandler(async (req, res) => {  // aka deleteProduct
+const deleteProductById = asyncHandler(async (req, res) => {  // aka deleteProduct
   const product = await Product.findById(req.params.id);
 
   if (product) { 
@@ -149,7 +149,7 @@ export {
   readAllProducts, 
   readProductById, 
   createProduct, 
-  updateProduct, 
-  deleteProduct, 
+  updateProductById, 
+  deleteProductById, 
   createProductReview
 };

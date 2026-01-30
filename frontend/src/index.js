@@ -14,19 +14,19 @@ import './assets/styles/bootstrap.custom.css';
 import './assets/styles/index.css';
 
 import HomeScreen from './screens/HomeScreen';
-import SignUpScreen from './screens/SignUpScreen';
 import SignInScreen from './screens/SignInScreen';
+import SignUpScreen from './screens/SignUpScreen';
 import ProductScreen from './screens/ProductScreen';
 import CartScreen from './screens/CartScreen';
 
 import PrivateRoute from './components/PrivateRoute';
 import MyProfileScreen from './screens/MyProfileScreen';
-import MyOrdersScreen from './screens/OrderScreen';
+import MyOrdersScreen from './screens/ConfirmOrderScreen';
 import BillingScreen from './screens/BillingScreen';
 import ShippingScreen from './screens/ShippingScreen';
 import PaymentScreen from './screens/PaymentScreen';
-import PlaceOrderScreen from './screens/PlaceOrderScreen';
-import OrderScreen from './screens/OrderScreen';
+import SubmitOrderScreen from './screens/SubmitOrderScreen';
+import ConfirmOrderScreen from './screens/ConfirmOrderScreen';
 import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 
 import AdminRoute from './components/AdminRoute';
@@ -53,21 +53,23 @@ const router = createBrowserRouter(
       <Route path='/reset_password/:token' element={<ResetPasswordScreen />} />
 
       <Route path='' element={<PrivateRoute />}>
-        <Route path='/my_profile' element={<MyProfileScreen />} />
-        <Route path='/my_orders' element={<MyOrdersScreen />} />
+        <Route path='/user/:id/my_profile' element={<MyProfileScreen />} />
+        <Route path='/user/:id/my_orders' element={<MyOrdersScreen />} />
         <Route path='/billing' element={<BillingScreen />} />
         <Route path='/shipping' element={<ShippingScreen />} />
         <Route path='/payment' element={<PaymentScreen />} />
-        <Route path='/submit_order' element={<PlaceOrderScreen />} />
-        <Route path='/order_confirmed' element={<OrderScreen />} />
+        <Route path='/submit_order' element={<SubmitOrderScreen />} />
+        <Route path='/order_confirmed' element={<ConfirmOrderScreen />} />
       </Route>
 
       <Route path='' element={<AdminRoute />}>
         <Route path='/admin/all_users' element={<AllUsersListScreen />} />
+        <Route path='/admin/all_users/:pageNumber' element={<AllUsersListScreen />} />
         <Route path='/admin/all_users/user/:id/edit_user' element={<EditUserScreen />} />
         <Route path='/admin/all_users/add_user' element={<AddUserByAdminScreen />} />
         
         <Route path='/admin/all_products' element={<AllProductsListScreen />} />
+        <Route path='/admin/all_products/:pageNumber' element={<AllProductsListScreen />} />
         <Route path='/admin/all_products/product/:id/edit_product' element={<EditProductScreen />} />
         
         <Route path='/admin/all_orders' element={<AllOrdersListScreen />} />

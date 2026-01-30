@@ -256,9 +256,16 @@ const resetPassword = asyncHandler(async (req, res) => {
 // @desc  Get/Read all users
 // @route  GET /api/users
 // @access  Private (Admin)
-const readAllUsers = asyncHandler(async (req, res) => {
-  const users = await User.find({}).populate('createdBy', 'firstName lastName primaryEmail');
-  res.status(200).json(users);
+const readAllUsers = asyncHandler(async (req, res) => { 
+  const pageSize = 2;  // Number of products allowed per page
+  const currentPage = Number(req.query.pageNumber) || 1;
+  const pageCount = await User.countDocuments();
+
+  const users = await User.find({})
+  .limit(pageSize)
+  .skip(pageSize * (currentPage - 1))
+  .populate('createdBy', 'firstName lastName primaryEmail');
+  res.status(200).json({users, currentPage, totalPages: Math.ceil(pageCount / pageSize)});
 });
 
 // @desc  Read/Get user by Id.
