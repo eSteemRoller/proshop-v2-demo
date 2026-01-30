@@ -15,22 +15,22 @@ export const productsApiSlice = apiSlice.injectEndpoints({
       providesTags: ['Products'],
       keepUnusedDataFor: 5
     }),
-    readProduct: builder.query({ 
+    readProductById: builder.query({ 
       query: (productId) => ({ 
-        url: `${PRODUCTS_URL}/${productId}`,
+        url: `${PRODUCTS_URL}/product/${productId}`,
       }),
       keepUnusedDataFor: 5
     }),
     createProduct: builder.mutation({ 
       query: () => ({ 
-        url: PRODUCTS_URL,
+        url: `${PRODUCTS_URL}/admin/all_products`,
         method: 'POST',
       }),
       invalidatesTags: ['Products'],
     }),
-    updateProduct: builder.mutation({  // aka updateProduct
+    updateProductById: builder.mutation({  // aka updateProduct
       query: (data) => ({ 
-        url: `${PRODUCTS_URL}/${data.productId}`,
+        url: `${PRODUCTS_URL}/admin/all_products/product/${data.productId}/edit_product`,
         method: 'PUT',
         body: data,
       }),
@@ -38,21 +38,21 @@ export const productsApiSlice = apiSlice.injectEndpoints({
     }),
     uploadProductImage: builder.mutation({ 
       query: (data) => ({ 
-        url: `${PRODUCT_IMAGE_UPLOAD_URL}`,
+        url: `${PRODUCTS_URL}/admin/all_products/product/${data.productId}/${PRODUCT_IMAGE_UPLOAD_URL}`,
         method: 'POST',
         body: data,
       })
     }),
-    deleteProduct: builder.mutation({ 
+    deleteProductById: builder.mutation({ 
       query: (productId) => ({ 
-        url: `${PRODUCTS_URL}/${productId}`,
+        url: `${PRODUCTS_URL}/admin/all_products/${productId}/delete_product`,
         method: 'DELETE',
       }),
       invalidatesTags: ['Products']
     }),
     createProductReview: builder.mutation({  // aka createReview
       query: (data) => ({ 
-        url: `${PRODUCTS_URL}/${data.productId}/reviews`,
+        url: `${PRODUCTS_URL}/product/${data.productId}/create_review`,
         method: 'POST',
         body: data
       }),
@@ -63,11 +63,11 @@ export const productsApiSlice = apiSlice.injectEndpoints({
 
 export const { 
   useReadAllProductsQuery, 
-  useReadProductQuery,
+  useReadProductByIdQuery,
   useCreateProductMutation, 
-  useUpdateProductMutation,
+  useUpdateProductByIdMutation,
   useUploadProductImageMutation,
-  useDeleteProductMutation,
+  useDeleteProductByIdMutation,
   useCreateProductReviewMutation
 } = 
   productsApiSlice;

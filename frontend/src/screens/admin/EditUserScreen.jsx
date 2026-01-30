@@ -26,8 +26,7 @@ export default function EditUserScreen() {  // aka UserEditScreen
   const { 
     data: user, 
     isLoading,
-    refetch,
-    error
+    err
   } = useReadUserDetailsQuery(userId);
 
   const [updateUser, { isLoading: isUpdatingUser }] = 
@@ -75,8 +74,8 @@ export default function EditUserScreen() {  // aka UserEditScreen
 
         { isLoading ? ( 
           <Loader /> 
-        ) : error ? ( 
-          <Message variant='danger'>{error}</Message>
+        ) : err ? ( 
+          <Message variant='danger'>{err}</Message>
         ) : !hasValidUser ? (
           <Message variant='warning'>Failure: User not found</Message>
         ) : ( 

@@ -11,21 +11,21 @@ import { useReadAllProductsQuery } from '../slices/productsApiSlice';
 export default function HomeScreen() { 
   const { pageNumber } = useParams();
 
-  const { data, isLoading, err } = useReadAllProductsQuery({ pageNumber });
+  const { data, isLoading, error } = useReadAllProductsQuery({ pageNumber });
 
   return (
     <>
       {isLoading ? ( 
         <Loader />
-      ) : err ? (
+      ) : error ? (
         <Message variant='danger'> 
-          { err?.data?.message || err.error } 
+          { error?.data?.message || error.error } 
         </Message>
       ) : (
         <>
           <h1>Latest Products</h1>
           <Row>
-            {data.products.map((product) => (
+            {data?.products?.map((product) => (
               <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
                 <div className='h-100 w-100 d-flex'>
                   <Product product={product} />
@@ -34,8 +34,8 @@ export default function HomeScreen() {
             )) }
           </Row>
           <Paginate 
-            pages={data.pages}
-            page={data.page}
+            totalPages={data?.totalPages || 1}
+            currentPage={data?.currentPage || 1}
           />
         </>
       )}

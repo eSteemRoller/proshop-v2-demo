@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Rating from '../components/Rating';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import { useReadProductQuery, useCreateProductReviewMutation } from "../slices/productsApiSlice";
+import { useReadProductByIdQuery, useCreateProductReviewMutation } from "../slices/productsApiSlice";
 import { addToCart } from '../slices/cartApiSlice';
 import { toast } from 'react-toastify';
 
@@ -29,7 +29,7 @@ export default function ProductScreen() {
     isLoading,
     refetch,
     err,
-  } = useReadProductQuery(productId);
+  } = useReadProductByIdQuery(productId);
 
   const [createProductReview, { isLoading: isLoadingProductReview }] = 
     useCreateProductReviewMutation();
@@ -39,7 +39,7 @@ export default function ProductScreen() {
 
   const addToCartHandler = () => { 
     dispatch(addToCart({ ...product, productQty }));
-    // navigate('/cart');
+    refetch();
     setShowGoToCartButton(true);
     // if (productQty > 0) { 
     //   res.status(304).json({ message: "Error: Item quantity can be adjusted in your cart"});
@@ -55,8 +55,7 @@ export default function ProductScreen() {
         comment
       }).unwrap();
       refetch();
-
-      toast.success("Success: Review submitted");
+      toast.success("Success: Review created");
       setRating(0);
       setComment('');
     } catch (err) {

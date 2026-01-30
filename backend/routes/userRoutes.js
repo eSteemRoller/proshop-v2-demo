@@ -8,10 +8,10 @@ import {
   resetPassword,
   readMyUserProfile,
   updateMyUserProfile,
-  addUserByAdmin,
   readAllUsers,
   readUserById,
   updateUserById,
+  addUserByAdmin,
   deleteUserById,
 } from '../controllers/userController.js'; // file extension needed
 import { protect, admin } from "../middleware/authHandler.js";
@@ -25,8 +25,8 @@ router.route('/user/:id/my_profile').get(protect, readMyUserProfile).put(protect
 router.route('/sign_out').post(signOutUser);
 router.route('/reset_password/:token').put(sensitiveLimiter, resetPassword);
 
-router.route('/admin/all_users').get(protect, admin, readAllUsers).delete(protect, admin, deleteUserById);
-router.route('/admin/all_users/user/:id/edit_user-edit_orders').get(protect, admin, readUserById).put(protect, admin, updateUserById).delete(protect, admin, deleteUserById);
+router.route('/admin/all_users/:pageNumber').get(protect, admin, readAllUsers).delete(protect, admin, deleteUserById);
+router.route('/admin/all_users/user/:id/edit_user&orders').get(protect, admin, readUserById).put(protect, admin, updateUserById).delete(protect, admin, deleteUserById);
 router.route('/admin/all_users/add_user').post(protect, admin, sensitiveLimiter, addUserByAdmin);
 
 
