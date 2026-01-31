@@ -3,25 +3,25 @@ import { Pagination } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 
-export default function Paginate({ totalPages, currentPage, isAdmin = false }) { 
+export default function Paginate({ totalPages, currentPage, basePath }) { 
+  if (totalPages <= 1) return null;
+
   return ( 
-    totalPages > 1 && ( 
-      <Pagination>
-        {[...Array(totalPages).keys()].map((x) => ( 
+    <Pagination>
+      {[...Array(totalPages).keys()].map((x) => { 
+        const page = x + 1;
+
+        return (
           <Pagination.Item
-            key={x + 1}
-            active={x + 1 === currentPage}
+            key={page}
+            active={page === currentPage}
             as={Link}
-            to={ 
-              !isAdmin
-                ? `/page/${x + 1}`
-                : `/admin/all_products/${x + 1}`
-            }
+            to={page === 1 ? basePath : `${basePath}/${page}`}
           >
-            {x + 1}
+            {page}
           </Pagination.Item>
-        )) }
-      </Pagination>
-    )
+        );
+      }) }
+    </Pagination>
   );
 };

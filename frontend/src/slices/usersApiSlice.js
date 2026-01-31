@@ -40,8 +40,11 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     readAllUsers: builder.query({ 
-      query: () => ({ 
-        url: `${USERS_URL}/admin/all_users`,
+      query: ({ pageNumber }) => ({ 
+        url: USERS_URL,
+        params: { 
+          pageNumber,
+        }
       }),
       providesTags: ['Users'],
       keepUnusedDataFor: 5

@@ -34,8 +34,9 @@ export default function HomeScreen() {
             )) }
           </Row>
           <Paginate 
-            totalPages={data?.totalPages || 1}
-            currentPage={data?.currentPage || 1}
+            totalPages={data.totalPages} 
+            currentPage={data.currentPage} 
+            basePath="/page" 
           />
         </>
       )}

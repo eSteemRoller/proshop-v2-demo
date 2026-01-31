@@ -71,10 +71,10 @@ export default function Header() {
                   <NavDropdown.Item onClick={() => navigate('/admin/all_orders')}>
                     View/Edit All Orders
                   </NavDropdown.Item>
-                  <NavDropdown.Item onClick={() => navigate('/admin/all_products/:pageNumber')}>
+                  <NavDropdown.Item onClick={() => navigate('/admin/all_products')}>
                     View/Edit All Products
                   </NavDropdown.Item>
-                  <NavDropdown.Item onClick={() => navigate('/admin/all_users/:pageNumber')}>
+                  <NavDropdown.Item onClick={() => navigate('/admin/all_users')}>
                     View/Edit All Users
                   </NavDropdown.Item>
                 </NavDropdown>

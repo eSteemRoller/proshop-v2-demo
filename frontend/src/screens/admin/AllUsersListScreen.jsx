@@ -1,14 +1,17 @@
 import { Col, Table, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { FaPlus, FaTimes, FaTrash, FaEdit, FaCheck } from 'react-icons/fa';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import { useReadAllUsersQuery, useDeleteUserMutation } from '../../slices/usersApiSlice';
+import Paginate from '../../components/Paginate';
 import { toast } from 'react-toastify';
 
 
-export default function AllUsersListScreen() {
-  const { data: users, refetch, isLoading, error } = useReadAllUsersQuery();
+export default function AllUsersListScreen() { 
+  const { pageNumber } = useParams();
+  const page = pageNumber || 1;
+  const { data, data: users, refetch, isLoading, error } = useReadAllUsersQuery({ pageNumber: page });
   console.log(users);
 
   const [ deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
@@ -109,6 +112,11 @@ export default function AllUsersListScreen() {
           </Table>
         )
       }
+      <Paginate 
+        totalPages={data.totalPages} 
+        currentPage={data.currentPage} 
+        basePath="/admin/all_users" 
+      />
       <Link to='/' className='btn btn-light my-2 text-decoration-none'>
         Cancel
       </Link>

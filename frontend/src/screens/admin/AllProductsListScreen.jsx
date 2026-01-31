@@ -105,8 +105,9 @@ export default function AllProductsListScreen() {
             </tbody>
           </Table>
           <Paginate 
-            totalPages={data?.totalPages || 1}
-            currentPage={data?.currentPage || 1}
+            totalPages={data.totalPages} 
+            currentPage={data.currentPage} 
+            basePath="/admin/all_products" 
           />
           <Link to='/' className='btn btn-light my-2 text-decoration-none'>
             Cancel
