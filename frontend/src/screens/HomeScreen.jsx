@@ -36,7 +36,8 @@ export default function HomeScreen() {
           <Paginate 
             totalPages={data.totalPages} 
             currentPage={data.currentPage} 
-            basePath="/page" 
+            basePath="/page"
+            firstPageIsBasePath={true}
           />
         </>
       )}

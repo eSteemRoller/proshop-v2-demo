@@ -14,7 +14,9 @@ const readAllProducts = asyncHandler(async (req, res) => {
   const products = await Product.find({})
     .limit(pageSize)
     .skip(pageSize * (currentPage - 1));
-  res.json({products, currentPage, totalPages: Math.ceil(pageCount / pageSize)});
+  res
+    .status(200)
+    .json({products, currentPage, totalPages: Math.ceil(pageCount / pageSize)});
 });
 
 // @desc GET/Read a product by its Id.

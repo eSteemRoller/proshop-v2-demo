@@ -11,8 +11,11 @@ import { toast } from 'react-toastify';
 export default function AllUsersListScreen() { 
   const { pageNumber } = useParams();
   const page = pageNumber || 1;
-  const { data, data: users, refetch, isLoading, error } = useReadAllUsersQuery({ pageNumber: page });
-  console.log(users);
+  const { data, refetch, isLoading, error } = useReadAllUsersQuery({ pageNumber: page });
+  const users = data?.users || [];
+  console.log("data:", data);
+  console.log("users:", users);
+  // console.log(typeof data.currentPage, data.currentPage);
 
   const [ deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
 
@@ -113,9 +116,10 @@ export default function AllUsersListScreen() {
         )
       }
       <Paginate 
-        totalPages={data.totalPages} 
-        currentPage={data.currentPage} 
+        totalPages={users.totalPages} 
+        currentPage={users.currentPage} 
         basePath="/admin/all_users" 
+        firstPageIsBasePath={false}
       />
       <Link to='/' className='btn btn-light my-2 text-decoration-none'>
         Cancel

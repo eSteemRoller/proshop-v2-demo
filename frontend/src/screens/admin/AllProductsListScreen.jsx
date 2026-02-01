@@ -107,7 +107,8 @@ export default function AllProductsListScreen() {
           <Paginate 
             totalPages={data.totalPages} 
             currentPage={data.currentPage} 
-            basePath="/admin/all_products" 
+            basePath="/admin/all_products"
+            firstPageIsBasePath={false}
           />
           <Link to='/' className='btn btn-light my-2 text-decoration-none'>
             Cancel

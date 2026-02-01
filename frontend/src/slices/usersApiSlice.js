@@ -41,7 +41,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
     }),
     readAllUsers: builder.query({ 
       query: ({ pageNumber }) => ({ 
-        url: USERS_URL,
+        url: `${USERS_URL}/admin/all_users/${pageNumber}`,
         params: { 
           pageNumber,
         }
