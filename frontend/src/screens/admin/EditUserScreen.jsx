@@ -7,8 +7,8 @@ import { toast } from 'react-toastify';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import { 
-  useReadUserDetailsQuery, 
-  useUpdateUserDetailsMutation, 
+  useReadUserByIdQuery, 
+  useUpdateUserByIdMutation, 
 } from '../../slices/usersApiSlice';
 
 
@@ -26,11 +26,11 @@ export default function EditUserScreen() {  // aka UserEditScreen
   const { 
     data: user, 
     isLoading,
-    err
-  } = useReadUserDetailsQuery(userId);
+    error
+  } = useReadUserByIdQuery(userId);
 
   const [updateUser, { isLoading: isUpdatingUser }] = 
-    useUpdateUserDetailsMutation();
+    useUpdateUserByIdMutation();
 
   const navigate = useNavigate();
 
@@ -57,8 +57,8 @@ export default function EditUserScreen() {  // aka UserEditScreen
       await updateUser({ userId, firstName, lastName, primaryEmail, primaryBillingAddress, primaryShippingAddress, isAdmin, adminNotes}).unwrap();
       toast.success('Success: User updated');
       navigate('/admin/all_users');
-    } catch (err) {
-      toast.error(err?.data?.message || err.error);
+    } catch (error) {
+      toast.error(error?.data?.message || error.error);
     }
   };
 
@@ -74,8 +74,8 @@ export default function EditUserScreen() {  // aka UserEditScreen
 
         { isLoading ? ( 
           <Loader /> 
-        ) : err ? ( 
-          <Message variant='danger'>{err}</Message>
+        ) : error ? ( 
+          <Message variant='danger'>{error}</Message>
         ) : !hasValidUser ? (
           <Message variant='warning'>Failure: User not found</Message>
         ) : ( 

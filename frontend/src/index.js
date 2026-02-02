@@ -54,7 +54,7 @@ const router = createBrowserRouter(
 
       <Route path='' element={<PrivateRoute />}>
         <Route path='/user/:id/my_profile' element={<MyProfileScreen />} />
-        <Route path='/user/:id/my_orders' element={<MyOrdersScreen />} />
+        <Route path='/user/:id/my_profile/my_orders/:pageNumber' element={<MyOrdersScreen />} />
         <Route path='/billing' element={<BillingScreen />} />
         <Route path='/shipping' element={<ShippingScreen />} />
         <Route path='/payment' element={<PaymentScreen />} />
@@ -73,6 +73,7 @@ const router = createBrowserRouter(
         <Route path='/admin/all_products/product/:id/edit_product' element={<EditProductScreen />} />
         
         <Route path='/admin/all_orders' element={<AllOrdersListScreen />} />
+        <Route path='/admin/all_orders/:pageNumber' element={<AllOrdersListScreen />} />
       </Route>
     </Route>
   )

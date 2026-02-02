@@ -22,7 +22,6 @@ export const usersApiSlice = apiSlice.injectEndpoints({
     readMyUserProfile: builder.query({ 
       query: (userData) => ({ 
         url: `${USERS_URL}/user/${userData.userId}/my_profile`,
-        method: 'PUT',
         body: userData,
       }),
     }),
@@ -41,7 +40,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
     }),
     readAllUsers: builder.query({ 
       query: ({ pageNumber }) => ({ 
-        url: `${USERS_URL}/admin/all_users/${pageNumber}`,
+        url: `${USERS_URL}/admin/all_users/:pageNumber`,
         params: { 
           pageNumber,
         }
@@ -49,15 +48,15 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       providesTags: ['Users'],
       keepUnusedDataFor: 5
     }),
-    readUserDetails: builder.query({ 
-      query: (userData) => ({ 
-        url: `${USERS_URL}/admin/user/${userData.userId}/my_profile`,
+    readUserById: builder.query({ 
+      query: (userId) => ({ 
+        url: `${USERS_URL}/admin/all_users/user/${userId}/edit_user`,
       }),
       keepUnusedDataFor: 5
     }),
-    updateUserDetails: builder.mutation({  // aka updateUser
+    updateUserById: builder.mutation({  // aka updateUser
       query: (userData) => ({ 
-        url: `${USERS_URL}/admin/user/${userData.userId}/my_profile`,
+        url: `${USERS_URL}/admin/all_users/user/${userData.userId}/edit_user`,
         method: 'PUT',
         body: userData,
       }),
@@ -80,7 +79,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
     }),
     deleteUser: builder.mutation({ 
       query: (userId) => ({ 
-        url: `${USERS_URL}/${userId}`,
+        url: `${USERS_URL}/admin/all_users/user/${userId}/delete_user`,
         method: 'DELETE',
       }),
       invalidatesTags: ['Users']
@@ -96,8 +95,8 @@ export const {
   useSignOutMutation, 
   useResetPasswordMutation, 
   useReadAllUsersQuery,
-  useReadUserDetailsQuery, 
-  useUpdateUserDetailsMutation, 
+  useReadUserByIdQuery, 
+  useUpdateUserByIdMutation, 
   useAddUserByAdminMutation, 
   useDeleteUserMutation,
 } = usersApiSlice;

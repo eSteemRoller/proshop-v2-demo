@@ -27,8 +27,8 @@ export default function AllProductsListScreen() {
         const newProduct = await createProduct().unwrap();
         refetch();
         toast.success(`Success: Product ${newProduct._id} created`);
-      } catch (err) {
-        toast.error(err?.data?.message || err.error);
+      } catch (error) {
+        toast.error(error?.data?.message || error.error);
       }
     }
   }
@@ -42,8 +42,8 @@ export default function AllProductsListScreen() {
         await deleteProduct(_id).unwrap();
         toast.success(`Success: Product ${productToDelete._id} ${productToDelete.name} is deleted`);
         refetch();
-      } catch (err) {
-        toast.error(err?.data?.message || err.error);
+      } catch (error) {
+        toast.error(error?.data?.message || error.error);
       }
     }
   };
@@ -85,10 +85,8 @@ export default function AllProductsListScreen() {
                   <td className='align-middle text-center'>{product.name}</td>
                   <td className='align-middle text-center'>{product.price}</td>
                   <td className='align-middle text-center'>
-                    <Link to={`/admin/product/${product._id}/edit_product`}>
-                      <Button variant='light' className='btn-sm d-flex justify-content-center align-items-center mx-auto'>
-                        <FaEdit />
-                      </Button>
+                    <Link to={`/admin/all_products/product/${product._id}/edit_product`} className='btn btn-light btn-sm text-decoration-none'>
+                      <FaEdit />
                     </Link>
                   </td>
                   <td className='align-middle text-center'>
@@ -101,14 +99,14 @@ export default function AllProductsListScreen() {
                     </Button>
                   </td>
                 </tr>
-              ))}
+              )) }
             </tbody>
           </Table>
           <Paginate 
             totalPages={data.totalPages} 
             currentPage={data.currentPage} 
             basePath="/admin/all_products"
-            firstPageIsBasePath={false}
+            firstPageIsBasePath={true}
           />
           <Link to='/' className='btn btn-light my-2 text-decoration-none'>
             Cancel

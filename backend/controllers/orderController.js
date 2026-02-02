@@ -6,7 +6,7 @@ import Order from '../models/orderModel.js';
 // @desc Create/POST new User order
 // @route POST /api/orders
 // @access Private
-const createUsersOrder = asyncHandler(async (req, res) => { 
+const createUserOrder = asyncHandler(async (req, res) => { 
   const { 
     // user,
     orderItems,
@@ -56,7 +56,7 @@ const createUsersOrder = asyncHandler(async (req, res) => {
 // @desc Read/GET all User's orders
 // @route GET /api/orders/my_orders
 // @access Private
-const readAllUsersOrders = asyncHandler(async (req, res) => { 
+const readAllMyOrders = asyncHandler(async (req, res) => { 
   const allUsersOrders = await Order.find({ user: req.user._id });
   res.status(200).json(allUsersOrders);
   res.send('readMyOrders');
@@ -65,7 +65,7 @@ const readAllUsersOrders = asyncHandler(async (req, res) => {
 // @desc Read/GET User's order by Id
 // @route GET /api/orders/:id
 // @access Private (Admin)
-const readUsersOrderById = asyncHandler(async (req, res) => { 
+const readUserOrderById = asyncHandler(async (req, res) => { 
   const usersOrderById = 
     await Order.findById(req.params.id).populate('user','name email phone');
 
@@ -81,7 +81,7 @@ const readUsersOrderById = asyncHandler(async (req, res) => {
 // @desc Update/PUT User's order as Paid
 // @route PUT /api/orders/:id/paid
 // @access Private
-const updateUsersOrderByIdAsPaid = asyncHandler(async (req, res) => { 
+const updateUserOrderByIdAsPaid = asyncHandler(async (req, res) => { 
   const order = await order.findById(req.params.id);
 
   if (order) { 
@@ -107,14 +107,14 @@ const updateUsersOrderByIdAsPaid = asyncHandler(async (req, res) => {
 // @desc Update/PUT User's order as Shipped
 // @route PUT /api/orders/:id/shipped
 // @access Private
-const updateUsersOrderByIdAsShipped = asyncHandler(async (req, res) => {
+const updateUserOrderByIdAsShipped = asyncHandler(async (req, res) => {
   res.send('updateUsersOrderByIdAsShipped');
 });
 
 // @desc Update/PUT User's order as Delivered
 // @route PUT /api/orders/:id/delivered
 // @access Private
-const updateUsersOrderByIdAsDelivered = asyncHandler(async (req, res) => { 
+const updateUserOrderByIdAsDelivered = asyncHandler(async (req, res) => { 
   const order = await Order.findById(req.params.id);
 
   if (order) { 
@@ -135,20 +135,30 @@ const updateUsersOrderByIdAsDelivered = asyncHandler(async (req, res) => {
 // @desc Read/GET all orders
 // @route GET /api/orders
 // @access Private (Admin)
-const readAllOrders = asyncHandler(async (req, res) => {
-  const orders = await Order.find({}).populate('user', 'id lastName');
-  res.status(200).json(orders);
-  res.send('readAllOrders');
+const readAllOrders = asyncHandler(async (req, res) => { 
+  const pageSize = 2;  // Number of users allowed per page
+  const currentPage = Number(req.query.pageNumber) || 1;
+  const pageCount = await Order.countDocuments();
+
+  const orders = await Order.find({})
+    .limit(pageSize)
+    .skip(pageSize * (currentPage - 1))
+    .populate('user', 'id lastName');
+  res
+    .status(200)
+    .json({orders, currentPage, totalPages: Math.ceil(pageCount / pageSize)});
+  res
+    .send('readAllOrders');
 });
 
 
 export { 
-  createUsersOrder,
-  readAllUsersOrders,
-  readUsersOrderById,
-  updateUsersOrderByIdAsPaid,
-  updateUsersOrderByIdAsShipped,
-  updateUsersOrderByIdAsDelivered,
+  createUserOrder,
+  readAllMyOrders,
+  readUserOrderById,
+  updateUserOrderByIdAsPaid,
+  updateUserOrderByIdAsShipped,
+  updateUserOrderByIdAsDelivered,
   readAllOrders,
 };
 

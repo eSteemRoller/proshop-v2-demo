@@ -22,7 +22,7 @@ router.route('/admin/all_products/:pageNumber')
   .post(protect, admin, createProduct);
 router.route('/admin/all_products/product/:id/edit_product')
   .put(protect, admin, updateProductById);
-router.route('/admin/all_products/:id/delete_product')
+router.route('/admin/all_products/product/:id/delete_product')
   .delete(protect, admin, deleteProductById);
 router.route('/product/:id/submit_review')
   .post(protect, createProductReview);

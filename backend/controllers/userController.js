@@ -264,7 +264,7 @@ const readAllUsers = asyncHandler(async (req, res) => {
   const users = await User.find({})
     .limit(pageSize)
     .skip(pageSize * (currentPage - 1))
-    .populate('createdBy', 'firstName lastName primaryEmail');
+    // .populate('createdBy', 'firstName lastName primaryEmail');
   res
     .status(200)
     .json({users, currentPage, totalPages: Math.ceil(pageCount / pageSize)});

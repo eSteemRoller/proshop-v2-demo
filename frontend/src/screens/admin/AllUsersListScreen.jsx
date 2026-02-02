@@ -11,11 +11,7 @@ import { toast } from 'react-toastify';
 export default function AllUsersListScreen() { 
   const { pageNumber } = useParams();
   const page = pageNumber || 1;
-  const { data, refetch, isLoading, error } = useReadAllUsersQuery({ pageNumber: page });
-  const users = data?.users || [];
-  console.log("data:", data);
-  console.log("users:", users);
-  // console.log(typeof data.currentPage, data.currentPage);
+  const { data, isLoading, refetch, error } = useReadAllUsersQuery({ pageNumber: page });
 
   const [ deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
 
@@ -25,21 +21,21 @@ export default function AllUsersListScreen() {
         await deleteUser(id);
         toast.success("Success: User deleted");
         refetch();
-      } catch (err) {
-        toast.error(err?.data?.message || err.error);
+      } catch (error) {
+        toast.error(error?.data?.message || error.error);
       }
     }
   };
 
-  const renderError = (err) => {
-    if (!err) return '';
-    if (typeof err === 'string') return err;
-    if (err.data && err.data.message) return err.data.message;
-    if (err.error) return err.error;
+  const renderError = (error) => {
+    if (!error) return '';
+    if (typeof error === 'string') return error;
+    if (error.data && error.data.message) return error.data.message;
+    if (error.error) return error.error;
     try {
-      return JSON.stringify(err);
+      return JSON.stringify(error);
     } catch {
-      return String(err);
+      return String(error);
     }
   };
 
@@ -60,7 +56,6 @@ export default function AllUsersListScreen() {
         <Message variant='danger'>{renderError(error)}</Message> 
       ) : ( 
           <Table 
-            strong
             striped 
             hover 
             responsive 
@@ -78,7 +73,7 @@ export default function AllUsersListScreen() {
               </tr>
             </thead>
             <tbody>
-              {users.map((user) => ( 
+              {data.users.map((user) => ( 
                 <tr key={user._id}>
                   <td>{user._id}</td>
                   <td>{user.firstName}</td>
@@ -96,7 +91,7 @@ export default function AllUsersListScreen() {
                     )}
                   </td>
                   <td>
-                    <Link to={`/admin/user/${user._id}/edit_user`} className='btn btn-light btn-sm text-decoration-none'>
+                    <Link to={`/admin/all_users/user/${user._id}/edit_user`} className='btn btn-light btn-sm text-decoration-none'>
                       <FaEdit />
                     </Link>
                   </td>
@@ -116,10 +111,10 @@ export default function AllUsersListScreen() {
         )
       }
       <Paginate 
-        totalPages={users.totalPages} 
-        currentPage={users.currentPage} 
+        totalPages={data?.totalPages} 
+        currentPage={data?.currentPage} 
         basePath="/admin/all_users" 
-        firstPageIsBasePath={false}
+        firstPageIsBasePath={true}
       />
       <Link to='/' className='btn btn-light my-2 text-decoration-none'>
         Cancel

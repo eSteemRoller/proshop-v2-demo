@@ -1,15 +1,17 @@
 
 import { Table, Button, Nav } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { FaTimes } from 'react-icons/fa';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import { useReadAllOrdersQuery } from '../../slices/ordersApiSlice';
+import Paginate from '../../components/Paginate';
 
 
-export default function AllOrdersListScreen() {
-  const { data: orders, isLoading, error } = useReadAllOrdersQuery();
-  console.log(orders);
+export default function AllOrdersListScreen() { 
+  const { pageNumber } = useParams();
+  const page = pageNumber || 1;
+  const { data, isLoading, error } = useReadAllOrdersQuery({ pageNumber: page });
 
   return (
     <>
@@ -18,7 +20,6 @@ export default function AllOrdersListScreen() {
         : error ? <Message variant='danger'>{error}</Message> 
         : ( 
           <Table 
-            strong
             striped 
             hover 
             responsive 
@@ -26,8 +27,8 @@ export default function AllOrdersListScreen() {
           >
             <thead>
               <tr>
-                <th>ID</th>
-                <th>USER</th>
+                <th>USER ID</th>
+                <th>USER NAME</th>
                 <th>DATE</th>
                 <th>TOTAL</th>
                 <th>PAID</th>
@@ -38,7 +39,7 @@ export default function AllOrdersListScreen() {
               </tr>
             </thead>
             <tbody>
-              {orders.map((order) => ( 
+              {data.orders.map((order) => ( 
                 <tr key={order._id}>
                   <td>{order._id}</td>
                   <td>{order.user && order.user.name}</td>
@@ -66,7 +67,7 @@ export default function AllOrdersListScreen() {
                     )}
                   </td>
                   <td>
-                    <Nav to={`/order/${order._id}`}>
+                    <Nav to={`/admin/all_orders/order/${order._id}`}>
                       <Button variant='light' className='btn-sm'>
                         Details
                       </Button>
@@ -77,7 +78,13 @@ export default function AllOrdersListScreen() {
             </tbody>
           </Table>
         )
-      };
+      }
+      <Paginate 
+        totalPages={data?.totalPages} 
+        currentPage={data?.currentPage} 
+        basePath="/admin/all_orders" 
+        firstPageIsBasePath={true}
+      />
       <Link to='/' className='btn btn-light my-2 text-decoration-none'>
         Cancel
       </Link>

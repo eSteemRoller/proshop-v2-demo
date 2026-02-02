@@ -33,14 +33,23 @@ export const ordersApiSlice = apiSlice.injectEndpoints({
       keepUnusedDataFor: 5,  // Seconds
     }),
     readMyOrders: builder.query({ 
-      query: () => ({ 
-        url: `${ORDERS_URL}/my_orders`
+      query: (userData) => ({ 
+        url: `${ORDERS_URL}/user/${userData.userId}/my_profile`
+      }),
+      keepUnusedDataFor: 5,  // Seconds
+    }),
+    readMyOrdersDetails: builder.query({ 
+      query: (userData) => ({ 
+        url: `${ORDERS_URL}/user/${userData.userId}/my_profile/my_orders/:pageNumber`
       }),
       keepUnusedDataFor: 5,  // Seconds
     }),
     readAllOrders: builder.query({ 
-      query: () => ({ 
-        url: ORDERS_URL,
+      query: ({ pageNumber }) => ({ 
+        url: `${ORDERS_URL}/admin/all_orders/:pageNumber`,
+        params: { 
+          pageNumber,
+        }
       }),
       keepUnusedDataFor: 5,  // Seconds
     }),
@@ -59,6 +68,7 @@ export const {
   usePayOrderMutation,
   useReadPayPalClientIdQuery, 
   useReadMyOrdersQuery,
+  useReadMyOrdersDetailsQuery,
   useReadAllOrdersQuery,
   useUpdateOrderAsDeliveredMutation,
 } = ordersApiSlice;

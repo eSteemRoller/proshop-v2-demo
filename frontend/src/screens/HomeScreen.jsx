@@ -37,7 +37,7 @@ export default function HomeScreen() {
             totalPages={data.totalPages} 
             currentPage={data.currentPage} 
             basePath="/page"
-            firstPageIsBasePath={true}
+            firstPageIsBasePath={false}
           />
         </>
       )}

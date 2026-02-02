@@ -33,12 +33,12 @@ router.route('/reset_password/:token')
 
 router.route('/admin/all_users/:pageNumber')
   .get(protect, admin, readAllUsers);
-router.route('/admin/all_users/user/:id/edit_user&orders')
+router.route('/admin/all_users/user/:id/edit_user')
   .get(protect, admin, readUserById)
   .put(protect, admin, updateUserById);
 router.route('/admin/all_users/add_user')
   .post(protect, admin, sensitiveLimiter, addUserByAdmin);
-router.route('/admin/all_users/:id')
+router.route('/admin/all_users/user/:id')
   .delete(protect, admin, deleteUserById);
 
 

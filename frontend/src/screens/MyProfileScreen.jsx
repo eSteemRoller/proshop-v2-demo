@@ -20,6 +20,7 @@ import { FaTimes } from 'react-icons/fa';
 import { useUpdateMyUserProfileMutation } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authApiSlice";
 import { useReadMyOrdersQuery } from "../slices/ordersApiSlice";
+import Paginate from "../components/Paginate";
 
 
 export default function MyProfileScreen() {
@@ -36,10 +37,10 @@ export default function MyProfileScreen() {
 
   const { userInfo } = useSelector((state) => state.auth);
 
-  const [updateMyUserProfile, { isLoading: isUpdating }] =
+  const [updateMyUserProfile, { isLoading: isUpdating, refetch }] =
     useUpdateMyUserProfileMutation();
 
-  const { data: orders, isLoading, err } = useReadMyOrdersQuery();
+  const { data, isLoading, error } = useReadMyOrdersQuery();
 
   useEffect(() => {
     if (userInfo) {
@@ -77,8 +78,9 @@ export default function MyProfileScreen() {
         }).unwrap();
         dispatch(setCredentials(res));
         toast.success("Success: Profile updated");
-      } catch (err) {
-        toast.error(err?.data?.message || err.error);
+        refetch();
+      } catch (error) {
+        toast.error(error?.data?.message || error.error);
       }
     }
     console.log("submitHandler");
@@ -188,9 +190,9 @@ export default function MyProfileScreen() {
         <h2>My Orders</h2>
         {isLoading ? (
           <Loader />
-        ) : err ? (
+        ) : error ? (
           <Message variant="danger">
-            {err?.data?.message || err.error}
+            {error?.data?.message || error.error}
           </Message>
         ) : (
           <Table striped bordered hover responsive className="table-sm">
@@ -207,7 +209,7 @@ export default function MyProfileScreen() {
               </tr>
             </thead>
             <tbody>
-              {orders.map((order) => ( 
+              {data.orders.map((order) => ( 
                 <tr key={order._id}>
                   <td>{order._id}</td>
                   <td>{order.createdWhen.substring(0, 10)}</td>
@@ -228,7 +230,7 @@ export default function MyProfileScreen() {
                   </td>
                   <td>
                     <Button className='btn-sm' variant='light'>
-                      <Nav to={`/order/${order._id}`}>
+                      <Nav to={`/user/${userInfo._id}/my_profile/my_orders/order/${order._id}`}>
                         Order Details
                       </Nav>
                     </Button>
@@ -238,6 +240,12 @@ export default function MyProfileScreen() {
             </tbody>
           </Table>
         )}
+        <Paginate 
+          totalPages={data?.totalPages} 
+          currentPage={data?.currentPage} 
+          basePath={`/user/${userInfo._id}/my_profile/my_orders`} 
+          firstPageIsBasePath={true}
+        />
       </Col>
     </Row>
   );
