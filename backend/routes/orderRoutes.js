@@ -13,11 +13,11 @@ import {
 import { protect, admin } from '../middleware/authHandler.js';
 
 
-router.route('/user/:id/my_profile/my_orders/:pageNumber')
+router.route('/user/:id/my_orders/:pageNumber')
   .get(protect, readAllMyOrders);
-router.route('/user/:id/my_profile/')
-  .get(protect, readAllMyOrders);
-router.route('/user/:id/my_profile/my_orders/order/:id')
+// router.route('/user/:id/my_profile')
+//   .get(protect, readAllMyOrders);
+router.route('/user/:id/my_orders/order/:id')
   .get(protect, readUserOrderById);
 
 router.route('/admin/all_orders/:pageNumber')

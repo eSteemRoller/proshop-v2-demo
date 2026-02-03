@@ -8,10 +8,9 @@ import {
   Table,
   Button,
   FormLabel,
-  FormControl,
-  Nav
+  FormControl
 } from "react-bootstrap";
-import { Link, useLocation } from "react-router";
+import { Link, useLocation, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Message from "../components/Message";
@@ -23,15 +22,27 @@ import { useReadMyOrdersQuery } from "../slices/ordersApiSlice";
 import Paginate from "../components/Paginate";
 
 
-export default function MyProfileScreen() {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [primaryEmail, setPrimaryEmail] = useState('');
-  const [secondaryEmail, setSecondaryEmail] = useState('');
-  const [primaryPhone, setPrimaryPhone] = useState('');
-  const [secondaryPhone, setSecondaryPhone] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+export default function MyProfileScreen() { 
+  const [formData, setFormData] = useState({ 
+    firstName: '', 
+    lastName: '', 
+    primaryEmail: '', 
+    secondaryEmail: '', 
+    primaryPhone: '', 
+    secondaryPhone: '', 
+    password: '', 
+    confirmPassword: '' });
+  
+  const { 
+    firstName, 
+    lastName, 
+    primaryEmail, 
+    secondaryEmail, 
+    primaryPhone, 
+    secondaryPhone, 
+    password, 
+    confirmPassword 
+  } = formData;
 
   const dispatch = useDispatch();
 
@@ -40,42 +51,50 @@ export default function MyProfileScreen() {
   const [updateMyUserProfile, { isLoading: isUpdating, refetch }] =
     useUpdateMyUserProfileMutation();
 
-  const { data, isLoading, error } = useReadMyOrdersQuery();
+  const { pageNumber } = useParams();
+  const page = pageNumber || 1;
+  const { 
+    data, 
+    isLoading, 
+    error 
+  } = useReadMyOrdersQuery({ 
+    pageNumber: page 
+  });
 
-  useEffect(() => {
-    if (userInfo) {
-      setFirstName(userInfo.firstName);
-      setLastName(userInfo.lastName);
-      setPrimaryEmail(userInfo.primaryEmail);
-      setSecondaryEmail(userInfo.secondaryEmail);
-      setPrimaryPhone(userInfo.primaryPhone)
-      setSecondaryPhone(userInfo.secondaryPhone)
-    }
-  }, [userInfo, 
-    userInfo.firstName, 
-    userInfo.lastName, 
-    userInfo.primaryEmail,
-    userInfo.secondaryEmail,
-    userInfo.primaryPhone,
-    userInfo.secondaryPhone
-  ]);
+useEffect(() => { 
+  if (userInfo) { 
+    const { 
+      firstName = '', 
+      lastName = '', 
+      primaryEmail = '', 
+      secondaryEmail = '', 
+      primaryPhone = '', 
+      secondaryPhone = '' 
+    } = userInfo; 
+    
+    setFormData((prev) => ({ 
+      ...prev, 
+      firstName, 
+      lastName, 
+      primaryEmail, 
+      secondaryEmail, 
+      primaryPhone, 
+      secondaryPhone 
+    })); 
+  } 
+}, [userInfo]);
 
   async function submitHandler(formSubmit) {
     formSubmit.preventDefault();
-    if (password !== confirmPassword) {
+    if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords do not match");
     } else {
       try {
-        const res = await updateMyUserProfile({
-          _id: userInfo._id,
-          firstName,
-          lastName,
-          primaryEmail,
-          secondaryEmail,
-          primaryPhone,
-          secondaryPhone,
-          password,
-        }).unwrap();
+        const res = await updateMyUserProfile({ 
+          _id: userInfo._id, 
+          ...formData 
+        })
+        .unwrap();
         dispatch(setCredentials(res));
         toast.success("Success: Profile updated");
         refetch();
@@ -103,7 +122,7 @@ export default function MyProfileScreen() {
               type='text'
               placeholder="Enter first name"
               value={firstName}
-              onChange={(formSubmit) => setFirstName(formSubmit.target.value)}
+              onChange={(e) => setFormData({ ...formData, firstName: e.target.value }) }
             ></FormControl>
           </FormGroup>
           <FormGroup controlId="lastName" className="my-2">
@@ -112,25 +131,25 @@ export default function MyProfileScreen() {
               type='text'
               placeholder="Enter last name"
               value={lastName}
-              onChange={(formSubmit) => setLastName(formSubmit.target.value)}
+              onChange={(e) => setFormData({ ...formData, lastName: e.target.value }) }
             ></FormControl>
           </FormGroup>
           <FormGroup controlId="primaryEmail" className="my-2">
             <FormLabel>Primary E-Mail Address (part of your log-in credentials):</FormLabel>
             <FormControl
               type="email"
-              placeholder="Enter e-mail address"
+              placeholder="Enter primary e-mail address"
               value={primaryEmail}
-              onChange={(formSubmit) => setPrimaryEmail(formSubmit.target.value)}
+              onChange={(e) => setFormData({ ...formData, primaryEmail: e.target.value }) }
             ></FormControl>
           </FormGroup>
           <FormGroup controlId="secondaryEmail" className="my-2">
             <FormLabel>Secondary E-Mail Address:</FormLabel>
             <FormControl
               type="email"
-              placeholder="Enter e-mail address"
+              placeholder="Enter secondary e-mail address"
               value={secondaryEmail}
-              onChange={(formSubmit) => setSecondaryEmail(formSubmit.target.value)}
+              onChange={(e) => setFormData({ ...formData, secondaryEmail: e.target.value }) }
             ></FormControl>
           </FormGroup>
           <FormGroup controlId="primaryPhone" className="my-2">
@@ -139,7 +158,7 @@ export default function MyProfileScreen() {
               type="text"
               placeholder="Enter primary phone number"
               value={primaryPhone}
-              onChange={(formSubmit) => setPrimaryPhone(formSubmit.target.value)}
+              onChange={(e) => setFormData({ ...formData, primaryPhone: e.target.value }) }
             ></FormControl>
           </FormGroup>
           <FormGroup controlId="secondaryPhone" className="my-2">
@@ -148,7 +167,7 @@ export default function MyProfileScreen() {
               type="text"
               placeholder="Enter secondary phone number"
               value={secondaryPhone}
-              onChange={(formSubmit) => setSecondaryPhone(formSubmit.target.value)}
+              onChange={(e) => setFormData({ ...formData, secondaryPhone: e.target.value }) }
             ></FormControl>
           </FormGroup>
           <FormGroup controlId="password" className="my-2">
@@ -157,7 +176,7 @@ export default function MyProfileScreen() {
               type="password"
               placeholder="Enter password"
               value={password}
-              onChange={(formSubmit) => setPassword(formSubmit.target.value)}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value }) }
             ></FormControl>
           </FormGroup>
           <FormGroup controlId="confirmPassword" className="my-2">
@@ -166,7 +185,7 @@ export default function MyProfileScreen() {
               type="password"
               placeholder="Confirm password"
               value={confirmPassword}
-              onChange={(formSubmit) => setConfirmPassword(formSubmit.target.value)}
+              onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value }) }
             ></FormControl>
           </FormGroup>
           <div className="d-flex justify-content-between">
@@ -188,13 +207,12 @@ export default function MyProfileScreen() {
 
       <Col md={8} className='ml-10'>
         <h2>My Orders</h2>
-        {isLoading ? (
-          <Loader />
-        ) : error ? (
-          <Message variant="danger">
-            {error?.data?.message || error.error}
-          </Message>
-        ) : (
+        {isLoading ? <Loader />
+          : error ? 
+            <Message variant="danger">
+              {error?.data?.message || error.error}
+            </Message>
+          : (
           <Table striped bordered hover responsive className="table-sm">
             <thead>
               <tr>
@@ -205,7 +223,7 @@ export default function MyProfileScreen() {
                 <th>SHIPPED</th>
                 <th>DELIVERED</th>
                 <th>REVIEWED</th>
-                <th>{/*button placeholder*/}</th>
+                <th>*button placeholder*</th>
               </tr>
             </thead>
             <tbody>
@@ -229,11 +247,12 @@ export default function MyProfileScreen() {
                     )}
                   </td>
                   <td>
-                    <Button className='btn-sm' variant='light'>
-                      <Nav to={`/user/${userInfo._id}/my_profile/my_orders/order/${order._id}`}>
-                        Order Details
-                      </Nav>
-                    </Button>
+                    <Link 
+                      to={`/user/${userInfo._id}/my_orders/order/${order._id}`} 
+                      className="btn btn-light btn-sm" 
+                    > 
+                      Order Details 
+                    </Link>
                   </td>
                 </tr>
               )) }
@@ -243,7 +262,7 @@ export default function MyProfileScreen() {
         <Paginate 
           totalPages={data?.totalPages} 
           currentPage={data?.currentPage} 
-          basePath={`/user/${userInfo._id}/my_profile/my_orders`} 
+          basePath={`/user/${userInfo._id}/my_orders`} 
           firstPageIsBasePath={true}
         />
       </Col>

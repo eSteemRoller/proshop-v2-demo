@@ -33,14 +33,21 @@ export const ordersApiSlice = apiSlice.injectEndpoints({
       keepUnusedDataFor: 5,  // Seconds
     }),
     readMyOrders: builder.query({ 
-      query: (userData) => ({ 
-        url: `${ORDERS_URL}/user/${userData.userId}/my_profile`
+      query: ({ userInfo, pageNumber }) => ({ 
+        url: `${ORDERS_URL}/user/${userInfo._id}/my_orders/:pageNumber`,
+        params: { 
+          pageNumber,
+        },
       }),
       keepUnusedDataFor: 5,  // Seconds
     }),
     readMyOrdersDetails: builder.query({ 
-      query: (userData) => ({ 
-        url: `${ORDERS_URL}/user/${userData.userId}/my_profile/my_orders/:pageNumber`
+      query: ({ userId, pageNumber, UserOrderId, details }) => ({ 
+        url: `${ORDERS_URL}/user/${userId}/my_orders/order/${UserOrderId}`,
+        params: { 
+          pageNumber,
+        },
+        body: { ...details }
       }),
       keepUnusedDataFor: 5,  // Seconds
     }),

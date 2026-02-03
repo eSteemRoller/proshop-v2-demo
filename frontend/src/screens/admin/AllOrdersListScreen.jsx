@@ -13,11 +13,15 @@ export default function AllOrdersListScreen() {
   const page = pageNumber || 1;
   const { data, isLoading, error } = useReadAllOrdersQuery({ pageNumber: page });
 
+
   return (
     <>
       <h1>All Orders</h1>
       {isLoading ? <Loader /> 
-        : error ? <Message variant='danger'>{error}</Message> 
+        : error ? 
+          <Message variant='danger'>
+            {error?.data?.message || error.error}
+          </Message> 
         : ( 
           <Table 
             striped 
