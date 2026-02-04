@@ -58,6 +58,7 @@ export default function MyProfileScreen() {
     isLoading, 
     error 
   } = useReadMyOrdersQuery({ 
+    userId: userInfo._id,
     pageNumber: page 
   });
 
@@ -227,7 +228,7 @@ useEffect(() => {
               </tr>
             </thead>
             <tbody>
-              {data.orders.map((order) => ( 
+              {data?.orders?.map(order => ( 
                 <tr key={order._id}>
                   <td>{order._id}</td>
                   <td>{order.createdWhen.substring(0, 10)}</td>

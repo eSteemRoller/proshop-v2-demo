@@ -136,7 +136,8 @@ export default function EditUserScreen() {  // aka UserEditScreen
               <Form.Group controlId='adminNotes' className='my-2 mb-3'>
                 <Form.Label>Administrator Notes</Form.Label>
                 <Form.Control 
-                  type='text'
+                  as='textarea'
+                  rows={12}
                   placeholder='Enter notes, if applicable'
                   value={adminNotes}
                   onChange={(e) => setAdminNotes(e.target.value)}

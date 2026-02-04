@@ -21,11 +21,14 @@ const authUser = asyncHandler(async (req, res) => {
       firstName: user.firstName,
       lastName: user.lastName,
       primaryEmail: user.primaryEmail,
+      secondaryEmail: user.secondaryEmail,
+      primaryPhone: user.primaryPhone,
+      secondaryPhone: user.secondaryPhone,
       isAdmin: user.isAdmin,
     });
   } else { 
     res.status(401);
-    throw new Error('Invalid e-mail or password');
+    throw new Error("Invalid e-mail or password");
   }
 });
 
@@ -38,7 +41,7 @@ const signUpUser = asyncHandler(async (req, res) => {
 
   if (userExists) { 
     res.status(400);
-    throw new Error('Failure: User already exists');
+    throw new Error("Failure: User already exists");
   }
   const user = await User.create({ 
     firstName,
@@ -59,7 +62,7 @@ const signUpUser = asyncHandler(async (req, res) => {
     });
   } else { 
     res.status(400);
-    throw new Error('Failure: Invalid user data');
+    throw new Error("Failure: Invalid user data");
   }
 });
 
@@ -91,11 +94,14 @@ const readMyUserProfile = asyncHandler(async (req, res) => {
       firstName: user.firstName,
       lastName: user.lastName,
       primaryEmail: user.primaryEmail,
+      secondaryEmail: user.secondaryEmail,
+      primaryPhone: user.primaryPhone,
+      secondaryPhone: user.secondaryPhone,
       isAdmin: user.isAdmin,
     });
   } else {
     res.status(404);
-    throw new Error('User not found');
+    throw new Error("User not found");
   }
 });
 
@@ -104,36 +110,58 @@ const readMyUserProfile = asyncHandler(async (req, res) => {
 // @access  Private (User)
 const updateMyUserProfile = asyncHandler(async (req, res) => { 
   const user = await User.findById(req.user._id);
+  
+  if (!user) { 
+    res.status(404); 
+    throw new Error("User not found"); 
+  } 
 
-  if (user) { 
-    user.firstName = req.body.firstName || user.firstName;
-    user.lastName = req.body.lastName || user.lastName;
-    user.primaryEmail = req.body.primaryEmail || user.primaryEmail;
+  user.firstName = req.body.firstName || user.firstName; 
+  user.lastName = req.body.lastName || user.lastName; 
+  user.primaryEmail = req.body.primaryEmail || user.primaryEmail; 
+  user.secondaryEmail = req.body.secondaryEmail || user.secondaryEmail; 
+  user.primaryPhone = req.body.primaryPhone || user.primaryPhone; 
+  user.secondaryPhone = req.body.secondaryPhone || user.secondaryPhone; 
+  
+  if (req.body.password) { 
+    user.password = req.body.password; 
+  } 
+  
+  const updatedUser = await user.save();
 
-    if (req.body.password) { 
-      user.password = req.body.password;
-    }
-
-    const updatedUser = await user.save();
-
-    res.status(200).json({ 
-      _id: updatedUser._id,
-      firstName: updatedUser.firstName,
-      lastName: updatedUser.lastName,
-      primaryEmail: updatedUser.primaryEmail,
+  // Generate new token 
+  const token = genToken(res, updatedUser._id); 
+  
+  // Return updated user 
+  res
+    .status(200)
+    .json({ 
+      _id: updatedUser._id, 
+      firstName: updatedUser.firstName, 
+      lastName: updatedUser.lastName, 
+      primaryEmail: updatedUser.primaryEmail, 
+      secondaryEmail: updatedUser.secondaryEmail, 
+      primaryPhone: updatedUser.primaryPhone, 
+      secondaryPhone: updatedUser.secondaryPhone, 
       isAdmin: updatedUser.isAdmin,
-    });
-  } else { 
-    res.status(404);
-    throw new Error('User not found');
-  }
+      token, 
+    }); 
 });
 
 // @desc  Add/Signup/Register user by Admin
 // @route  POST /api/usersByAdmin
 // @access  Private (Admin)
-const addUserByAdmin = asyncHandler(async (req, res) => {
-  const { firstName, lastName, primaryEmail, password, isSubscribedToEmail, isSubscribedToText, isAdmin, adminNotes } = req.body;
+const createUserByAdmin = asyncHandler(async (req, res) => {
+  const { 
+    firstName, 
+    lastName, 
+    primaryEmail, 
+    password, 
+    isSubscribedToEmail, 
+    isSubscribedToText, 
+    isAdmin, 
+    adminNotes 
+  } = req.body;
 
   // Basic Email format validation
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -340,7 +368,7 @@ export {
   signOutUser,
   readMyUserProfile,
   updateMyUserProfile,
-  addUserByAdmin,
+  createUserByAdmin,
   readAllUsers,
   readUserById,
   updateUserById,

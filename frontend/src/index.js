@@ -34,7 +34,7 @@ import AllOrdersListScreen from './screens/admin/AllOrdersListScreen';
 import AllProductsListScreen from './screens/admin/AllProductsListScreen';
 import EditProductScreen from './screens/admin/EditProductScreen';
 import AllUsersListScreen from './screens/admin/AllUsersListScreen';
-import AddUserByAdminScreen from './screens/admin/AddUserByAdminScreen';
+import CreateUserByAdminScreen from './screens/admin/CreateUserByAdminScreen';
 import EditUserScreen from './screens/admin/EditUserScreen';
 import ResetPasswordScreen from './screens/ResetPasswordScreen';
 
@@ -67,7 +67,7 @@ const router = createBrowserRouter(
         <Route path='/admin/all_users' element={<AllUsersListScreen />} />
         <Route path='/admin/all_users/:pageNumber' element={<AllUsersListScreen />} />
         <Route path='/admin/all_users/user/:id/edit_user' element={<EditUserScreen />} />
-        <Route path='/admin/all_users/add_user' element={<AddUserByAdminScreen />} />
+        <Route path='/admin/all_users/add_user' element={<CreateUserByAdminScreen />} />
         
         <Route path='/admin/all_products' element={<AllProductsListScreen />} />
         <Route path='/admin/all_products/:pageNumber' element={<AllProductsListScreen />} />

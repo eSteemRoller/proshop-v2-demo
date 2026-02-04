@@ -16,6 +16,6 @@ export default function genToken(res, userId) {
     secure: process.env.NODE_ENV !== 'development',
     sameSite: 'strict',
     maxAge: 30 * 24 * 60 * 60 * 1000  
-    // Auth session duration (30 days = 30 days * 24 hrs * 60 min * 60 sec * 1000 ms)
+      // Auth session duration (30 days = 30 days * 24 hrs * 60 min * 60 sec * 1000 ms)
   });
 };

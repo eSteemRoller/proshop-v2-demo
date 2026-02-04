@@ -62,11 +62,14 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Users']
     }),
-    addUserByAdmin: builder.mutation({
-      query: (userData) => ({
-        url: `${USERS_URL}/add_user`,
+    createUserByAdmin: builder.mutation({
+      query: ({userData, pageNumber}) => ({
+        url: `${USERS_URL}/admin/all_users/:pageNumber/add_user`,
         method: 'POST',
         body: userData,
+        params: { 
+          pageNumber,
+        }
       }),
       invalidatesTags: ['Users']
     }),
@@ -97,6 +100,6 @@ export const {
   useReadAllUsersQuery,
   useReadUserByIdQuery, 
   useUpdateUserByIdMutation, 
-  useAddUserByAdminMutation, 
+  useCreateUserByAdminMutation, 
   useDeleteUserMutation,
 } = usersApiSlice;

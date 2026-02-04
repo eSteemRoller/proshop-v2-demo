@@ -19,7 +19,7 @@ export default function AllProductsListScreen() {
   const { data, isLoading, refetch, error } = useReadAllProductsQuery({ pageNumber: page });
   console.log(data);
 
-  const [createProduct, { isLoading: isAddingProduct }] = useCreateProductMutation();
+  const [createProduct, { isLoading: isAddingProduct }] = useCreateProductMutation({ pageNumber: page });
 
   async function createProductHandler() { 
     if (window.confirm('Create the template for a new product below?')) { 

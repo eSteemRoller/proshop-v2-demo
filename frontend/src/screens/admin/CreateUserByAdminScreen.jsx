@@ -5,9 +5,9 @@ import { Form, Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
-import { useAddUserByAdminMutation } from '../../slices/usersApiSlice';
+import { useCreateUserByAdminMutation } from '../../slices/usersApiSlice';
 
-export default function AddUserByAdminScreen() {
+export default function CreateUserByAdminScreen() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [primaryEmail, setPrimaryEmail] = useState('');
@@ -17,14 +17,14 @@ export default function AddUserByAdminScreen() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [adminNotes, setAdminNotes] = useState('');
 
-  const [ addUser, { isLoading, error } ] = useAddUserByAdminMutation();
+  const [ createUser, { isLoading, error } ] = useCreateUserByAdminMutation();
 
   const navigate = useNavigate();
 
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      await addUser({ firstName, lastName, primaryEmail, password, isAdmin, adminNotes }).unwrap();
+      await createUser({ firstName, lastName, primaryEmail, password, isAdmin, adminNotes }).unwrap();
       toast.success('Success: User added');
       navigate('/admin/all_users');
     } catch (err) {

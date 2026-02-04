@@ -22,9 +22,12 @@ export const productsApiSlice = apiSlice.injectEndpoints({
       keepUnusedDataFor: 5
     }),
     createProduct: builder.mutation({ 
-      query: () => ({ 
-        url: `${PRODUCTS_URL}/admin/all_products`,
+      query: ({ pageNumber}) => ({ 
+        url: `${PRODUCTS_URL}/admin/all_products/:pageNumber`,
         method: 'POST',
+        params: { 
+          pageNumber,
+        }
       }),
       invalidatesTags: ['Products'],
     }),

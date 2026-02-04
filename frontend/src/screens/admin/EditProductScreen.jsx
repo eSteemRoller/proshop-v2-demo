@@ -147,8 +147,9 @@ export default function EditProductScreen() {
               <Form.Group controlId='description' className='my-2 mb-3'>
                 <Form.Label>Description</Form.Label>
                 <Form.Control 
-                  type='text'
-                  placeholder='Enter description'
+                  as='textarea'
+                  rows={6}
+                  placeholder='Enter product description'
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                 ></Form.Control>

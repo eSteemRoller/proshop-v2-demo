@@ -11,7 +11,7 @@ import {
   readAllUsers,
   readUserById,
   updateUserById,
-  addUserByAdmin,
+  createUserByAdmin,
   deleteUserById,
 } from '../controllers/userController.js'; // file extension needed
 import { protect, admin } from "../middleware/authHandler.js";
@@ -36,8 +36,8 @@ router.route('/admin/all_users/:pageNumber')
 router.route('/admin/all_users/user/:id/edit_user')
   .get(protect, admin, readUserById)
   .put(protect, admin, updateUserById);
-router.route('/admin/all_users/add_user')
-  .post(protect, admin, sensitiveLimiter, addUserByAdmin);
+router.route('/admin/all_users/:pageNumber/add_user')
+  .post(protect, admin, sensitiveLimiter, createUserByAdmin);
 router.route('/admin/all_users/user/:id')
   .delete(protect, admin, deleteUserById);
 
