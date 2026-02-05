@@ -19,26 +19,33 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         body: userData,
       }),
     }),
-    readMyUserProfile: builder.query({ 
-      query: (userData) => ({ 
-        url: `${USERS_URL}/user/${userData.userId}/my_profile`,
-        body: userData,
-      }),
-    }),
-    updateMyUserProfile: builder.mutation({ 
-      query: (userData) => ({ 
-        url: `${USERS_URL}/user/${userData.userId}/my_profile`,
-        method: 'PUT',
-        body: userData,
-      }),
-    }),
     signOut: builder.mutation({ 
       query: () => ({ 
         url: `${USERS_URL}/sign_out`,
         method: 'POST',
       }),
     }),
-    readAllUsers: builder.query({ 
+    userResetPassword: builder.mutation({
+      query: ({ token, password }) => ({
+        url: `${USERS_URL}/reset_password/${token}`,
+        method: 'PUT',
+        body: { password },
+      }),
+    }),
+    userReadMyProfile: builder.query({ 
+      query: (userData) => ({ 
+        url: `${USERS_URL}/user/${userData.userId}/my_profile`,
+        body: userData,
+      }),
+    }),
+    userUpdateMyProfile: builder.mutation({ 
+      query: (userData) => ({ 
+        url: `${USERS_URL}/user/${userData.userId}/my_profile`,
+        method: 'PUT',
+        body: userData,
+      }),
+    }),
+    adminReadAllUsers: builder.query({ 
       query: ({ pageNumber }) => ({ 
         url: `${USERS_URL}/admin/all_users/:pageNumber`,
         params: { 
@@ -48,13 +55,13 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       providesTags: ['Users'],
       keepUnusedDataFor: 5
     }),
-    readUserById: builder.query({ 
+    adminReadUserById: builder.query({ 
       query: (userId) => ({ 
         url: `${USERS_URL}/admin/all_users/user/${userId}/edit_user`,
       }),
       keepUnusedDataFor: 5
     }),
-    updateUserById: builder.mutation({  // aka updateUser
+    adminUpdateUserById: builder.mutation({  // aka updateUser
       query: (userData) => ({ 
         url: `${USERS_URL}/admin/all_users/user/${userData.userId}/edit_user`,
         method: 'PUT',
@@ -62,7 +69,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Users']
     }),
-    createUserByAdmin: builder.mutation({
+    adminCreateUserByAdmin: builder.mutation({
       query: ({userData, pageNumber}) => ({
         url: `${USERS_URL}/admin/all_users/:pageNumber/add_user`,
         method: 'POST',
@@ -73,14 +80,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Users']
     }),
-    resetPassword: builder.mutation({
-      query: ({ token, password }) => ({
-        url: `${USERS_URL}/reset_password/${token}`,
-        method: 'PUT',
-        body: { password },
-      }),
-    }),
-    deleteUser: builder.mutation({ 
+    adminDeleteUserById: builder.mutation({ 
       query: (userId) => ({ 
         url: `${USERS_URL}/admin/all_users/user/${userId}/delete_user`,
         method: 'DELETE',
@@ -93,13 +93,13 @@ export const usersApiSlice = apiSlice.injectEndpoints({
 export const { 
   useSignInMutation, 
   useSignUpMutation, 
-  useReadMyUserProfileQuery,
-  useUpdateMyUserProfileMutation, 
   useSignOutMutation, 
-  useResetPasswordMutation, 
-  useReadAllUsersQuery,
-  useReadUserByIdQuery, 
-  useUpdateUserByIdMutation, 
-  useCreateUserByAdminMutation, 
-  useDeleteUserMutation,
+  useUserResetPasswordMutation, 
+  useUserReadMyProfileQuery,
+  useUserUpdateMyProfileMutation, 
+  useAdminReadAllUsersQuery,
+  useAdminReadUserByIdQuery, 
+  useAdminUpdateUserByIdMutation, 
+  useAdminCreateUserByAdminMutation, 
+  useAdminDeleteUserByIdMutation,
 } = usersApiSlice;

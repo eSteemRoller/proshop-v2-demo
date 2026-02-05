@@ -12,7 +12,7 @@ import {
 } from '../../slices/productsApiSlice';
 
 
-export default function EditProductScreen() { 
+export default function UpdateProductScreen() { 
   const { id: productId } = useParams();
 
   const [image, setImage] = useState('');

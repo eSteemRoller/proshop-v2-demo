@@ -36,7 +36,7 @@ import EditProductScreen from './screens/admin/EditProductScreen';
 import AllUsersListScreen from './screens/admin/AllUsersListScreen';
 import CreateUserByAdminScreen from './screens/admin/CreateUserByAdminScreen';
 import EditUserScreen from './screens/admin/EditUserScreen';
-import ResetPasswordScreen from './screens/ResetPasswordScreen';
+import UserResetPasswordScreen from './screens/UserResetPasswordScreen';
 
 import reportWebVitals from './reportWebVitals';
 
@@ -50,7 +50,7 @@ const router = createBrowserRouter(
       <Route path='/sign_up' element={<SignUpScreen />} />
       <Route path='/product/:id' element={<ProductScreen />} />
       <Route path='/cart' element={<CartScreen />} />
-      <Route path='/reset_password/:token' element={<ResetPasswordScreen />} />
+      <Route path='/reset_password/:token' element={<UserResetPasswordScreen />} />
 
       <Route path='' element={<PrivateRoute />}>
         <Route path='/user/:id/my_profile' element={<MyProfileScreen />} />

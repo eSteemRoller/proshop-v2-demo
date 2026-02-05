@@ -8,7 +8,7 @@ import Paginate from '../../components/Paginate';
 import { toast } from 'react-toastify';
 
 
-export default function AllUsersListScreen() { 
+export default function ReadAllUsersScreen() { 
   const { pageNumber } = useParams();
   const page = pageNumber || 1;
   const { data, isLoading, refetch, error } = useReadAllUsersQuery({ pageNumber: page });

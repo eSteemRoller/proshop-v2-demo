@@ -5,16 +5,16 @@ import FormContainer from '../components/FormContainer';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import { toast } from 'react-toastify';
-import { useResetPasswordMutation } from '../slices/usersApiSlice';
+import { useUserResetPasswordMutation } from '../slices/usersApiSlice';
 
-export default function ResetPasswordScreen() {
+export default function UserResetPasswordScreen() {
   const { token } = useParams();
   const navigate = useNavigate();
 
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const [ resetPassword, { isLoading, error } ] = useResetPasswordMutation();
+  const [ resetPassword, { isLoading, error } ] = useUserResetPasswordMutation();
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -24,10 +24,10 @@ export default function ResetPasswordScreen() {
     }
     try {
       await resetPassword({ token, password }).unwrap();
-      toast.success('Password reset successful. Please sign in.');
+      toast.success('Success: Password reset. Please sign in.');
       navigate('/sign_in');
     } catch (err) {
-      toast.error(err?.data?.message || err.error || 'Failed to reset password');
+      toast.error(err?.data?.message || err.error || 'Error: Failed to reset password');
     }
   };
 

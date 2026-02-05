@@ -263,7 +263,7 @@ useEffect(() => {
         <Paginate 
           totalPages={data?.totalPages} 
           currentPage={data?.currentPage} 
-          basePath={`/user/${userInfo._id}/my_orders`} 
+          basePath={`/user/${userInfo._id}/my_orders/:pageNumber`} 
           firstPageIsBasePath={true}
         />
       </Col>

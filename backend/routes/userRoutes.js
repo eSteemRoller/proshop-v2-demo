@@ -5,7 +5,7 @@ import {
   authUser,
   signUpUser,
   signOutUser,
-  resetPassword,
+  userResetPassword,
   readMyUserProfile,
   updateMyUserProfile,
   readAllUsers,
@@ -29,7 +29,7 @@ router.route('/user/:id/my_profile')
 router.route('/sign_out')
   .post(signOutUser);
 router.route('/reset_password/:token')
-  .put(sensitiveLimiter, resetPassword);
+  .put(sensitiveLimiter, userResetPassword);
 
 router.route('/admin/all_users/:pageNumber')
   .get(protect, admin, readAllUsers);

@@ -12,7 +12,7 @@ import {
 } from '../../slices/usersApiSlice';
 
 
-export default function EditUserScreen() {  // aka UserEditScreen
+export default function UpdateUserScreen() {  // aka UserEditScreen
   const { id: userId } = useParams();
 
   const [firstName, setFirstName] = useState('');

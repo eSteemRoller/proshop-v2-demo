@@ -8,7 +8,7 @@ import { useReadAllOrdersQuery } from '../../slices/ordersApiSlice';
 import Paginate from '../../components/Paginate';
 
 
-export default function AllOrdersListScreen() { 
+export default function ReadAllOrdersScreen() { 
   const { pageNumber } = useParams();
   const page = pageNumber || 1;
   const { data, isLoading, error } = useReadAllOrdersQuery({ pageNumber: page });
@@ -86,7 +86,7 @@ export default function AllOrdersListScreen() {
       <Paginate 
         totalPages={data?.totalPages} 
         currentPage={data?.currentPage} 
-        basePath="/admin/all_orders" 
+        basePath="/admin/all_orders/:pageNumber" 
         firstPageIsBasePath={true}
       />
       <Link to='/' className='btn btn-light my-2 text-decoration-none'>

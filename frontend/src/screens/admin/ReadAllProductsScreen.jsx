@@ -13,7 +13,7 @@ import {
 import Paginate from '../../components/Paginate';
 
 
-export default function AllProductsListScreen() { 
+export default function ReadAllProductsScreen() { 
   const { pageNumber } = useParams();
   const page = pageNumber || 1;
   const { data, isLoading, refetch, error } = useReadAllProductsQuery({ pageNumber: page });

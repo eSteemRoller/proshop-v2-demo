@@ -24,11 +24,14 @@ const authUser = asyncHandler(async (req, res) => {
       secondaryEmail: user.secondaryEmail,
       primaryPhone: user.primaryPhone,
       secondaryPhone: user.secondaryPhone,
+      isSubscribedToEmail: user.isSubscribedToEmail, 
+      isSubscribedToText: user.isSubscribedToText,
       isAdmin: user.isAdmin,
+      adminNotes: user.adminNotes
     });
   } else { 
     res.status(401);
-    throw new Error("Invalid e-mail or password");
+    throw new Error("Failure: Invalid e-mail or password");
   }
 });
 
@@ -36,8 +39,20 @@ const authUser = asyncHandler(async (req, res) => {
 // @route  POST /api/users
 // @access  Public
 const signUpUser = asyncHandler(async (req, res) => { 
-  const { firstName, lastName, primaryEmail, password } = req.body;
-  const userExists = await User.findOne({ primaryEmail });
+  const { 
+    firstName, 
+    lastName, 
+    primaryEmail, 
+    secondaryEmail, 
+    primaryPhone, 
+    secondaryPhone, 
+    password,
+    isSubscribedToEmail, 
+    isSubscribedToText,
+    isAdmin,
+    adminNotes 
+  } = req.body;
+  const userExists = await User.findOne({ primaryEmail, secondaryEmail });
 
   if (userExists) { 
     res.status(400);
@@ -47,7 +62,14 @@ const signUpUser = asyncHandler(async (req, res) => {
     firstName,
     lastName,
     primaryEmail,
+    secondaryEmail,
+    primaryPhone, 
+    secondaryPhone,
     password,
+    isSubscribedToEmail, 
+    isSubscribedToText,
+    isAdmin,
+    adminNotes
   });
 
   if (user) { 
@@ -58,34 +80,40 @@ const signUpUser = asyncHandler(async (req, res) => {
       firstName: user.firstName,
       lastName: user.lastName,
       primaryEmail: user.primaryEmail,
+      secondaryEmail: user.secondaryEmail,
+      primaryPhone: user.primaryPhone,
+      secondaryPhone: user.secondaryPhone,
+      isSubscribedToEmail: user.isSubscribedToEmail, 
+      isSubscribedToText: user.isSubscribedToText,
       isAdmin: user.isAdmin,
+      adminNotes: user.adminNotes
     });
   } else { 
     res.status(400);
-    throw new Error("Failure: Invalid user data");
+    throw new Error("Error: Invalid user data");
   }
 });
 
-// @desc  Sign out user & clear (delete, not just clear contents) cookie
+// @desc  Sign out user & delete (destroy, not just clear contents) cookie
 // @route  POST /api/users/sign_out
 // @access  Private (User)
 const signOutUser = asyncHandler(async (req, res) => { 
-  // if (req.user) {
+  if (req.user) {
     res.cookie('jwt', '', { 
     httpOnly: true,
     expires: new Date(0)
-  });
-  res.status(200).json({ message: 'Success: You have signed out'});
-  // } else {
-  //   res.status(400);
-  //   throw new Error('Invalid request. Please, sign in.');
-  // }
+    });
+    res.status(200).json({ message: 'Success: You have signed out'});
+  } else {
+    res.status(400);
+    throw new Error('Failure: Invalid request. Please, sign in.');
+  }
 });
 
 // @desc  Read/Get user profile
 // @route  GET /api/users/profile
 // @access  Private (User)
-const readMyUserProfile = asyncHandler(async (req, res) => { 
+const userReadMyProfile = asyncHandler(async (req, res) => { 
   const user = await User.findById(req.user._id);
 
   if (user) { 
@@ -97,23 +125,25 @@ const readMyUserProfile = asyncHandler(async (req, res) => {
       secondaryEmail: user.secondaryEmail,
       primaryPhone: user.primaryPhone,
       secondaryPhone: user.secondaryPhone,
+      isSubscribedToEmail: user.isSubscribedToEmail, 
+      isSubscribedToText: user.isSubscribedToText,
       isAdmin: user.isAdmin,
     });
   } else {
     res.status(404);
-    throw new Error("User not found");
+    throw new Error("Error: User not found");
   }
 });
 
 // @desc  Update user profile
 // @route  PUT /api/users/profile
 // @access  Private (User)
-const updateMyUserProfile = asyncHandler(async (req, res) => { 
+const userUpdateMyProfile = asyncHandler(async (req, res) => { 
   const user = await User.findById(req.user._id);
   
   if (!user) { 
     res.status(404); 
-    throw new Error("User not found"); 
+    throw new Error("Error: User not found"); 
   } 
 
   user.firstName = req.body.firstName || user.firstName; 
@@ -122,6 +152,10 @@ const updateMyUserProfile = asyncHandler(async (req, res) => {
   user.secondaryEmail = req.body.secondaryEmail || user.secondaryEmail; 
   user.primaryPhone = req.body.primaryPhone || user.primaryPhone; 
   user.secondaryPhone = req.body.secondaryPhone || user.secondaryPhone; 
+  user.isSubscribedToEmail = req.body.isSubscribedToEmail || user.isSubscribedToEmail; 
+  user.isSubscribedToText = req.body.isSubscribedToText || user.isSubscribedToText; 
+  user.isAdmin = req.body.isAdmin || user.isAdmin; 
+  user.adminNotes = req.body.adminNotes || user.adminNotes; 
   
   if (req.body.password) { 
     user.password = req.body.password; 
@@ -133,29 +167,33 @@ const updateMyUserProfile = asyncHandler(async (req, res) => {
   const token = genToken(res, updatedUser._id); 
   
   // Return updated user 
-  res
-    .status(200)
-    .json({ 
-      _id: updatedUser._id, 
-      firstName: updatedUser.firstName, 
-      lastName: updatedUser.lastName, 
-      primaryEmail: updatedUser.primaryEmail, 
-      secondaryEmail: updatedUser.secondaryEmail, 
-      primaryPhone: updatedUser.primaryPhone, 
-      secondaryPhone: updatedUser.secondaryPhone, 
-      isAdmin: updatedUser.isAdmin,
-      token, 
-    }); 
+  res.status(200).json({ 
+    _id: updatedUser._id, 
+    firstName: updatedUser.firstName, 
+    lastName: updatedUser.lastName, 
+    primaryEmail: updatedUser.primaryEmail, 
+    secondaryEmail: updatedUser.secondaryEmail, 
+    primaryPhone: updatedUser.primaryPhone, 
+    secondaryPhone: updatedUser.secondaryPhone, 
+    isSubscribedToEmail: updatedUser.isSubscribedToEmail, 
+    isSubscribedToText: updatedUser.isSubscribedToText, 
+    isAdmin: updatedUser.isAdmin,
+    adminNotes: updatedUser.adminNotes,
+    token, 
+  }); 
 });
 
 // @desc  Add/Signup/Register user by Admin
 // @route  POST /api/usersByAdmin
 // @access  Private (Admin)
-const createUserByAdmin = asyncHandler(async (req, res) => {
+const adminCreateUserByAdmin = asyncHandler(async (req, res) => {
   const { 
     firstName, 
     lastName, 
     primaryEmail, 
+    secondaryEmail,
+    primaryPhone, 
+    secondaryPhone,
     password, 
     isSubscribedToEmail, 
     isSubscribedToText, 
@@ -167,14 +205,14 @@ const createUserByAdmin = asyncHandler(async (req, res) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!primaryEmail || !emailRegex.test(primaryEmail)) {
     res.status(400);
-    throw new Error('Invalid e-mail address');
+    throw new Error('Error: Invalid e-mail address');
   }
 
   const userExists = await User.findOne({ primaryEmail });
 
   if (userExists) {
     res.status(400);
-    throw new Error('User already exists');
+    throw new Error('Failure: User already exists');
   }
 
   // Create the user with a random password (required by schema) and then generate a password-reset token
@@ -184,6 +222,9 @@ const createUserByAdmin = asyncHandler(async (req, res) => {
     firstName,
     lastName,
     primaryEmail,
+    secondaryEmail,
+    primaryPhone,
+    secondaryPhone,
     password: password || randomPassword,
     isSubscribedToEmail: Boolean(isSubscribedToEmail),
     isSubscribedToText: Boolean(isSubscribedToText),
@@ -194,7 +235,7 @@ const createUserByAdmin = asyncHandler(async (req, res) => {
 
   if (!user) {
     res.status(400);
-    throw new Error('Invalid user data');
+    throw new Error('Error: Invalid user data');
   }
 
   // Generate a password reset token and expiry
@@ -233,10 +274,10 @@ const createUserByAdmin = asyncHandler(async (req, res) => {
         text: `An account has been created for you. To set your password, visit: ${resetUrl}\nThe link expires in 1 hour.`,
       });
     } else {
-      console.warn('SMTP not configured. Reset URL:', resetUrl);
+      console.warn('Error: SMTP not configured. Reset URL:', resetUrl);
     }
-  } catch (err) {
-    console.error('Failed to send reset email:', err.message || String(err));
+  } catch (error) {
+    console.error('Failure: Failed to send reset email:', error.message || String(error));
   }
 
   res.status(201).json({
@@ -244,16 +285,21 @@ const createUserByAdmin = asyncHandler(async (req, res) => {
     firstName: user.firstName,
     lastName: user.lastName,
     primaryEmail: user.primaryEmail,
+    secondaryEmail: user.secondaryEmail,
+    primaryPhone: user.primaryPhone,
+    secondaryPhone: user.secondaryPhone,
+    isSubscribedToEmail: user.isSubscribedToEmail,
+    isSubscribedToText: user.isSubscribedToText,
     isAdmin: user.isAdmin,
     adminNotes: user.adminNotes || '',
-    message: 'User created. Password setup instructions sent if SMTP configured.'
+    message: 'Success: User created. Password setup instructions sent if SMTP configured.'
   });
 });
 
 // @desc Reset password using token
 // @route PUT /api/users/reset_password/:token
 // @access Public
-const resetPassword = asyncHandler(async (req, res) => {
+const userResetPassword = asyncHandler(async (req, res) => {
   const token = req.params.token;
   const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
 
@@ -284,7 +330,7 @@ const resetPassword = asyncHandler(async (req, res) => {
 // @desc  Get/Read all users
 // @route  GET /api/users
 // @access  Private (Admin)
-const readAllUsers = asyncHandler(async (req, res) => { 
+const adminReadAllUsers = asyncHandler(async (req, res) => { 
   const pageSize = 2;  // Number of users allowed per page
   const currentPage = Number(req.query.pageNumber) || 1;
   const pageCount = await User.countDocuments();
@@ -292,7 +338,7 @@ const readAllUsers = asyncHandler(async (req, res) => {
   const users = await User.find({})
     .limit(pageSize)
     .skip(pageSize * (currentPage - 1))
-    // .populate('createdBy', 'firstName lastName primaryEmail');
+    .populate('createdBy', 'firstName lastName primaryEmail');
   res
     .status(200)
     .json({users, currentPage, totalPages: Math.ceil(pageCount / pageSize)});
@@ -301,8 +347,16 @@ const readAllUsers = asyncHandler(async (req, res) => {
 // @desc  Read/Get user by Id.
 // @route  GET /api/users/:id
 // @access  Private (Admin)
-const readUserById = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id).select('-password').populate('createdBy', 'firstName lastName primaryEmail secondaryEmail primaryPhone secondaryPhone isSubscribedToEmail isSubscribedToText isAdmin adminNotes');
+const adminReadUserById = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id)
+    .select(
+      '-password'
+    )
+    .populate(
+      'createdBy', 
+      'firstName lastName primaryEmail secondaryEmail primaryPhone secondaryPhone isSubscribedToEmail isSubscribedToText isAdmin adminNotes'
+    )
+  ;
 
   if (user) { 
     res.status(200).json(user);
@@ -315,25 +369,35 @@ const readUserById = asyncHandler(async (req, res) => {
 // @desc  Update user by Id.
 // @route  PUT /api/users/:id
 // @access  Private (Admin)
-const updateUserById = asyncHandler(async (req, res) => {
+const adminUpdateUserById = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id).select('-password');
 
   if (user) { 
     user.firstName = req.body.firstName || user.firstName;
     user.lastName = req.body.lastName || user.lastName;
     user.primaryEmail = req.body.primaryEmail || user.primaryEmail;
-    user.primaryBillingAddress = req.body.primaryBillingAddress || user.primaryBillingAddress;
-    user.primaryShippingAddress = req.body.primaryShippingAddress || user.primaryShippingAddress;
+    user.secondaryEmail = req.body.secondaryEmail || user.secondaryEmail;
+    user.primaryPhone = req.body.primaryPhone || user.primaryPhone;
+    user.secondaryPhone = req.body.secondaryPhone || user.secondaryPhone;
+    user.isSubscribedToEmail = req.body.isSubscribedToEmail || user.isSubscribedToEmail;
+    user.isSubscribedToText = req.body.isSubscribedToText || user.isSubscribedToText;
+    // user.primaryBillingAddress = req.body.primaryBillingAddress || user.primaryBillingAddress;
+    // user.primaryShippingAddress = req.body.primaryShippingAddress || user.primaryShippingAddress;
     user.isAdmin = Boolean(req.body.isAdmin);
     user.adminNotes = req.body.adminNotes || user.adminNotes;
 
     const updatedUser = await user.save();
 
     res.status(200).json({ 
-      _id: updatedUser._id,
-      firstName: updatedUser.firstName,
-      lastName: updatedUser.lastName,
-      primaryEmail: updatedUser.primaryEmail,
+      _id: updatedUser._id, 
+      firstName: updatedUser.firstName, 
+      lastName: updatedUser.lastName, 
+      primaryEmail: updatedUser.primaryEmail, 
+      secondaryEmail: updatedUser.secondaryEmail, 
+      primaryPhone: updatedUser.primaryPhone, 
+      secondaryPhone: updatedUser.secondaryPhone, 
+      isSubscribedToEmail: updatedUser.isSubscribedToEmail, 
+      isSubscribedToText: updatedUser.isSubscribedToText, 
       isAdmin: updatedUser.isAdmin,
       adminNotes: updatedUser.adminNotes || ''
     });
@@ -346,13 +410,13 @@ const updateUserById = asyncHandler(async (req, res) => {
 // @desc  Delete a user
 // @route  DELETE /api/users/:id
 // @access  Private (Admin)
-const deleteUserById = asyncHandler(async (req, res) => {
+const adminDeleteUserById = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id).select('-password');
 
   if (user) { 
     if (user.isAdmin) { 
       res.status(400);
-      throw new Error('Cannot delete admin user')
+      throw new Error('Failure: Cannot delete admin user')
     }
     await User.deleteOne({_id: user._id});
     res.status(200).json({ message: `Success: ${user._id} ${user.primaryEmail} has been deleted`});
@@ -366,12 +430,12 @@ export {
   authUser,
   signUpUser,
   signOutUser,
-  readMyUserProfile,
-  updateMyUserProfile,
-  createUserByAdmin,
-  readAllUsers,
-  readUserById,
-  updateUserById,
-  deleteUserById,
-  resetPassword,
+  userReadMyProfile,
+  userUpdateMyProfile,
+  adminCreateUserByAdmin,
+  adminReadAllUsers,
+  adminReadUserById,
+  adminUpdateUserById,
+  adminDeleteUserById,
+  userResetPassword,
 };
