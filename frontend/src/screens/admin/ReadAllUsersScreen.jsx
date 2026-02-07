@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { FaPlus, FaTimes, FaTrash, FaEdit, FaCheck } from 'react-icons/fa';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
-import { useReadAllUsersQuery, useDeleteUserMutation } from '../../slices/usersApiSlice';
+import { useAdminReadAllUsersQuery, useAdminDeleteUserByIdMutation } from '../../slices/usersApiSlice';
 import Paginate from '../../components/Paginate';
 import { toast } from 'react-toastify';
 
@@ -11,9 +11,9 @@ import { toast } from 'react-toastify';
 export default function ReadAllUsersScreen() { 
   const { pageNumber } = useParams();
   const page = pageNumber || 1;
-  const { data, isLoading, refetch, error } = useReadAllUsersQuery({ pageNumber: page });
+  const { data, isLoading, refetch, error } = useAdminReadAllUsersQuery({ pageNumber: page });
 
-  const [ deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
+  const [ deleteUser, { isLoading: isDeleting }] = useAdminDeleteUserByIdMutation();
 
   const deleteUserHandler = async (id) => { 
     if (window.confirm("Are you sure?")) { 
@@ -45,9 +45,9 @@ export default function ReadAllUsersScreen() {
         <h1>All Users</h1>
       </Col>
       <Col className='d-flex align-items-center justify-content-end'>
-        <Button to='/admin/user/add_user' className='btn btn-primary my-2 d-flex align-items-center justify-content-end'>
+        <Link to='/admin/all_users/add_user' className='btn btn-primary my-2 d-flex align-items-center justify-content-end'>
           <FaPlus />&nbsp;Add New User
-        </Button>
+        </Link>
       </Col>
       {isDeleting && <Loader />}
       {isLoading ? (

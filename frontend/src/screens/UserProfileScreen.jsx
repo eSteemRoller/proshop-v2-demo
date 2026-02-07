@@ -16,13 +16,13 @@ import { toast } from "react-toastify";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { FaTimes } from 'react-icons/fa';
-import { useUpdateMyUserProfileMutation } from "../slices/usersApiSlice";
+import { useUserUpdateMyProfileMutation } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authApiSlice";
-import { useReadMyOrdersQuery } from "../slices/ordersApiSlice";
+import { useUserReadAllMyOrdersQuery } from "../slices/ordersApiSlice";
 import Paginate from "../components/Paginate";
 
 
-export default function MyProfileScreen() { 
+export default function UserProfileScreen() { 
   const [formData, setFormData] = useState({ 
     firstName: '', 
     lastName: '', 
@@ -48,8 +48,8 @@ export default function MyProfileScreen() {
 
   const { userInfo } = useSelector((state) => state.auth);
 
-  const [updateMyUserProfile, { isLoading: isUpdating, refetch }] =
-    useUpdateMyUserProfileMutation();
+  const [updateMyProfile, { isLoading: isUpdating, refetch }] =
+    useUserUpdateMyProfileMutation();
 
   const { pageNumber } = useParams();
   const page = pageNumber || 1;
@@ -57,7 +57,7 @@ export default function MyProfileScreen() {
     data, 
     isLoading, 
     error 
-  } = useReadMyOrdersQuery({ 
+  } = useUserReadAllMyOrdersQuery({ 
     userId: userInfo._id,
     pageNumber: page 
   });
@@ -91,7 +91,7 @@ useEffect(() => {
       toast.error("Passwords do not match");
     } else {
       try {
-        const res = await updateMyUserProfile({ 
+        const res = await updateMyProfile({ 
           _id: userInfo._id, 
           ...formData 
         })
@@ -263,7 +263,7 @@ useEffect(() => {
         <Paginate 
           totalPages={data?.totalPages} 
           currentPage={data?.currentPage} 
-          basePath={`/user/${userInfo._id}/my_orders/:pageNumber`} 
+          basePath={`/user/${userInfo._id}/my_orders`} 
           firstPageIsBasePath={true}
         />
       </Col>

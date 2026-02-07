@@ -5,34 +5,27 @@ import { ORDERS_URL, PAYPAL_URL } from '../constants.js';
 
 export const ordersApiSlice = apiSlice.injectEndpoints({ 
   endpoints: (builder) => ({ 
-    createUsersOrder: builder.mutation({ 
-      query: (order) => ({ 
-        url: ORDERS_URL,
+    userCreateMyOrder: builder.mutation({ 
+      query: ({userId, order}) => ({ 
+        url: `${ORDERS_URL}/user/${userId}/order/submit_order`,
         method: 'POST',
         body: {...order}
       }),
     }),
-    readUsersOrderDetails: builder.query({ 
-      query: (UserOrderId) => ({ 
-        url: `${ORDERS_URL}/${UserOrderId}`,
-        method: 'GET',  // Read function ('GET') by default
-      }),
-      keepUnusedDataFor: 5,  // Seconds
-    }),
-    payOrder: builder.mutation({ 
-      query: ({UserOrderId, details}) => ({ 
-        url: `${ORDERS_URL}/${UserOrderId}/paid`,
-        method: 'PUT',
-        body: { ...details },
-      }),
-    }),
-    readPayPalClientId: builder.query({ 
+    userReadPayPalClientId: builder.query({ 
       query: () => ({ 
         url: PAYPAL_URL,
       }),
       keepUnusedDataFor: 5,  // Seconds
     }),
-    readMyOrders: builder.query({ 
+    userPayOrder: builder.mutation({ 
+      query: ({userId, orderId, details}) => ({ 
+        url: `${ORDERS_URL}/user/${userId}/order/${orderId}/mark_order_as_paid`,
+        method: 'PUT',
+        body: { ...details },
+      }),
+    }),
+    userReadAllMyOrders: builder.query({ 
       query: ({ userId, pageNumber = 1 }) => ({ 
         url: `${ORDERS_URL}/user/${userId}/my_orders/:pageNumber`,
         params: { 
@@ -41,17 +34,14 @@ export const ordersApiSlice = apiSlice.injectEndpoints({
       }),
       keepUnusedDataFor: 5,  // Seconds
     }),
-    readMyOrdersDetails: builder.query({ 
-      query: ({ userId, pageNumber, UserOrderId, details }) => ({ 
-        url: `${ORDERS_URL}/user/${userId}/my_orders/order/${UserOrderId}`,
-        params: { 
-          pageNumber,
-        },
+    userReadMyOrderById: builder.query({ 
+      query: ({ userId, orderId, details }) => ({ 
+        url: `${ORDERS_URL}/user/${userId}/my_orders/order/${orderId}`,
         body: { ...details }
       }),
       keepUnusedDataFor: 5,  // Seconds
     }),
-    readAllOrders: builder.query({ 
+    adminReadAllOrders: builder.query({ 
       query: ({ pageNumber }) => ({ 
         url: `${ORDERS_URL}/admin/all_orders/:pageNumber`,
         params: { 
@@ -60,9 +50,22 @@ export const ordersApiSlice = apiSlice.injectEndpoints({
       }),
       keepUnusedDataFor: 5,  // Seconds
     }),
-    updateOrderAsDelivered: builder.mutation({ 
-      query: (orderId) => ({ 
-        url: `${ORDERS_URL}/${orderId}/delivered`,
+    adminReadOrderById: builder.query({ 
+      query: ({ orderId, details }) => ({ 
+        url: `${ORDERS_URL}/admin/all_orders/order/${orderId}`,
+        body: { ...details }
+      }),
+      keepUnusedDataFor: 5,  // Seconds
+    }),
+    adminUpdateOrderById: builder.mutation({ 
+      query: ({ orderId }) => ({ 
+        url: `${ORDERS_URL}/admin/all_orders/order/${orderId}/edit_order`,
+        method: 'PUT',
+      }),
+    }),
+    adminUpdateOrderAsDelivered: builder.mutation({ 
+      query: ({ orderId }) => ({ 
+        url: `${ORDERS_URL}/admin/all_orders/order/${orderId}/mark_order_as_delivered`,
         method: 'PUT',
       }),
     }),
@@ -70,12 +73,14 @@ export const ordersApiSlice = apiSlice.injectEndpoints({
 });
 
 export const { 
-  useCreateUsersOrderMutation, 
-  useReadUsersOrderDetailsQuery,
-  usePayOrderMutation,
-  useReadPayPalClientIdQuery, 
-  useReadMyOrdersQuery,
-  useReadMyOrdersDetailsQuery,
-  useReadAllOrdersQuery,
-  useUpdateOrderAsDeliveredMutation,
+  useUserCreateMyOrderMutation, 
+  useUserReadPayPalClientIdQuery, 
+  useUserPayOrderMutation, 
+  useUserReadAllMyOrdersQuery, 
+  useUserReadMyOrderByIdQuery, 
+  
+  useAdminReadAllOrdersQuery, 
+  useAdminReadOrderByIdQuery, 
+  useAdminUpdateOrderByIdMutation, 
+  useAdminUpdateOrderAsDeliveredMutation
 } = ordersApiSlice;

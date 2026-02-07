@@ -7,17 +7,17 @@ import { toast } from "react-toastify";
 import CheckoutSteps from '../components/CheckoutSteps';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { useCreateUsersOrderMutation } from '../slices/ordersApiSlice';
+import { useUserCreateMyOrderMutation } from '../slices/ordersApiSlice';
 import { clearCartAfterOrder } from '../slices/cartApiSlice';
 import { ListGroupItem } from "react-bootstrap";
 
 
-export default function PlaceOrderScreen() { 
+export default function SubmitOrderScreen() { 
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
 
-  const [createUsersOrder, { isLoading, error }] = useCreateUsersOrderMutation();
+  const [createUserOrder, { isLoading, error }] = useUserCreateMyOrderMutation();
   
 
   useEffect(() => { 
@@ -38,7 +38,7 @@ export default function PlaceOrderScreen() {
 
   const submitOrderHandler = async () => { 
     try {
-      const res = await createUsersOrder({ 
+      const res = await createUserOrder({ 
         orderItems: cart.cartItems,
         billingAddress: cart.billingAddress,
         shippingAddress: cart.shippingAddress,

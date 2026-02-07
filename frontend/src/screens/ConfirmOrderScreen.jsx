@@ -4,10 +4,10 @@ import { Link, useParams } from 'react-router-dom';
 import { Row, Col, ListGroup, ListGroupItem, Card, Image, Button } from 'react-bootstrap';
 import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
 import { 
-  useReadUsersOrderDetailsQuery,
-  usePayOrderMutation,
-  useReadPayPalClientIdQuery,
-  useUpdateOrderAsDeliveredMutation
+  useUserReadMyOrderByIdQuery,
+  useUserPayOrderMutation,
+  useUserReadPayPalClientIdQuery,
+  useAdminUpdateOrderAsDeliveredMutation
 } from '../slices/ordersApiSlice';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
@@ -21,25 +21,25 @@ export default function MyOrdersScreen() {
     data: order, 
     refetch, 
     isLoading, 
-    err 
-  } = useReadUsersOrderDetailsQuery(orderId);
+    error 
+  } = useUserReadMyOrderByIdQuery(orderId);
   
-  const [payOrder, { isLoading:isLoadingPaid }] = usePayOrderMutation();
+  const [payOrder, { isLoading:isLoadingPaid }] = useUserPayOrderMutation();
 
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 
   const { 
     data: paypal, 
     isLoading: isLoadingPayPal, 
-    err: errPayPal 
-  } = useReadPayPalClientIdQuery();
+    error: errorPayPal 
+  } = useUserReadPayPalClientIdQuery();
 
   const { userInfo } = useSelector((state) => state.auth);
 
-  const [updateOrderAsDelivered, { isLoading: isLoadingDelivered }] = useUpdateOrderAsDeliveredMutation();
+  const [updateOrderAsDelivered, { isLoading: isLoadingDelivered }] = useAdminUpdateOrderAsDeliveredMutation();
 
   useEffect(() => { 
-    if (!errPayPal && !isLoadingPayPal && paypal.clientId) { 
+    if (!errorPayPal && !isLoadingPayPal && paypal.clientId) { 
       const loadPayPalScript = async () => { 
         paypalDispatch({ 
           type: 'resetOptions',
@@ -56,13 +56,13 @@ export default function MyOrdersScreen() {
         }
       }
     }
-  }, [order, paypal, paypalDispatch, isLoadingPayPal, errPayPal]);
+  }, [order, paypal, paypalDispatch, isLoadingPayPal, errorPayPal]);
 
 
   async function onApproveTester() { 
-    await payOrder({ orderId, details: { payer: {} } });
+    await payOrder({ orderId, details: { payor: {} } });
     refetch();
-    toast.success('Order marked as paid (for testing purposes)');
+    toast.success('Success: Order marked as paid (for testing purposes)');
   }
 
   function createOrder(data, actions) { 
@@ -84,7 +84,7 @@ export default function MyOrdersScreen() {
       try { 
         await payOrder({ orderId, details });
         refetch();
-        toast.success('Payment successful');
+        toast.success('Success: Payment sent');
       } catch (err) { 
         toast.error(err?.data?.message || err.message);
       }
@@ -99,14 +99,14 @@ export default function MyOrdersScreen() {
     try { 
       await updateOrderAsDelivered(orderId);
       refetch();
-      toast.success('Order marked as delivered');
+      toast.success('Success: Order marked as delivered');
     } catch (err) {
       toast.error(err?.data?.message || err.message);
     }
   }
 
   return isLoading ? <Loader /> : 
-      err ? <Message variant='danger' /> : ( 
+      error ? <Message variant='danger' /> : ( 
         <>
           <h1>Order {order._id} Review</h1>
           <Row>

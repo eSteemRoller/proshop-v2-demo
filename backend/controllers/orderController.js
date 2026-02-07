@@ -6,7 +6,7 @@ import Order from '../models/orderModel.js';
 // @desc Create/POST new User order
 // @route POST /api/orders
 // @access Private
-const createUserOrder = asyncHandler(async (req, res) => { 
+const userCreateMyOrder = asyncHandler(async (req, res) => { 
   const { 
     // user,
     orderItems,
@@ -56,16 +56,33 @@ const createUserOrder = asyncHandler(async (req, res) => {
 // @desc Read/GET all User's orders
 // @route GET /api/orders/my_orders
 // @access Private
-const readAllMyOrders = asyncHandler(async (req, res) => { 
-  const allUsersOrders = await Order.find({ user: req.user._id });
-  res.status(200).json(allUsersOrders);
-  res.send('readMyOrders');
+const userReadAllMyOrders = asyncHandler(async (req, res) => { 
+  const readAllMyOrders = await Order.find({ user: req.user._id });
+  res.status(200).json(readAllMyOrders);
+  res.send('userReadAllMyOrders');
 });
 
 // @desc Read/GET User's order by Id
 // @route GET /api/orders/:id
 // @access Private (Admin)
-const readUserOrderById = asyncHandler(async (req, res) => { 
+const userReadMyOrderById = asyncHandler(async (req, res) => { 
+  const readMyOrderById = 
+    await Order.findById(req.params.id)
+      .populate('user','name email phone');
+
+  if (readMyOrderById) { 
+    res.status(200).json(readMyOrderById);
+  } else { 
+    res.status(404);
+    throw new Error('Error: Order not found');
+  }
+  res.send('readUsersOrderById');
+});
+
+// @desc Read/GET User's order by Id
+// @route GET /api/orders/:id
+// @access Private (Admin)
+const adminReadUserOrderById = asyncHandler(async (req, res) => { 
   const usersOrderById = 
     await Order.findById(req.params.id).populate('user','name email phone');
 
@@ -73,9 +90,35 @@ const readUserOrderById = asyncHandler(async (req, res) => {
     res.status(200).json(usersOrderById);
   } else { 
     res.status(404);
-    throw new Error('Order not found');
+    throw new Error('Error: Order not found');
   }
   res.send('readUsersOrderById');
+});
+
+// @desc Update/PUT User's order by admin
+// @route PUT /api/orders/:id/paid
+// @access Private (Admin)
+const adminUpdateUserOrderById = asyncHandler(async (req, res) => { 
+  const order = await order.findById(req.params.id);
+
+  if (order) { 
+    order.isPaid = true;
+    order.paidWhen = Date.now();
+    order.paymentResult = { 
+      id: req.body.id,
+      status: req.body.status,
+      update_time: req.body.update_time,
+      email_address: req.body.payer.email_address,
+    };
+    res.send('adminUpdateUserOrderById');
+
+    const updatedOrder = await order.save();
+
+    res.status(200).json(updatedOrder);
+  } else { 
+    res.status(404);
+    throw new Error('Error: Order not found');
+  }
 });
 
 // @desc Update/PUT User's order as Paid
@@ -100,7 +143,7 @@ const updateUserOrderByIdAsPaid = asyncHandler(async (req, res) => {
     res.status(200).json(paidOrder);
   } else { 
     res.status(404);
-    throw new Error('Order not found');
+    throw new Error('Error: Order not found');
   }
 });
 
@@ -126,7 +169,7 @@ const updateUserOrderByIdAsDelivered = asyncHandler(async (req, res) => {
     res.status(200).json(updatedOrder);
   } else { 
     res.status(404);
-    throw new Error('Order not found')
+    throw new Error('Error: Order not found')
   }
 
   res.send('updateUsersOrderByIdAsDelivered');
@@ -135,7 +178,7 @@ const updateUserOrderByIdAsDelivered = asyncHandler(async (req, res) => {
 // @desc Read/GET all orders
 // @route GET /api/orders
 // @access Private (Admin)
-const readAllOrders = asyncHandler(async (req, res) => { 
+const adminReadAllOrders = asyncHandler(async (req, res) => { 
   const pageSize = 2;  // Number of users allowed per page
   const currentPage = Number(req.query.pageNumber) || 1;
   const pageCount = await Order.countDocuments();
@@ -148,17 +191,19 @@ const readAllOrders = asyncHandler(async (req, res) => {
     .status(200)
     .json({orders, currentPage, totalPages: Math.ceil(pageCount / pageSize)});
   res
-    .send('readAllOrders');
+    .send('adminReadAllOrders');
 });
 
 
 export { 
-  createUserOrder,
-  readAllMyOrders,
-  readUserOrderById,
+  userCreateMyOrder, 
+  userReadAllMyOrders, 
+  userReadMyOrderById, 
+  adminReadAllOrders, 
+  adminReadUserOrderById, 
+  adminUpdateUserOrderById,
   updateUserOrderByIdAsPaid,
   updateUserOrderByIdAsShipped,
   updateUserOrderByIdAsDelivered,
-  readAllOrders,
 };
 

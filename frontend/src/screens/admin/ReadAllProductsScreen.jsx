@@ -6,9 +6,9 @@ import Message from '../../components/Message';
 import { toast } from 'react-toastify';
 import Loader from '../../components/Loader';
 import { 
-  useReadAllProductsQuery, 
-  useCreateProductMutation, 
-  useDeleteProductByIdMutation,
+  useAdminReadAllProductsQuery, 
+  useAdminCreateProductMutation, 
+  useAdminDeleteProductByIdMutation,
 } from '../../slices/productsApiSlice';
 import Paginate from '../../components/Paginate';
 
@@ -16,10 +16,10 @@ import Paginate from '../../components/Paginate';
 export default function ReadAllProductsScreen() { 
   const { pageNumber } = useParams();
   const page = pageNumber || 1;
-  const { data, isLoading, refetch, error } = useReadAllProductsQuery({ pageNumber: page });
+  const { data, isLoading, refetch, error } = useAdminReadAllProductsQuery({ pageNumber: page });
   console.log(data);
 
-  const [createProduct, { isLoading: isAddingProduct }] = useCreateProductMutation({ pageNumber: page });
+  const [createProduct, { isLoading: isAddingProduct }] = useAdminCreateProductMutation({ pageNumber: page });
 
   async function createProductHandler() { 
     if (window.confirm('Create the template for a new product below?')) { 
@@ -33,7 +33,7 @@ export default function ReadAllProductsScreen() {
     }
   }
 
-  const [deleteProduct, { isLoading: isDeletingProduct }] = useDeleteProductByIdMutation();
+  const [deleteProduct, { isLoading: isDeletingProduct }] = useAdminDeleteProductByIdMutation();
 
   const deleteProductHandler = async (_id) => {
     if (window.confirm(`Are you sure you want to delete product ${_id}?`)) { 
@@ -103,8 +103,8 @@ export default function ReadAllProductsScreen() {
             </tbody>
           </Table>
           <Paginate 
-            totalPages={data.totalPages} 
-            currentPage={data.currentPage} 
+            totalPages={data?.totalPages} 
+            currentPage={data?.currentPage} 
             basePath="/admin/all_products"
             firstPageIsBasePath={true}
           />

@@ -59,6 +59,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       query: (userId) => ({ 
         url: `${USERS_URL}/admin/all_users/user/${userId}/edit_user`,
       }),
+      providesTags: (result, error, userId) => [{ type: 'Users', id: userId }],
       keepUnusedDataFor: 5
     }),
     adminUpdateUserById: builder.mutation({  // aka updateUser
@@ -67,23 +68,23 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         method: 'PUT',
         body: userData,
       }),
-      invalidatesTags: ['Users']
+      invalidatesTags: (result, error, { userId }) => [ { type: 'Users', id: userId } ]
     }),
-    adminCreateUserByAdmin: builder.mutation({
-      query: ({userData, pageNumber}) => ({
-        url: `${USERS_URL}/admin/all_users/:pageNumber/add_user`,
-        method: 'POST',
-        body: userData,
+    adminDeleteUserById: builder.mutation({ 
+      query: ({ pageNumber, userId }) => ({ 
+        url: `${USERS_URL}/admin/all_users/page/:pageNumber/user/${userId}/delete_user`,
+        method: 'DELETE',
         params: { 
           pageNumber,
         }
       }),
       invalidatesTags: ['Users']
     }),
-    adminDeleteUserById: builder.mutation({ 
-      query: (userId) => ({ 
-        url: `${USERS_URL}/admin/all_users/user/${userId}/delete_user`,
-        method: 'DELETE',
+    adminCreateUserByAdmin: builder.mutation({
+      query: ({ ...userData }) => ({
+        url: `${USERS_URL}/admin/all_users/add_user`,
+        method: 'POST',
+        body: userData,
       }),
       invalidatesTags: ['Users']
     }),
@@ -95,11 +96,12 @@ export const {
   useSignUpMutation, 
   useSignOutMutation, 
   useUserResetPasswordMutation, 
-  useUserReadMyProfileQuery,
+  useUserReadMyProfileQuery, 
   useUserUpdateMyProfileMutation, 
-  useAdminReadAllUsersQuery,
+  
+  useAdminReadAllUsersQuery, 
   useAdminReadUserByIdQuery, 
   useAdminUpdateUserByIdMutation, 
+  useAdminDeleteUserByIdMutation, 
   useAdminCreateUserByAdminMutation, 
-  useAdminDeleteUserByIdMutation,
-} = usersApiSlice;
+} = usersApiSlice; 

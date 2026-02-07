@@ -6,9 +6,9 @@ import { toast } from 'react-toastify';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import { 
-  useReadProductByIdQuery, 
-  useUpdateProductByIdMutation, 
-  useUploadProductImageMutation 
+  useAdminReadProductByIdQuery, 
+  useAdminUpdateProductByIdMutation, 
+  useAdminUploadProductImageMutation 
 } from '../../slices/productsApiSlice';
 
 
@@ -27,13 +27,13 @@ export default function UpdateProductScreen() {
     data: product, 
     isLoading,
     error
-  } = useReadProductByIdQuery(productId);
+  } = useAdminReadProductByIdQuery(productId);
 
   const [updateProduct, { isLoading: isUpdatingProduct }] = 
-    useUpdateProductByIdMutation();
+    useAdminUpdateProductByIdMutation();
 
   const [uploadProductImage, { isLoading: isUploadingImage }] = 
-    useUploadProductImageMutation();
+    useAdminUploadProductImageMutation();
 
   const navigate = useNavigate();
 

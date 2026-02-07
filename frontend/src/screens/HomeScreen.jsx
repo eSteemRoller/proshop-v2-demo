@@ -5,13 +5,13 @@ import Product from '../components/Product';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import Paginate from '../components/Paginate';
-import { useReadAllProductsQuery } from '../slices/productsApiSlice';
+import { useUserReadAllProductsQuery } from '../slices/productsApiSlice';
 
 
 export default function HomeScreen() { 
   const { pageNumber } = useParams();
 
-  const { data, isLoading, error } = useReadAllProductsQuery({ pageNumber });
+  const { data, isLoading, error } = useUserReadAllProductsQuery({ pageNumber });
 
   return (
     <>
@@ -34,10 +34,10 @@ export default function HomeScreen() {
             )) }
           </Row>
           <Paginate 
-            totalPages={data.totalPages} 
-            currentPage={data.currentPage} 
-            basePath="/page"
-            firstPageIsBasePath={false}
+            totalPages={data?.totalPages} 
+            currentPage={data?.currentPage} 
+            basePath="/"
+            firstPageIsBasePath={true}
           />
         </>
       )}

@@ -4,14 +4,14 @@ import { Link, useParams } from 'react-router-dom';
 import { FaTimes } from 'react-icons/fa';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
-import { useReadAllOrdersQuery } from '../../slices/ordersApiSlice';
+import { useAdminReadAllOrdersQuery } from '../../slices/ordersApiSlice';
 import Paginate from '../../components/Paginate';
 
 
 export default function ReadAllOrdersScreen() { 
   const { pageNumber } = useParams();
   const page = pageNumber || 1;
-  const { data, isLoading, error } = useReadAllOrdersQuery({ pageNumber: page });
+  const { data, isLoading, error } = useAdminReadAllOrdersQuery({ pageNumber: page });
 
 
   return (
@@ -86,7 +86,7 @@ export default function ReadAllOrdersScreen() {
       <Paginate 
         totalPages={data?.totalPages} 
         currentPage={data?.currentPage} 
-        basePath="/admin/all_orders/:pageNumber" 
+        basePath="/admin/all_orders" 
         firstPageIsBasePath={true}
       />
       <Link to='/' className='btn btn-light my-2 text-decoration-none'>

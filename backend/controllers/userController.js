@@ -203,6 +203,7 @@ const adminCreateUserByAdmin = asyncHandler(async (req, res) => {
 
   // Basic Email format validation
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  console.log("primaryEmail:", JSON.stringify(primaryEmail));
   if (!primaryEmail || !emailRegex.test(primaryEmail)) {
     res.status(400);
     throw new Error('Error: Invalid e-mail address');
@@ -291,7 +292,7 @@ const adminCreateUserByAdmin = asyncHandler(async (req, res) => {
     isSubscribedToEmail: user.isSubscribedToEmail,
     isSubscribedToText: user.isSubscribedToText,
     isAdmin: user.isAdmin,
-    adminNotes: user.adminNotes || '',
+    adminNotes: user.adminNotes,
     message: 'Success: User created. Password setup instructions sent if SMTP configured.'
   });
 });
@@ -399,7 +400,7 @@ const adminUpdateUserById = asyncHandler(async (req, res) => {
       isSubscribedToEmail: updatedUser.isSubscribedToEmail, 
       isSubscribedToText: updatedUser.isSubscribedToText, 
       isAdmin: updatedUser.isAdmin,
-      adminNotes: updatedUser.adminNotes || ''
+      adminNotes: updatedUser.adminNotes
     });
   } else { 
     res.status(404);

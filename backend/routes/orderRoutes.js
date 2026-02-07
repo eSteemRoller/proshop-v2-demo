@@ -1,34 +1,31 @@
 
 import express from 'express';
 const router = express.Router();
-import {
-  readAllMyOrders,
-  readUserOrderById,
-  updateUserOrderByIdAsPaid,
-  updateUserOrderByIdAsShipped,
-  updateUserOrderByIdAsDelivered,
-  readAllOrders,
-  createUserOrder,
+import { 
+  userCreateMyOrder,
+  userReadAllMyOrders,
+  userReadMyOrderById,
+  adminReadAllOrders,
+  adminReadUserOrderById,
+  adminUpdateUserOrderById,
 } from '../controllers/orderController.js'; // file extension needed
 import { protect, admin } from '../middleware/authHandler.js';
 
 
+
+router.route('/user/:id/order/submit_order')
+  .post(protect, userCreateMyOrder);
 router.route('/user/:id/my_orders/:pageNumber')
-  .get(protect, readAllMyOrders);
-// router.route('/user/:id/my_profile')
-//   .get(protect, readAllMyOrders);
+  .get(protect, userReadAllMyOrders);
 router.route('/user/:id/my_orders/order/:id')
-  .get(protect, readUserOrderById);
+  .get(protect, userReadMyOrderById);
 
 router.route('/admin/all_orders/:pageNumber')
-  .get(protect, admin, readAllOrders)
-  .post(protect, admin, createUserOrder);
+  .get(protect, admin, adminReadAllOrders)
 router.route('/admin/all_orders/order/:id')
-  .get(protect, admin, readUserOrderById);
+  .get(protect, admin, adminReadUserOrderById);
 router.route('/admin/all_orders/order/:id/edit_order')
-  .put(protect, updateUserOrderByIdAsPaid);
-router.route('/:id/shipped').put(protect, admin, updateUserOrderByIdAsShipped);
-router.route('/:id/delivered').put(protect, admin, updateUserOrderByIdAsDelivered);
+  .put(protect, admin, adminUpdateUserOrderById);
 
 
 export default router;
