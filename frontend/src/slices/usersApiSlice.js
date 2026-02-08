@@ -45,48 +45,55 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         body: userData,
       }),
     }),
-    adminReadAllUsers: builder.query({ 
-      query: ({ pageNumber }) => ({ 
-        url: `${USERS_URL}/admin/all_users/:pageNumber`,
-        params: { 
-          pageNumber,
-        }
+    adminCreateUserByAdmin: builder.mutation({
+      query: (userData) => ({
+        url: `${USERS_URL}/admin/all_users/add_user`,
+        method: 'POST',
+        body: userData
       }),
-      providesTags: ['Users'],
+      invalidatesTags: [{ type: 'Users', id: 'LIST' }]
+    }),
+    adminReadAllUsers: builder.query({ 
+      query: ({ page }) => ({ 
+        url: `${USERS_URL}/admin/all_users`,
+        params: { page },
+      }),
+      providesTags: (result) => 
+        result?.users 
+          ? [ 
+              ...result.users.map((u) => ({ type: 'User', id: u._id })), 
+              { type: 'Users', id: 'LIST' } 
+            ] 
+          : [{ type: 'Users', id: 'LIST' }],
       keepUnusedDataFor: 5
     }),
     adminReadUserById: builder.query({ 
       query: (userId) => ({ 
-        url: `${USERS_URL}/admin/all_users/user/${userId}/edit_user`,
+        url: `${USERS_URL}/admin/all_users/user/${userId}`,
       }),
       providesTags: (result, error, userId) => [{ type: 'Users', id: userId }],
       keepUnusedDataFor: 5
     }),
     adminUpdateUserById: builder.mutation({  // aka updateUser
-      query: (userData) => ({ 
-        url: `${USERS_URL}/admin/all_users/user/${userData.userId}/edit_user`,
+      query: ({ userId, ...userData}) => ({ 
+        url: `${USERS_URL}/admin/all_users/user/${ userId }/edit_user`,
         method: 'PUT',
         body: userData,
       }),
-      invalidatesTags: (result, error, { userId }) => [ { type: 'Users', id: userId } ]
+      invalidatesTags: (result, error, { userId }) => [ 
+        { type: 'User', id: userId }, 
+        { type: 'Users', id: 'LIST' } 
+       ]
     }),
     adminDeleteUserById: builder.mutation({ 
-      query: ({ pageNumber, userId }) => ({ 
-        url: `${USERS_URL}/admin/all_users/page/:pageNumber/user/${userId}/delete_user`,
-        method: 'DELETE',
-        params: { 
-          pageNumber,
-        }
+      query: (userId) => ({ 
+        url: `${USERS_URL}/admin/all_users/user/${userId}/delete_user`,
+        method: 'DELETE'
       }),
-      invalidatesTags: ['Users']
-    }),
-    adminCreateUserByAdmin: builder.mutation({
-      query: ({ ...userData }) => ({
-        url: `${USERS_URL}/admin/all_users/add_user`,
-        method: 'POST',
-        body: userData,
-      }),
-      invalidatesTags: ['Users']
+      invalidatesTags: (result, error, { userId }) => [ 
+        { type: 'User', id: userId }, 
+        { type: 'Users', id: 'LIST' } 
+       ]
     }),
   }),
 });
@@ -99,9 +106,9 @@ export const {
   useUserReadMyProfileQuery, 
   useUserUpdateMyProfileMutation, 
   
+  useAdminCreateUserByAdminMutation,
   useAdminReadAllUsersQuery, 
   useAdminReadUserByIdQuery, 
   useAdminUpdateUserByIdMutation, 
-  useAdminDeleteUserByIdMutation, 
-  useAdminCreateUserByAdminMutation, 
+  useAdminDeleteUserByIdMutation 
 } = usersApiSlice; 
