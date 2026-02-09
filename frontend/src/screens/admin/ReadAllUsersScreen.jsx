@@ -10,8 +10,9 @@ import { toast } from 'react-toastify';
 
 export default function ReadAllUsersScreen() { 
   const { pageNumber } = useParams();
-  const page = pageNumber || 1;
-  const { data, isLoading, refetch, error } = useAdminReadAllUsersQuery({ pageNumber: page });
+  const page = Number(pageNumber) || 1;
+
+  const { data, isLoading, error } = useAdminReadAllUsersQuery({ page });
 
   const [ deleteUser, { isLoading: isDeleting }] = useAdminDeleteUserByIdMutation();
 
@@ -20,7 +21,6 @@ export default function ReadAllUsersScreen() {
       try {
         await deleteUser(id);
         toast.success("Success: User deleted");
-        refetch();
       } catch (error) {
         toast.error(error?.data?.message || error.error);
       }
@@ -79,8 +79,8 @@ export default function ReadAllUsersScreen() {
                   <td>{user.firstName}</td>
                   <td>{user.lastName}</td>
                   <td>
-                    <a href={`mailto:${user.primaryEmail || user.email}`}>
-                      { user.primaryEmail || user.email }
+                    <a href={`mailto:${user.primaryEmail || user.secondaryEmail}`}>
+                      { user.primaryEmail || user.secondaryEmail }
                     </a>
                   </td>
                   <td>
@@ -113,7 +113,7 @@ export default function ReadAllUsersScreen() {
       <Paginate 
         totalPages={data?.totalPages} 
         currentPage={data?.currentPage} 
-        basePath="/admin/all_users" 
+        basePath="admin/all_users" 
         firstPageIsBasePath={true}
       />
       <Link to='/' className='btn btn-light my-2 text-decoration-none'>

@@ -70,7 +70,7 @@ const router = createBrowserRouter(
         <Route path='/admin/all_products' element={<ReadAllProductsScreen />} />
         <Route path='/admin/all_products/page/:pageNumber' element={<ReadAllProductsScreen />} />
         <Route path='/admin/all_products/product/:id/edit_product' element={<UpdateProductScreen />} />
-        <Route path='/admin/all_products/page/:pageNumber/product/:id/delete_product' element={<ReadAllProductsScreen />} />
+        <Route path='/admin/all_products/product/:id/delete_product' element={<ReadAllProductsScreen />} />
 
         <Route path='/admin/all_users' element={<ReadAllUsersScreen />} />
         <Route path='/admin/all_users/page/:pageNumber' element={<ReadAllUsersScreen />} />

@@ -51,18 +51,20 @@ const userSchema = new mongoose.Schema(
         },
         isSubscribedToEmail: {
             type: Boolean,
-            required: true,
             default: false,
         },
         isSubscribedToText: {
             type: Boolean,
-            required: true,
             default: false,
         },
         isAdmin: {
             type: Boolean,
             required: true,
             default: false,
+        },
+        adminNotes: {
+            type: String,
+            required: false,
         },
         createdBy: {
             type: mongoose.Schema.Types.ObjectId,

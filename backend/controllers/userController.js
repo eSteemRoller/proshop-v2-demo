@@ -136,7 +136,7 @@ const userReadMyProfile = asyncHandler(async (req, res) => {
 });
 
 // @desc  Update user profile
-// @route  PUT /api/users/profile
+// @route  PUT /api/users/user/:id/my_profile
 // @access  Private (User)
 const userUpdateMyProfile = asyncHandler(async (req, res) => { 
   const user = await User.findById(req.user._id);
@@ -184,8 +184,8 @@ const userUpdateMyProfile = asyncHandler(async (req, res) => {
 });
 
 // @desc  Add/Signup/Register user by Admin
-// @route  POST /api/usersByAdmin
-// @access  Private (Admin)
+// @route  POST /api/users/admin/all_users/add_user
+// @access  Private & Admin
 const adminCreateUserByAdmin = asyncHandler(async (req, res) => {
   const { 
     firstName, 
@@ -230,7 +230,7 @@ const adminCreateUserByAdmin = asyncHandler(async (req, res) => {
     isSubscribedToEmail: Boolean(isSubscribedToEmail),
     isSubscribedToText: Boolean(isSubscribedToText),
     isAdmin: Boolean(isAdmin),
-    adminNotes: adminNotes || '',
+    adminNotes: adminNotes ?? '',
     createdBy: req.user ? req.user._id : undefined,
   });
 
@@ -328,21 +328,28 @@ const userResetPassword = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "Success: Password has been reset" });
 });
 
-// @desc  Get/Read all users
-// @route  GET /api/users
-// @access  Private (Admin)
+// @desc  Get/Read all users (paginated)
+// @route  GET /api/users/admin/all_users?page=1
+// @access  Private & Admin
 const adminReadAllUsers = asyncHandler(async (req, res) => { 
   const pageSize = 2;  // Number of users allowed per page
-  const currentPage = Number(req.query.pageNumber) || 1;
-  const pageCount = await User.countDocuments();
+  const currentPage = Number(req.query.page) || 1;
+
+  const totalUsers = await User.countDocuments();
 
   const users = await User.find({})
     .limit(pageSize)
     .skip(pageSize * (currentPage - 1))
-    .populate('createdBy', 'firstName lastName primaryEmail');
+    .populate('createdBy', 'firstName lastName primaryEmail')
+    .select('-password');
+
   res
     .status(200)
-    .json({users, currentPage, totalPages: Math.ceil(pageCount / pageSize)});
+    .json({ 
+      users, 
+      currentPage, 
+      totalPages: Math.ceil(totalUsers / pageSize)
+  });
 });
 
 // @desc  Read/Get user by Id.
@@ -368,44 +375,56 @@ const adminReadUserById = asyncHandler(async (req, res) => {
 });
 
 // @desc  Update user by Id.
-// @route  PUT /api/users/:id
-// @access  Private (Admin)
+// @route  PUT /api/users/admin/all_users/user/:id/edit_user
+// @access  Private & Admin
 const adminUpdateUserById = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id).select('-password');
 
-  if (user) { 
-    user.firstName = req.body.firstName || user.firstName;
-    user.lastName = req.body.lastName || user.lastName;
-    user.primaryEmail = req.body.primaryEmail || user.primaryEmail;
-    user.secondaryEmail = req.body.secondaryEmail || user.secondaryEmail;
-    user.primaryPhone = req.body.primaryPhone || user.primaryPhone;
-    user.secondaryPhone = req.body.secondaryPhone || user.secondaryPhone;
-    user.isSubscribedToEmail = req.body.isSubscribedToEmail || user.isSubscribedToEmail;
-    user.isSubscribedToText = req.body.isSubscribedToText || user.isSubscribedToText;
-    // user.primaryBillingAddress = req.body.primaryBillingAddress || user.primaryBillingAddress;
-    // user.primaryShippingAddress = req.body.primaryShippingAddress || user.primaryShippingAddress;
-    user.isAdmin = Boolean(req.body.isAdmin);
-    user.adminNotes = req.body.adminNotes || user.adminNotes;
-
-    const updatedUser = await user.save();
-
-    res.status(200).json({ 
-      _id: updatedUser._id, 
-      firstName: updatedUser.firstName, 
-      lastName: updatedUser.lastName, 
-      primaryEmail: updatedUser.primaryEmail, 
-      secondaryEmail: updatedUser.secondaryEmail, 
-      primaryPhone: updatedUser.primaryPhone, 
-      secondaryPhone: updatedUser.secondaryPhone, 
-      isSubscribedToEmail: updatedUser.isSubscribedToEmail, 
-      isSubscribedToText: updatedUser.isSubscribedToText, 
-      isAdmin: updatedUser.isAdmin,
-      adminNotes: updatedUser.adminNotes
-    });
-  } else { 
+  if (!user) {
     res.status(404);
     throw new Error("Failure: User not found");
   }
+
+  if (req.body.firstName !== undefined) user.firstName = req.body.firstName;
+  if (req.body.lastName !== undefined) user.lastName = req.body.lastName;
+  if (req.body.primaryEmail !== undefined) user.primaryEmail = req.body.primaryEmail;
+  if (req.body.secondaryEmail !== undefined) user.secondaryEmail = req.body.secondaryEmail;
+  if (req.body.primaryPhone !== undefined) user.primaryPhone = req.body.primaryPhone;
+
+  console.log("Incoming secondaryPhone:", req.body.secondaryPhone);
+  if (req.body.secondaryPhone !== undefined) user.secondaryPhone = req.body.secondaryPhone;
+  console.log("Before save secondaryPhone:", user.secondaryPhone);
+
+  if (req.body.isSubscribedToEmail !== undefined)
+    user.isSubscribedToEmail = req.body.isSubscribedToEmail;
+
+  if (req.body.isSubscribedToText !== undefined)
+    user.isSubscribedToText = req.body.isSubscribedToText;
+
+    // user.primaryBillingAddress = req.body.primaryBillingAddress || user.primaryBillingAddress;
+    // user.primaryShippingAddress = req.body.primaryShippingAddress || user.primaryShippingAddress;
+
+  if (req.body.isAdmin !== undefined)
+    user.isAdmin = Boolean(req.body.isAdmin);
+
+  if (req.body.adminNotes !== undefined)
+    user.adminNotes = req.body.adminNotes;
+
+  const updatedUser = await user.save();
+
+  res.status(200).json({ 
+    _id: updatedUser._id, 
+    firstName: updatedUser.firstName, 
+    lastName: updatedUser.lastName, 
+    primaryEmail: updatedUser.primaryEmail, 
+    secondaryEmail: updatedUser.secondaryEmail, 
+    primaryPhone: updatedUser.primaryPhone, 
+    secondaryPhone: updatedUser.secondaryPhone, 
+    isSubscribedToEmail: updatedUser.isSubscribedToEmail, 
+    isSubscribedToText: updatedUser.isSubscribedToText, 
+    isAdmin: updatedUser.isAdmin,
+    adminNotes: updatedUser.adminNotes
+  });
 });
 
 // @desc  Delete a user

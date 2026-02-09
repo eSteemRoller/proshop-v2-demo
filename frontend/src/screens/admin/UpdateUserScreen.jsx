@@ -21,6 +21,8 @@ export default function UpdateUserScreen() {  // aka UserEditScreen
   const [secondaryEmail, setSecondaryEmail] = useState('');
   const [primaryPhone, setPrimaryPhone] = useState('');
   const [secondaryPhone, setSecondaryPhone] = useState('');
+  console.log("Render secondaryPhone:", secondaryPhone);
+
   // const [primaryBillingAddress, setPrimaryBillingAddress] = useState('');
   // const [primaryShippingAddress, setPrimaryShippingAddress] = useState('');
   const [isSubscribedToEmail, setIsSubscribedToEmail] = useState(false);
@@ -41,18 +43,18 @@ export default function UpdateUserScreen() {  // aka UserEditScreen
 
   useEffect(() => { 
     if (user) { 
-      setFirstName(user.firstName);
-      setLastName(user.lastName);
-      setPrimaryEmail(user.primaryEmail);
-      setSecondaryEmail(user.secondaryEmail || '');
-      setPrimaryPhone(user.primaryPhone || '');
-      setSecondaryPhone(user.secondaryPhone || '');
+      setFirstName(user.firstName ?? '');
+      setLastName(user.lastName ?? '');
+      setPrimaryEmail(user.primaryEmail ?? '');
+      setSecondaryEmail(user.secondaryEmail ?? '');
+      setPrimaryPhone(user.primaryPhone ?? '');
+      setSecondaryPhone(user.secondaryPhone ?? '');
       // setPrimaryBillingAddress(user.primaryBillingAddress);
       // setPrimaryShippingAddress(user.primaryShippingAddress);
-      setIsSubscribedToEmail(user.isSubscribedToEmail || undefined)
-      setIsSubscribedToText(user.isSubscribedToText || undefined)
-      setIsAdmin(user.isAdmin);
-      setAdminNotes(user.adminNotes || '');
+      setIsSubscribedToEmail(Boolean(user.isSubscribedToEmail));
+      setIsSubscribedToText(Boolean(user.isSubscribedToText));
+      setIsAdmin(Boolean(user.isAdmin));
+      setAdminNotes(user.adminNotes ?? '');
     } }, [user]);
 
   const hasValidUser = Boolean(
@@ -62,6 +64,8 @@ export default function UpdateUserScreen() {  // aka UserEditScreen
   );
 
   const submitHandler = async (e) => { 
+    console.log("Submitting secondaryPhone:", secondaryPhone);
+
     e.preventDefault();
     try {
       await updateUser({ 
@@ -78,6 +82,8 @@ export default function UpdateUserScreen() {  // aka UserEditScreen
         adminNotes
       })
         .unwrap();
+      console.log("Saved secondaryPhone:", updateUser.secondaryPhone);
+
       toast.success('Success: User updated');
       navigate('/admin/all_users');
     } catch (err) {
@@ -108,7 +114,7 @@ export default function UpdateUserScreen() {  // aka UserEditScreen
                 <Form.Control 
                   type='text'
                   placeholder='Enter first name'
-                  value={firstName}
+                  value={firstName ?? ''}
                   onChange={(e) => setFirstName(e.target.value)}
                 ></Form.Control>
               </Form.Group>
@@ -117,7 +123,7 @@ export default function UpdateUserScreen() {  // aka UserEditScreen
                 <Form.Control 
                   type='text'
                   placeholder='Enter last name'
-                  value={lastName}
+                  value={lastName ?? ''}
                   onChange={(e) => setLastName(e.target.value)}
                 ></Form.Control>
               </Form.Group>
@@ -126,7 +132,7 @@ export default function UpdateUserScreen() {  // aka UserEditScreen
                 <Form.Control 
                   type='email'
                   placeholder='Enter primary e-mail'
-                  value={primaryEmail}
+                  value={primaryEmail ?? ''}
                   onChange={(e) => setPrimaryEmail(e.target.value)}
                 ></Form.Control>
               </Form.Group>
@@ -135,7 +141,7 @@ export default function UpdateUserScreen() {  // aka UserEditScreen
                 <Form.Control 
                   type='email'
                   placeholder='Enter secondary e-mail'
-                  value={secondaryEmail}
+                  value={secondaryEmail ?? ''}
                   onChange={(e) => setSecondaryEmail(e.target.value)}
                 ></Form.Control>
               </Form.Group>
@@ -144,7 +150,7 @@ export default function UpdateUserScreen() {  // aka UserEditScreen
                 <Form.Control 
                   type='phone'
                   placeholder='Enter primary phone'
-                  value={primaryPhone}
+                  value={primaryPhone ?? ''}
                   onChange={(e) => setPrimaryPhone(e.target.value)}
                 ></Form.Control>
               </Form.Group>
@@ -153,7 +159,7 @@ export default function UpdateUserScreen() {  // aka UserEditScreen
                 <Form.Control 
                   type='phone'
                   placeholder='Enter secondary phone'
-                  value={secondaryPhone}
+                  value={secondaryPhone ?? ''}
                   onChange={(e) => setSecondaryPhone(e.target.value)}
                 ></Form.Control>
               </Form.Group>
@@ -179,7 +185,7 @@ export default function UpdateUserScreen() {  // aka UserEditScreen
                 <Form.Check 
                   type='checkbox'
                   label="Is Subscribed To Email Marketing"
-                  checked={isSubscribedToEmail}
+                  checked={isSubscribedToEmail ?? false}
                   onChange={(e) => setIsSubscribedToEmail(e.target.checked)}
                 ></Form.Check>
               </Form.Group>
@@ -187,7 +193,7 @@ export default function UpdateUserScreen() {  // aka UserEditScreen
                 <Form.Check 
                   type='checkbox'
                   label="Is Subscribed To Text Marketing"
-                  checked={isSubscribedToText}
+                  checked={isSubscribedToText ?? false}
                   onChange={(e) => setIsSubscribedToText(e.target.checked)}
                 ></Form.Check>
               </Form.Group>
@@ -195,7 +201,7 @@ export default function UpdateUserScreen() {  // aka UserEditScreen
                 <Form.Check 
                   type='checkbox'
                   label="Is Administrator"
-                  checked={isAdmin}
+                  checked={isAdmin ?? false}
                   onChange={(e) => setIsAdmin(e.target.checked)}
                 ></Form.Check>
               </Form.Group>
@@ -205,7 +211,7 @@ export default function UpdateUserScreen() {  // aka UserEditScreen
                   as='textarea'
                   rows={12}
                   placeholder='Enter notes, if applicable'
-                  value={adminNotes}
+                  value={adminNotes ?? ''}
                   onChange={(e) => setAdminNotes(e.target.value)}
                 ></Form.Control>
               </Form.Group>
