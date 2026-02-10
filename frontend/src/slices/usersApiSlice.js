@@ -1,4 +1,3 @@
-
 import { USERS_URL } from "../constants";
 import { apiSlice } from "./apiSlice";
 
@@ -71,10 +70,9 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       query: (userId) => ({ 
         url: `${USERS_URL}/admin/all_users/user/${userId}`,
       }),
-      providesTags: (result, error, userId) => [{ type: 'Users', id: userId }],
-      keepUnusedDataFor: 5
+      providesTags: (result, error, userId) => [{ type: 'User', id: userId }],
     }),
-    adminUpdateUserById: builder.mutation({  // aka updateUser
+    adminUpdateUserById: builder.mutation({
       query: ({ userId, ...userData}) => ({ 
         url: `${USERS_URL}/admin/all_users/user/${ userId }/edit_user`,
         method: 'PUT',
@@ -103,6 +101,7 @@ export const {
   useSignUpMutation, 
   useSignOutMutation, 
   useUserResetPasswordMutation, 
+  
   useUserReadMyProfileQuery, 
   useUserUpdateMyProfileMutation, 
   

@@ -15,7 +15,7 @@ export default function genToken(res, userId) {
     httpOnly: true,  // cookie not stored in client local storage = better security
     secure: process.env.NODE_ENV !== 'development',
     sameSite: 'strict',
-    maxAge: 30 * 24 * 60 * 60 * 1000  
+    maxAge: 2 * 24 * 60 * 60 * 1000  
       // Auth session duration (30 days = 30 days * 24 hrs * 60 min * 60 sec * 1000 ms)
   });
 };

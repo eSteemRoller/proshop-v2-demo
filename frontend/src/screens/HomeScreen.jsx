@@ -1,4 +1,3 @@
-
 import { Row, Col } from 'react-bootstrap';
 import { useParams } from 'react-router';
 import Product from '../components/Product';
@@ -44,4 +43,3 @@ export default function HomeScreen() {
     </>
   );
 };
-

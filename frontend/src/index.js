@@ -16,6 +16,7 @@ import './assets/styles/index.css';
 import HomeScreen from './screens/HomeScreen';
 import SignInScreen from './screens/SignInScreen';
 import SignUpScreen from './screens/SignUpScreen';
+import UserResetPasswordScreen from './screens/UserResetPasswordScreen';
 import ProductScreen from './screens/ProductScreen';
 import CartScreen from './screens/CartScreen';
 
@@ -36,7 +37,6 @@ import ReadAllProductsScreen from './screens/admin/ReadAllProductsScreen';
 import ReadAllUsersScreen from './screens/admin/ReadAllUsersScreen';
 import UpdateProductScreen from './screens/admin/UpdateProductScreen';
 import UpdateUserScreen from './screens/admin/UpdateUserScreen';
-import UserResetPasswordScreen from './screens/UserResetPasswordScreen';
 
 import reportWebVitals from './reportWebVitals';
 

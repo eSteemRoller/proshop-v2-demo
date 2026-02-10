@@ -1,5 +1,3 @@
-
-import message from "statuses"; // not { message }
 import asyncHandler from "../middleware/asyncHandler.js";
 import User from "../models/userModel.js";
 import genToken from "../utils/genToken.js";
@@ -20,6 +18,7 @@ const authUser = asyncHandler(async (req, res) => {
       _id: user._id,
       firstName: user.firstName,
       lastName: user.lastName,
+      bizName: user.bizName,
       primaryEmail: user.primaryEmail,
       secondaryEmail: user.secondaryEmail,
       primaryPhone: user.primaryPhone,
@@ -42,6 +41,7 @@ const signUpUser = asyncHandler(async (req, res) => {
   const { 
     firstName, 
     lastName, 
+    bizName, 
     primaryEmail, 
     secondaryEmail, 
     primaryPhone, 
@@ -60,7 +60,8 @@ const signUpUser = asyncHandler(async (req, res) => {
   }
   const user = await User.create({ 
     firstName,
-    lastName,
+    lastName, 
+    bizName,
     primaryEmail,
     secondaryEmail,
     primaryPhone, 
@@ -78,7 +79,8 @@ const signUpUser = asyncHandler(async (req, res) => {
     res.status(201).json({ 
       _id: user._id,
       firstName: user.firstName,
-      lastName: user.lastName,
+      lastName: user.lastName, 
+      bizName: user.bizName, 
       primaryEmail: user.primaryEmail,
       secondaryEmail: user.secondaryEmail,
       primaryPhone: user.primaryPhone,
@@ -121,6 +123,7 @@ const userReadMyProfile = asyncHandler(async (req, res) => {
       _id: user._id,
       firstName: user.firstName,
       lastName: user.lastName,
+      bizName: user.bizName,
       primaryEmail: user.primaryEmail,
       secondaryEmail: user.secondaryEmail,
       primaryPhone: user.primaryPhone,
@@ -146,16 +149,23 @@ const userUpdateMyProfile = asyncHandler(async (req, res) => {
     throw new Error("Error: User not found"); 
   } 
 
-  user.firstName = req.body.firstName || user.firstName; 
-  user.lastName = req.body.lastName || user.lastName; 
-  user.primaryEmail = req.body.primaryEmail || user.primaryEmail; 
-  user.secondaryEmail = req.body.secondaryEmail || user.secondaryEmail; 
-  user.primaryPhone = req.body.primaryPhone || user.primaryPhone; 
-  user.secondaryPhone = req.body.secondaryPhone || user.secondaryPhone; 
-  user.isSubscribedToEmail = req.body.isSubscribedToEmail || user.isSubscribedToEmail; 
-  user.isSubscribedToText = req.body.isSubscribedToText || user.isSubscribedToText; 
-  user.isAdmin = req.body.isAdmin || user.isAdmin; 
-  user.adminNotes = req.body.adminNotes || user.adminNotes; 
+  if (req.body.firstName !== undefined) user.firstName = req.body.firstName;
+  if (req.body.lastName !== undefined) user.lastName = req.body.lastName;
+  if (req.body.bizName !== undefined) user.bizName = req.body.bizName;
+  if (req.body.primaryEmail !== undefined) user.primaryEmail = req.body.primaryEmail;
+  if (req.body.secondaryEmail !== undefined) user.secondaryEmail = req.body.secondaryEmail;
+  if (req.body.primaryPhone !== undefined) user.primaryPhone = req.body.primaryPhone;
+  if (req.body.secondaryPhone !== undefined) user.secondaryPhone = req.body.secondaryPhone;
+  if (req.body.isSubscribedToEmail !== undefined)
+    user.isSubscribedToEmail = req.body.isSubscribedToEmail;
+  if (req.body.isSubscribedToText !== undefined)
+    user.isSubscribedToText = req.body.isSubscribedToText;
+    // user.primaryBillingAddress = req.body.primaryBillingAddress || user.primaryBillingAddress;
+    // user.primaryShippingAddress = req.body.primaryShippingAddress || user.primaryShippingAddress;
+  if (req.body.isAdmin !== undefined)
+    user.isAdmin = Boolean(req.body.isAdmin);
+  if (req.body.adminNotes !== undefined)
+    user.adminNotes = req.body.adminNotes; 
   
   if (req.body.password) { 
     user.password = req.body.password; 
@@ -171,6 +181,7 @@ const userUpdateMyProfile = asyncHandler(async (req, res) => {
     _id: updatedUser._id, 
     firstName: updatedUser.firstName, 
     lastName: updatedUser.lastName, 
+    bizName: updatedUser.bizName, 
     primaryEmail: updatedUser.primaryEmail, 
     secondaryEmail: updatedUser.secondaryEmail, 
     primaryPhone: updatedUser.primaryPhone, 
@@ -189,7 +200,8 @@ const userUpdateMyProfile = asyncHandler(async (req, res) => {
 const adminCreateUserByAdmin = asyncHandler(async (req, res) => {
   const { 
     firstName, 
-    lastName, 
+    lastName,
+    bizName,
     primaryEmail, 
     secondaryEmail,
     primaryPhone, 
@@ -222,6 +234,7 @@ const adminCreateUserByAdmin = asyncHandler(async (req, res) => {
   const user = await User.create({
     firstName,
     lastName,
+    bizName,
     primaryEmail,
     secondaryEmail,
     primaryPhone,
@@ -285,6 +298,7 @@ const adminCreateUserByAdmin = asyncHandler(async (req, res) => {
     _id: user._id,
     firstName: user.firstName,
     lastName: user.lastName,
+    bizName: user.bizName,
     primaryEmail: user.primaryEmail,
     secondaryEmail: user.secondaryEmail,
     primaryPhone: user.primaryPhone,
@@ -373,39 +387,45 @@ const adminReadUserById = asyncHandler(async (req, res) => {
 const adminUpdateUserById = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id).select('-password');
 
-  if (user) { 
-    user.firstName = req.body.firstName || user.firstName;
-    user.lastName = req.body.lastName || user.lastName;
-    user.primaryEmail = req.body.primaryEmail || user.primaryEmail;
-    user.secondaryEmail = req.body.secondaryEmail || user.secondaryEmail;
-    user.primaryPhone = req.body.primaryPhone || user.primaryPhone;
-    user.secondaryPhone = req.body.secondaryPhone || user.secondaryPhone;
-    user.isSubscribedToEmail = req.body.isSubscribedToEmail || user.isSubscribedToEmail;
-    user.isSubscribedToText = req.body.isSubscribedToText || user.isSubscribedToText;
-    // user.primaryBillingAddress = req.body.primaryBillingAddress || user.primaryBillingAddress;
-    // user.primaryShippingAddress = req.body.primaryShippingAddress || user.primaryShippingAddress;
-    user.isAdmin = Boolean(req.body.isAdmin);
-    user.adminNotes = req.body.adminNotes || user.adminNotes;
-
-    const updatedUser = await user.save();
-
-    res.status(200).json({ 
-      _id: updatedUser._id, 
-      firstName: updatedUser.firstName, 
-      lastName: updatedUser.lastName, 
-      primaryEmail: updatedUser.primaryEmail, 
-      secondaryEmail: updatedUser.secondaryEmail, 
-      primaryPhone: updatedUser.primaryPhone, 
-      secondaryPhone: updatedUser.secondaryPhone, 
-      isSubscribedToEmail: updatedUser.isSubscribedToEmail, 
-      isSubscribedToText: updatedUser.isSubscribedToText, 
-      isAdmin: updatedUser.isAdmin,
-      adminNotes: updatedUser.adminNotes
-    });
-  } else { 
+  if (!user) {
     res.status(404);
     throw new Error("Failure: User not found");
   }
+
+  if (req.body.firstName !== undefined) user.firstName = req.body.firstName;
+  if (req.body.lastName !== undefined) user.lastName = req.body.lastName;
+  if (req.body.bizName !== undefined) user.bizName = req.body.bizName;
+  if (req.body.primaryEmail !== undefined) user.primaryEmail = req.body.primaryEmail;
+  if (req.body.secondaryEmail !== undefined) user.secondaryEmail = req.body.secondaryEmail;
+  if (req.body.primaryPhone !== undefined) user.primaryPhone = req.body.primaryPhone;
+  if (req.body.secondaryPhone !== undefined) user.secondaryPhone = req.body.secondaryPhone;
+  if (req.body.isSubscribedToEmail !== undefined)
+    user.isSubscribedToEmail = req.body.isSubscribedToEmail;
+  if (req.body.isSubscribedToText !== undefined)
+    user.isSubscribedToText = req.body.isSubscribedToText;
+    // user.primaryBillingAddress = req.body.primaryBillingAddress || user.primaryBillingAddress;
+    // user.primaryShippingAddress = req.body.primaryShippingAddress || user.primaryShippingAddress;
+  if (req.body.isAdmin !== undefined)
+    user.isAdmin = Boolean(req.body.isAdmin);
+  if (req.body.adminNotes !== undefined)
+    user.adminNotes = req.body.adminNotes;
+
+    const updatedUser = await user.save();
+
+  res.status(200).json({ 
+    _id: updatedUser._id, 
+    firstName: updatedUser.firstName, 
+    lastName: updatedUser.lastName, 
+    bizName: updatedUser.bizName, 
+    primaryEmail: updatedUser.primaryEmail, 
+    secondaryEmail: updatedUser.secondaryEmail, 
+    primaryPhone: updatedUser.primaryPhone, 
+    secondaryPhone: updatedUser.secondaryPhone, 
+    isSubscribedToEmail: updatedUser.isSubscribedToEmail, 
+    isSubscribedToText: updatedUser.isSubscribedToText, 
+    isAdmin: updatedUser.isAdmin,
+    adminNotes: updatedUser.adminNotes
+  });
 });
 
 // @desc  Delete a user
