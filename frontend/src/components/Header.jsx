@@ -25,9 +25,9 @@ export default function Header() {
       toast.success('Success: You have signed out');
       navigate('/sign_in');
       console.log('signOut');
-    } catch (error) { 
-      toast.error(error?.data?.message || error.error);
-      console.log(error);
+    } catch (err) { 
+      toast.error(err?.data?.message || err.error);
+      console.log(err);
     }
   };
 
