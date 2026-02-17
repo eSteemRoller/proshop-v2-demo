@@ -1,4 +1,3 @@
-
 import { PRODUCTS_URL, PRODUCT_IMAGE_UPLOAD_URL } from "../constants";
 import { apiSlice } from "./apiSlice";
 
@@ -40,11 +39,9 @@ export const productsApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: ['Products'],
     }),
     adminReadAllProducts: builder.query({ 
-      query: ({ pageNumber}) => ({ 
-        url: `${PRODUCTS_URL}/admin/all_products/:pageNumber`,
-        params: { 
-          pageNumber,
-        }
+      query: ({ page }) => ({ 
+        url: `${PRODUCTS_URL}/admin/all_products`,
+        params: { page }
       }),
       invalidatesTags: ['Products'],
     }),

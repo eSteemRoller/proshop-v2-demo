@@ -171,5 +171,5 @@ export default function CreateUserByAdminScreen() {
         </Form>
       </FormContainer>
     </>
-  )
+  );
 };

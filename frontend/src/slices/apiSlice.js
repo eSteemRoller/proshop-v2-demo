@@ -4,6 +4,7 @@ import { signOut } from './authApiSlice';
 
 const baseQuery = fetchBaseQuery({
   baseUrl: BASE_URL,
+  credentials: 'include',
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.userInfo?.token;
     if (token) headers.set('authorization', `Bearer ${token}`);
@@ -15,7 +16,13 @@ const baseQuery = fetchBaseQuery({
 const baseQueryWithAuthHandling = async (args, api, extraOptions) => {
   const result = await baseQuery(args, api, extraOptions);
 
-  if (result.error && result.error.status === 401) {
+  // Prevent infinite loop: ignore 401s from sign_out
+  const isSignOutRequest =
+    typeof args === 'string'
+      ? args.includes('/sign_out')
+      : args?.url?.includes('/sign_out');
+
+  if (!isSignOutRequest && result.error && result.error.status === 401) {
     // Token expired or unauthorized - clear credentials and force login
     api.dispatch(signOut());
     if (typeof window !== 'undefined') {

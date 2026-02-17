@@ -343,7 +343,7 @@ const userResetPassword = asyncHandler(async (req, res) => {
 });
 
 // @desc  Get/Read all users
-// @route  GET /api/users
+// @route  GET /api/users/admin/all_users
 // @access  Private (Admin)
 const adminReadAllUsers = asyncHandler(async (req, res) => { 
   const pageSize = 2;  // Number of users allowed per page
@@ -360,7 +360,7 @@ const adminReadAllUsers = asyncHandler(async (req, res) => {
 });
 
 // @desc  Read/Get user by Id.
-// @route  GET /api/users/:id
+// @route  GET /api/users/admin/all_users/user/:id
 // @access  Private (Admin)
 const adminReadUserById = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id)
@@ -377,12 +377,12 @@ const adminReadUserById = asyncHandler(async (req, res) => {
     res.status(200).json(user);
   } else { 
     res.status(404);
-    throw new Error("Failure: User not found");
+    throw new Error("Error: User not found");
   }
 });
 
 // @desc  Update user by Id.
-// @route  PUT /api/users/:id
+// @route  PUT /api/users/admin/all_users/user/:id/edit_user
 // @access  Private (Admin)
 const adminUpdateUserById = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id).select('-password');
@@ -437,13 +437,13 @@ const adminDeleteUserById = asyncHandler(async (req, res) => {
   if (user) { 
     if (user.isAdmin) { 
       res.status(400);
-      throw new Error('Failure: Cannot delete admin user')
+      throw new Error('Error: Cannot delete admin user')
     }
     await User.deleteOne({_id: user._id});
     res.status(200).json({ message: `Success: ${user._id} ${user.primaryEmail} has been deleted`});
   } else { 
     res.status(404);
-      throw new Error('User not found')
+      throw new Error('Error: User not found')
   }
 });
 

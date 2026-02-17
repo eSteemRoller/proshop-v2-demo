@@ -1,4 +1,3 @@
-
 import { apiSlice } from './apiSlice.js';
 import { ORDERS_URL, PAYPAL_URL } from '../constants.js';
 
@@ -26,11 +25,9 @@ export const ordersApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     userReadAllMyOrders: builder.query({ 
-      query: ({ userId, pageNumber = 1 }) => ({ 
-        url: `${ORDERS_URL}/user/${userId}/my_orders/:pageNumber`,
-        params: { 
-          pageNumber,
-        },
+      query: ({ userId, page }) => ({ 
+        url: `${ORDERS_URL}/user/${userId}/my_orders`,
+        params: { page }
       }),
       keepUnusedDataFor: 5,  // Seconds
     }),

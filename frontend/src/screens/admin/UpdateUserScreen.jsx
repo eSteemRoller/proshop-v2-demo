@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import FormContainer from '../../components/FormContainer';
@@ -226,5 +225,5 @@ export default function UpdateUserScreen() {  // aka UserEditScreen
         }
       </FormContainer>
     </>
-  )
+  );
 };

@@ -13,13 +13,13 @@ import {
 import { Link, useLocation, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import Message from "../components/Message";
-import Loader from "../components/Loader";
 import { FaTimes } from 'react-icons/fa';
 import { useUserUpdateMyProfileMutation } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authApiSlice";
 import { useUserReadAllMyOrdersQuery } from "../slices/ordersApiSlice";
 import Paginate from "../components/Paginate";
+import Message from "../components/Message";
+import Loader from "../components/Loader";
 
 
 export default function UserProfileScreen() { 
@@ -48,7 +48,7 @@ export default function UserProfileScreen() {
 
   const { userInfo } = useSelector((state) => state.auth);
 
-  const [updateMyProfile, { isLoading: isUpdating, refetch }] =
+  const [updateUserProfile, { isLoading: isUpdating, refetch }] =
     useUserUpdateMyProfileMutation();
 
   const { pageNumber } = useParams();
@@ -91,7 +91,7 @@ useEffect(() => {
       toast.error("Passwords do not match");
     } else {
       try {
-        const res = await updateMyProfile({ 
+        const res = await updateUserProfile({ 
           _id: userInfo._id, 
           ...formData 
         })

@@ -62,4 +62,4 @@ export default function UserResetPasswordScreen() {
       </Form>
     </FormContainer>
   );
-}
+};

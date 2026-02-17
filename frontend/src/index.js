@@ -9,6 +9,7 @@ import {
 import { Provider } from 'react-redux';
 import App from './App';
 import store from './store';
+import reportWebVitals from './reportWebVitals';
 
 import './assets/styles/bootstrap.custom.css';
 import './assets/styles/index.css';
@@ -37,8 +38,6 @@ import ReadAllProductsScreen from './screens/admin/ReadAllProductsScreen';
 import ReadAllUsersScreen from './screens/admin/ReadAllUsersScreen';
 import UpdateProductScreen from './screens/admin/UpdateProductScreen';
 import UpdateUserScreen from './screens/admin/UpdateUserScreen';
-
-import reportWebVitals from './reportWebVitals';
 
 
 const router = createBrowserRouter(

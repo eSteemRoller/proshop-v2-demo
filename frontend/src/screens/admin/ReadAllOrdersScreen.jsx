@@ -1,4 +1,3 @@
-
 import { Table, Button, Nav } from 'react-bootstrap';
 import { Link, useParams } from 'react-router-dom';
 import { FaTimes } from 'react-icons/fa';
@@ -93,5 +92,5 @@ export default function ReadAllOrdersScreen() {
         Cancel
       </Link>
     </>
-  )
+  );
 };

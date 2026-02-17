@@ -1,4 +1,3 @@
-
 import { Pagination } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
@@ -32,7 +31,9 @@ export default function Paginate({
           <Pagination.Item 
             key={page} 
             active={page === currentPage} 
-            as={Link} to={buildLink(page)} 
+            as={Link} 
+            to={buildLink(page)} 
+            href={buildLink(page)}
           > {page} 
           </Pagination.Item> 
         ); 

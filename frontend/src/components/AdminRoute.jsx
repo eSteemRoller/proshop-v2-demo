@@ -1,4 +1,3 @@
-
 import { Outlet, Navigate } from "react-router";
 import { useSelector } from "react-redux";
 
@@ -10,4 +9,4 @@ export default function AdminRoute() {
   ) : (
     <Navigate to="/sign_in" replace />
   );
-}
+};

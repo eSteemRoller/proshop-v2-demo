@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 export default function ReadAllUsersScreen() { 
   const { pageNumber } = useParams();
   const page = pageNumber || 1;
-  const { data, isLoading, refetch, error } = useAdminReadAllUsersQuery({ pageNumber: page });
+  const { data, isLoading, refetch, error } = useAdminReadAllUsersQuery({ page });
 
   const [ deleteUser, { isLoading: isDeleting }] = useAdminDeleteUserByIdMutation();
 
@@ -21,8 +21,8 @@ export default function ReadAllUsersScreen() {
         await deleteUser(id);
         toast.success("Success: User deleted");
         refetch();
-      } catch (error) {
-        toast.error(error?.data?.message || error.error);
+      } catch (err) {
+        toast.error(err?.data?.message || err.error);
       }
     }
   };
@@ -120,5 +120,5 @@ export default function ReadAllUsersScreen() {
         Cancel
       </Link>
     </>
-  )
+  );
 };

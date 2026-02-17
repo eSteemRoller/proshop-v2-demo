@@ -1,4 +1,3 @@
-
 import { Row, Col, Table, Button } from 'react-bootstrap';
 import { Link, useParams } from 'react-router-dom';
 import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
@@ -16,10 +15,10 @@ import Paginate from '../../components/Paginate';
 export default function ReadAllProductsScreen() { 
   const { pageNumber } = useParams();
   const page = pageNumber || 1;
-  const { data, isLoading, refetch, error } = useAdminReadAllProductsQuery({ pageNumber: page });
+  const { data, isLoading, refetch, error } = useAdminReadAllProductsQuery({ page });
   console.log(data);
 
-  const [createProduct, { isLoading: isAddingProduct }] = useAdminCreateProductMutation({ pageNumber: page });
+  const [createProduct, { isLoading: isAddingProduct }] = useAdminCreateProductMutation({ page });
 
   async function createProductHandler() { 
     if (window.confirm('Create the template for a new product below?')) { 
@@ -27,8 +26,8 @@ export default function ReadAllProductsScreen() {
         const newProduct = await createProduct().unwrap();
         refetch();
         toast.success(`Success: Product ${newProduct._id} created`);
-      } catch (error) {
-        toast.error(error?.data?.message || error.error);
+      } catch (err) {
+        toast.error(err?.data?.message || err.error);
       }
     }
   }

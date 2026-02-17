@@ -1,4 +1,3 @@
-
 import { Container, Row, Col } from 'react-bootstrap';
 
 
@@ -11,5 +10,5 @@ export default function FormContainer({ children }) {
         </Col>
       </Row>
     </Container>
-  )
-}
+  );
+};
