@@ -1,11 +1,11 @@
 import { Col, Table, Button } from 'react-bootstrap';
 import { Link, useParams } from 'react-router-dom';
 import { FaPlus, FaTimes, FaTrash, FaEdit, FaCheck } from 'react-icons/fa';
-import Message from '../../components/Message';
-import Loader from '../../components/Loader';
 import { useAdminReadAllUsersQuery, useAdminDeleteUserByIdMutation } from '../../slices/usersApiSlice';
-import Paginate from '../../components/Paginate';
 import { toast } from 'react-toastify';
+import Loader from '../../components/Loader';
+import Message from '../../components/Message';
+import Paginate from '../../components/Paginate';
 
 
 export default function ReadAllUsersScreen() { 

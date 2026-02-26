@@ -12,20 +12,21 @@ import {
 } from "react-bootstrap";
 import { Link, useLocation, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
 import { FaTimes } from 'react-icons/fa';
 import { useUserUpdateMyProfileMutation } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authApiSlice";
 import { useUserReadAllMyOrdersQuery } from "../slices/ordersApiSlice";
-import Paginate from "../components/Paginate";
-import Message from "../components/Message";
+import { toast } from "react-toastify";
 import Loader from "../components/Loader";
+import Message from "../components/Message";
+import Paginate from "../components/Paginate";
 
 
 export default function UserProfileScreen() { 
   const [formData, setFormData] = useState({ 
     firstName: '', 
     lastName: '', 
+    bizName: '', 
     primaryEmail: '', 
     secondaryEmail: '', 
     primaryPhone: '', 
@@ -36,6 +37,7 @@ export default function UserProfileScreen() {
   const { 
     firstName, 
     lastName, 
+    bizName, 
     primaryEmail, 
     secondaryEmail, 
     primaryPhone, 
@@ -67,6 +69,7 @@ useEffect(() => {
     const { 
       firstName = '', 
       lastName = '', 
+      bizName = '', 
       primaryEmail = '', 
       secondaryEmail = '', 
       primaryPhone = '', 
@@ -77,6 +80,7 @@ useEffect(() => {
       ...prev, 
       firstName, 
       lastName, 
+      bizName, 
       primaryEmail, 
       secondaryEmail, 
       primaryPhone, 
@@ -133,6 +137,15 @@ useEffect(() => {
               placeholder="Enter last name"
               value={lastName}
               onChange={(e) => setFormData({ ...formData, lastName: e.target.value }) }
+            ></FormControl>
+          </FormGroup>
+          <FormGroup controlId="bizName" className="my-2">
+            <FormLabel>Business Name:</FormLabel>
+            <FormControl
+              type='text'
+              placeholder="Enter your business name"
+              value={bizName}
+              onChange={(e) => setFormData({ ...formData, bizName: e.target.value }) }
             ></FormControl>
           </FormGroup>
           <FormGroup controlId="primaryEmail" className="my-2">
