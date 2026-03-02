@@ -2,27 +2,27 @@ import { Navbar, Nav, Container, Badge, NavDropdown } from 'react-bootstrap';
 import { FaShoppingCart, FaUser } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { useSignOutMutation } from '../slices/usersApiSlice';
+import { useUserSignOutMutation } from '../slices/usersApiSlice';
 import { signOut } from '../slices/authApiSlice';
-import logo from '../assets/logo.png';
 import { toast } from 'react-toastify';
+import logo from '../assets/logo.png';
 
 
 export default function Header() { 
   const { userInfo } = useSelector((state) => state.auth);
   const { cartItems } = useSelector((state) => state.cart);
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const [signOutApiCall] = useSignOutMutation();
+  const [signOutApiCall] = useUserSignOutMutation();
 
   const signOutHandler = async () => { 
     try {
       await signOutApiCall().unwrap();
       dispatch(signOut());
-      toast.success('Success: You have signed out');
-      navigate('/sign_in');
+      toast.success("Success: You have signed out");
+      navigate("/sign_in");
       console.log('signOut');
     } catch (err) { 
       toast.error(err?.data?.message || err.error);

@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import FormContainer from '../components/FormContainer';
-import Loader from '../components/Loader';
-import { useSignInMutation } from '../slices/usersApiSlice';
+import { useAuthUserMutation } from '../slices/usersApiSlice';
 import { setCredentials } from '../slices/authApiSlice';
 import { toast } from 'react-toastify';
+import FormContainer from '../components/FormContainer';
+import Loader from '../components/Loader';
 import Message from '../components/Message';
 
 
@@ -17,7 +17,7 @@ export default function SignInScreen() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [signIn, { isSigningIn }] = useSignInMutation();
+  const [signIn, { isSigningIn }] = useAuthUserMutation();
 
   const { userInfo } = useSelector((state) => state.auth);
 
@@ -90,4 +90,4 @@ export default function SignInScreen() {
       </Row>
     </FormContainer>
   );
-};
+}
