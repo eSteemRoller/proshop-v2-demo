@@ -9,7 +9,7 @@ export default function Footer() {
       <Container>
         <Row>
           <Col className='text-center py-3'>
-            <p className='text-light text-center py-3 mb-0' >ProShop &copy;{currentYear}</p>
+            <p className='text-light text-center py-2 mb-0 overflow-y-hidden' >ProShop &copy;{currentYear}</p>
           </Col>
         </Row>
       </Container>

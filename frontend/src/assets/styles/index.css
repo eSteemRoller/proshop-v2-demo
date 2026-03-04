@@ -1,5 +1,19 @@
+body {
+  max-height: 100vh;
+}
+
+header {
+  max-height: 10;
+  min-height: 80px;
+}
+
 main {
-  min-height: 80vh;
+  max-height: 80;
+}
+
+footer {
+  max-height: 10;
+  min-height: 80px;
 }
 
 .rating span {

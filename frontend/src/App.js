@@ -10,7 +10,7 @@ export default function App() {
   return (
     <div className='d-flex flex-column min-vh-100'>
       <Header />
-        <main className='flex-grow-1 py-3'>
+        <main className='flex-grow-1 py-3 min-height: 0'>
           <Container>
             <Outlet />
           </Container>
