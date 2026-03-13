@@ -21,6 +21,12 @@ const users = [
         primaryEmail: 'SuzeQ@email.com',
     },
     {
+        firstName: 'Susie',
+        lastName: 'Queue',
+        password: bcrypt.hashSync('12345678', 10),
+        primaryEmail: 'SuzeQ@email.com',
+    },
+    {
         firstName: 'John',
         lastName: 'Jacob Jingleheimer Schmidt',
         password: bcrypt.hashSync('12345678', 10),
