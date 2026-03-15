@@ -48,6 +48,18 @@ const products = [
     numReviews: 12,
   },
   {
+    name: 'Sony Playstation 4 Pro White Version',
+    image: '/images/playstation.jpg',
+    description:
+      'The ultimate home entertainment center starts with PlayStation. Whether you are into gaming, HD movies, television, music',
+    brand: 'Sony',
+    category: 'Electronics',
+    price: 399.99,
+    countInStock: 11,
+    rating: 5,
+    numReviews: 12,
+  },
+  {
     name: 'Logitech G-Series Gaming Mouse',
     image: '/images/mouse.jpg',
     description:
